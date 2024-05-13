@@ -1,10 +1,16 @@
-import React from 'react'
+
 import "./App.css"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { LoginPage } from "./Routes"
+
 
 export default function App() {
   return (
-    <div className="flex-1 justify-center items-center flex-row">
-      <div className="text-5xl text-red-300 text-center">Ini adalah sebuah File Tailwind CSS</div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
+    
   )
 }
