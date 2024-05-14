@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {RxAvatar} from "react-icons/rx"
+import axios from "axios"
+import { server } from "../../server";
+
 const SignUp = () => {
+    const navigate = useNavigate()
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
@@ -11,13 +15,30 @@ const SignUp = () => {
     const [name,setName] = useState("")
     const [avatar,setAvatar] = useState(null);
 
-    const handleSubmit = () => {
-        console.log("Berhasil Dibuat")
-    }
+    
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         setAvatar(file);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const config = {headers : {"Content-Type" : "multipart/form-data"}};
+        const newForm = new FormData();
+
+        newForm.append("file", avatar);
+        newForm.append("name", name);
+        newForm.append("email",email);
+        newForm.append("password",password)
+        axios.post(`${server}/user/create-user`, newForm, config).then((res) => {
+            if(res.data.success === true){
+                navigate("/");
+            }
+            console.log(res)
+        }).catch((err) => {
+            console.log(err);
+        })
     }
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8  top-0">

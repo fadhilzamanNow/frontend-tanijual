@@ -4,7 +4,6 @@ import sayuranImage from "../Assests/Login/sayuran.jpg"
 
 const LoginPage = () => {
 
-  const buah = require('../Assests/Login/sayur-dan-buah.jpg')
   return (
     <>
       
