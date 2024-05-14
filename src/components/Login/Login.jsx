@@ -2,11 +2,30 @@ import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios"
+import { server } from "../../server";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [visible,setVisible] = useState(true)
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      await axios.post(`${server}/user/login-user`,{
+        email,
+        password,
+      },{withCredentials : true}).then((res) => {
+        toast.success("Login Berhasil")
+        navigate("/")
+      }).catch((err) => {
+        toast.error(err.response.data.message)
+      })
+    }
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8  top-0">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-green-200">
@@ -24,7 +43,7 @@ const Login = () => {
                 </div>
             </div>
             
-          <form className="space-y-6" >
+          <form className="space-y-6" onSubmit={handleSubmit} >
             <div>
               <label
                 htmlFor="email"

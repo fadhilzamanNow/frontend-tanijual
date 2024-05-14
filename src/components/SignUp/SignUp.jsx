@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai"
 import styles from "../../styles/styles";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {RxAvatar} from "react-icons/rx"
 import axios from "axios"
 import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
-    const navigate = useNavigate()
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
@@ -32,12 +32,14 @@ const SignUp = () => {
         newForm.append("email",email);
         newForm.append("password",password)
         axios.post(`${server}/user/create-user`, newForm, config).then((res) => {
-            if(res.data.success === true){
-                navigate("/");
-            }
-            console.log(res)
+            toast.success(res.data.message)
+            setEmail("");
+            setName("");
+            setPassword("");
+            setAvatar();
+
         }).catch((err) => {
-            console.log(err);
+            toast.error(err.response.data.message)
         })
     }
   return (
