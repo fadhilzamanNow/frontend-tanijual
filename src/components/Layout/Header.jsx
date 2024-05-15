@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { categoriesData, productData } from "../../static/data";
@@ -8,36 +8,49 @@ import {BiMenuAltLeft} from "react-icons/bi"
 import DropDown from "./Dropdown"
 import Navbar from "./Navbar"
 import {CgProfile} from "react-icons/cg"
+import { useSelector } from "react-redux";
+import { backend_url } from "../../server";
 const Header = ({activeHeading}) => {
+  const {isAuthenticated, user} = useSelector((state) => state.user);
+  
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchData, setSearchData] = useState(null);
+  const [searchData, setSearchData] = useState("");
   const [active,setActive] = useState(false);
   const [dropDown,setDropDown] = useState(false)
+  const inputChange = useRef(null)
 
   const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
+    inputChange.current = e.target.value;
+    setSearchTerm(inputChange.current);
 
     const filteredProducts =
-      productData &&
+     ( productData &&
       productData.filter((product) => {
-        return product.name.toLowerCase().includes(term.toLowerCase());
-      });
+        return product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      }) )
     setSearchData(filteredProducts);
   };
 
 
   window.addEventListener("scroll", () => {
-    if(window.screenY > 70){
+    if(window.scrollY > 70){
         setActive(true)
     }
     else{
         setActive(false)
     }
   })
+
+
+  const handleSubmit = () => {
+    setSearchTerm(null)
+    console.log("hapus")
+    console.log(searchData)
+  }
   return (
     <>
-    <div className={`${styles.section}`}>
+         <div>
+                 <div className={`${styles.section}`}>
       <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
         <div>
           <Link to="/" className="flex flex-row text-4xl font-extrabold">
@@ -52,12 +65,14 @@ const Header = ({activeHeading}) => {
               value={searchTerm}
               onChange={handleSearchChange}
               className="h-[40px] w-full px-2 border-green-200 border-[2px] rounded-md focus:border-green-500 "
+              ref={inputChange}
             />
             <AiOutlineSearch
               size={30}
               className="absolute right-2 top-1.5 cursor-pointer"
+              onClick={handleSubmit}
             />
-            { searchData && searchData !==0 ? (
+            { searchData && searchData.length !==0 ? (
                 <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                     {searchData && searchData.map((i, index) => {
                         const d = i.name;
@@ -65,7 +80,7 @@ const Header = ({activeHeading}) => {
                         const Product_name = d.replace(/\s+/g,"-");
                         return (
                             <Link to={`/product/${Product_name}}`}>
-                                <div className="w-full flex items-start py-3">
+                                <div className="w-full flex items-start py-3" key={index}>
                                     <img src={i.image_Url[0].url} alt="" 
                                         className="w-[40px] h-[40px] mr-[10px]"
                                     />
@@ -97,14 +112,14 @@ const Header = ({activeHeading}) => {
                     <div className="relative h-[60px] mt-[10px] mb-[10px] w-[270px] hidden 1000px:block text-white">
                         <BiMenuAltLeft  size={30} className="absolute top-[16px] left-2"  color="white"/>
                         <button
-                            className={`h-[100%] w-full flex justify-between items-center pl-10 bg-green-800 font-sans text-lg font-[500] select-none rounded-md`}
+                            className={`h-[100%] w-full flex justify-between items-center pl-10 bg-green-800 font-sans text-lg font-[500] select-none rounded-md`} onClick={() => setDropDown(!dropDown)}
                         >
                             Semua Kategori
 
                         </button>
 
                         <IoIosArrowDown size={20}  className="absolute right-2 top-[23px] cursor-pointer text-white"  
-                            onClick={() => setDropDown(!dropDown)}
+                            
                         />
 
                         {
@@ -150,20 +165,27 @@ const Header = ({activeHeading}) => {
                     </div>
                     <div className={`${styles.noramlFlex}`}>
                         <div className="relative cursor-pointer mr-[15px]">
-                            <Link to="/login">
-                            <CgProfile
-                                size={30}
-                                className="text-white"
-                            />
-                            </Link>
-                            <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-
-                            </span>
+                        {isAuthenticated ? (
+                                 <Link to="/profile">
+                                    <img src={`${backend_url}/${user.avatar}`} alt="" className="w-[30px] h-[30px] rounded-full" />
+                                 </Link>
+                            ) : (
+                                <Link to="/login">
+                                 <CgProfile
+                                     size={30}
+                                     className="text-white"
+                                 />
+                                 </Link>
+                            )
+                            }
+                           
+                        
                         </div>
                     </div>
                 </div>
       </div>
       </div>
+            </div>
     </>
   );
 };

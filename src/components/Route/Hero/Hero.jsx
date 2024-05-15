@@ -1,12 +1,11 @@
 import React from 'react'
 import styles from '../../../styles/styles'
-import vegetable from "../../../Assests/Home/vegetable.jpg"
 import { Link } from 'react-router-dom'
 
 const Hero = () => {
   return (
     <div
-      className={`relative min-h-[120vh] 800px:min-h-[90vh] w-full ${styles.noramlFlex}`}
+      className={`relative min-h-[120vh] 800px:min-h-[70vh] w-full ${styles.noramlFlex}`}
       style={{
         backgroundImage: `url(https://r4.wallpaperflare.com/wallpaper/770/26/351/food-fruits-and-vegetables-wallpaper-74c933c3693529abf6d807d0fbd2c9cd.jpg)`,
         backgroundSize : "center"
@@ -14,9 +13,9 @@ const Hero = () => {
       }}
     >
             <div className={`${styles.section} w-[90%] 800px:w-[60%]`}>
-                <h1 className={`text=[35px] leading-[1.2] 800px:text-[60px] text-[white] font-[800] capitalize`}>
+                <h1 className={`text=[35px] leading-[1.2] 800px:text-[60px] font-[800] capitalize text-green-600`}>
                     Produk Segar <br/>
-                    Buah Buahan dan Sayur Sayuran
+                    <p className="text-white">Buah Buahan dan Sayur Sayuran</p>
                 </h1>
                 <p className="pt-5 text-[16px] font-[Poppins] font-[600] text-white text-justify mt-[80px] flex flex-col gap-y-8" >
                 <p>
