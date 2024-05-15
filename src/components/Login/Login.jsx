@@ -10,7 +10,7 @@ const Login = () => {
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
-    const [visible,setVisible] = useState(true)
+    const [visible,setVisible] = useState(false)
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -19,7 +19,7 @@ const Login = () => {
       await axios.post(`${server}/user/login-user`,{
         email,
         password,
-      },{withCredentials : true}).then((res) => {
+      },{ withCredentials: true }).then((res) => {
         toast.success("Login Berhasil")
         navigate("/")
       }).catch((err) => {
