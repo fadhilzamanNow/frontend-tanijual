@@ -5,15 +5,15 @@ export const navItems = [
       url: "/",
     },
     {
-      title: "Best Selling",
+      title: "Produk Terlaris",
       url: "/best-selling",
     },
     {
-      title: "Products",
+      title: "Produk",
       url: "/products",
     },
     {
-      title: "Events",
+      title: "Promo",
       url: "/events",
     },
     {
@@ -25,59 +25,9 @@ export const navItems = [
   // branding data
   export const brandingData = [
     {
-      id: 1,
-      title: "Free Shipping",
-      Description: "From all orders over 100$",
-      icon: (
-        <svg
-          width="36"
-          height="36"
-          viewBox="0 0 36 36"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1 1H5.63636V24.1818H35"
-            stroke="#FFBB38"
-            stroke-width="2"
-            stroke-miterlimit="10"
-            stroke-linecap="square"
-          ></path>
-          <path
-            d="M8.72763 35.0002C10.4347 35.0002 11.8185 33.6163 11.8185 31.9093C11.8185 30.2022 10.4347 28.8184 8.72763 28.8184C7.02057 28.8184 5.63672 30.2022 5.63672 31.9093C5.63672 33.6163 7.02057 35.0002 8.72763 35.0002Z"
-            stroke="#FFBB38"
-            stroke-width="2"
-            stroke-miterlimit="10"
-            stroke-linecap="square"
-          ></path>
-          <path
-            d="M31.9073 35.0002C33.6144 35.0002 34.9982 33.6163 34.9982 31.9093C34.9982 30.2022 33.6144 28.8184 31.9073 28.8184C30.2003 28.8184 28.8164 30.2022 28.8164 31.9093C28.8164 33.6163 30.2003 35.0002 31.9073 35.0002Z"
-            stroke="#FFBB38"
-            stroke-width="2"
-            stroke-miterlimit="10"
-            stroke-linecap="square"
-          ></path>
-          <path
-            d="M34.9982 1H11.8164V18H34.9982V1Z"
-            stroke="#FFBB38"
-            stroke-width="2"
-            stroke-miterlimit="10"
-            stroke-linecap="square"
-          ></path>
-          <path
-            d="M11.8164 7.18164H34.9982"
-            stroke="#FFBB38"
-            stroke-width="2"
-            stroke-miterlimit="10"
-            stroke-linecap="square"
-          ></path>
-        </svg>
-      ),
-    },
-    {
       id: 2,
-      title: "Daily Surprise Offers",
-      Description: "Save up to 25% off",
+      title: "Banyak Promo",
+      Description: "Promo sampai dengan 50%",
       icon: (
         <svg
           width="32"
@@ -104,8 +54,8 @@ export const navItems = [
     },
     {
       id: 4,
-      title: "Affortable Prices",
-      Description: "Get Factory direct price",
+      title: "Harga terjangkau",
+      Description: "Harga dari Petani langsung",
       icon: (
         <svg
           width="32"
@@ -151,8 +101,8 @@ export const navItems = [
     },
     {
       id: 5,
-      title: "Secure Payments",
-      Description: "100% protected payments",
+      title: "Keamanan",
+      Description: "100% terjaga keamanannya",
       icon: (
         <svg
           width="32"
@@ -191,72 +141,72 @@ export const navItems = [
   export const categoriesData = [
     {
       id: 1,
-      title: "Computers and Laptops",
+      title: "Tomat",
       subTitle: "",
       image_Url:
-        "https://cdn.shopify.com/s/files/1/1706/9177/products/NEWAppleMacbookProwithM1ProChip14InchLaptop2021ModelMKGQ3LL_A_16GB_1TBSSD_custommacbd.jpg?v=1659592838",
+        "https://umsu.ac.id/artikel/wp-content/uploads/2023/09/manfaat-tomat-buah-segar-yang-penuh-nutrisi.jpg",
     },
     {
       id: 2,
-      title: "cosmetics and body care",
+      title: "Cabai",
       subTitle: "",
       image_Url:
-        "https://indian-retailer.s3.ap-south-1.amazonaws.com/s3fs-public/2021-07/kosme1.png",
+        "https://asset.kompas.com/crops/j-CnJfrEvyz_V9aILpQWUUYE0Rw=/1152x418:5760x3490/750x500/data/photo/2023/03/07/6406eabc90e53.jpg",
     },
     {
       id: 3,
-      title: "Accesories",
+      title: "Bawang",
       subTitle: "",
       image_Url:
-        "https://img.freepik.com/free-vector/ordering-goods-online-internet-store-online-shopping-niche-e-commerce-website-mother-buying-babies-clothes-footwear-toys-infant-accessories_335657-2345.jpg?w=2000",
+        "https://s3-publishing-cmn-svc-prd.s3.ap-southeast-1.amazonaws.com/article/tpqx_7Ik9yLWFVOeJTs4W/original/052222900_1607682083-Manfaat-Bawang-Merah_-Antialergi-hingga-Menurunkan-Risiko-Kanker-shutterstock_1724962108.jpg",
     },
     {
       id: 4,
-      title: "Cloths",
+      title: "Sawi",
       subTitle: "",
       image_Url:
-        "https://www.shift4shop.com/2015/images/industries/clothing/clothing-apparel.png",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdiaSo-6o9Rj0ECAJFHdcJ7fkjOfQ3PjXetjr-hPRd8g&s",
     },
     {
       id: 5,
-      title: "Shoes",
+      title: "Bayam",
       subTitle: "",
       image_Url:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvBQPQMVNRd6TtDkGs2dCri0Y-rxKkFOiEWw&usqp=CAU",
+        "https://www.ngopibareng.id/images/uploads/2022/2022-02-19/8-macam-sayur-bayam-dan-manfaatnya-bagi-kesehatan--09",
     },
     {
       id: 6,
-      title: "Gifts",
+      title: "Timun",
       subTitle: "",
       image_Url:
-        "https://securecdn.pymnts.com/wp-content/uploads/2014/11/Gifts-Photo-700x489.jpg",
+        "https://images.tokopedia.net/img/cache/700/VqbcmM/2020/11/12/d4e5337d-d9d0-4293-8dd6-e761356d6204.png",
     },
     {
       id: 7,
-      title: "Pet Care",
+      title: "Kangkung",
       subTitle: "",
-      image_Url: "https://cdn.openpr.com/T/c/Tc15444071_g.jpg",
+      image_Url: "https://i0.wp.com/umsu.ac.id/berita/wp-content/uploads/2023/07/Kangkung.jpg?fit=1200%2C900&ssl=1",
     },
     {
       id: 8,
-      title: "Mobile and Tablets",
+      title: "Seledri",
       subTitle: "",
       image_Url:
-        "https://st-troy.mncdn.com/mnresize/1500/1500/Content/media/ProductImg/original/mpwp3tua-apple-iphone-14-256gb-mavi-mpwp3tua-637986832343472449.jpg",
+        "https://asset.kompas.com/crops/V_I2Ecu_7PTynPf-bEitexgTD-A=/37x0:622x390/750x500/data/photo/2014/07/26/1232317shutterstock-159254675780x390.jpg",
     },
     {
       id: 9,
-      title: "Music and Gaming",
+      title: "Daun Mint",
       subTitle: "",
       image_Url:
-        "https://static.vecteezy.com/system/resources/previews/011/996/555/original/3d-black-headphone-illustration-ecommerce-icon-png.png",
+        "https://media.istockphoto.com/id/1164307019/id/foto/daun-segar-mint-bumbu-hijau-bahan.jpg?s=612x612&w=0&k=20&c=9cBidxxExxFs3blItZYiPiXc2mo-EKLEjOEvOCaT9Ns=",
     },
     {
       id: 10,
-      title: "Others",
+      title: "Buah Lainnya",
       subTitle: "",
       image_Url:
-        "https://searchspring.com/wp-content/uploads/2022/10/Hero-Image-Platform-Others-2.png",
+        "https://media.istockphoto.com/id/467652436/id/foto/buah-buahan-campuran-segar.jpg?s=612x612&w=0&k=20&c=F6jIhF7hBBYD6GLMesgmOolFm6etkbR4WsyWybuYkaA=",
     },
   ];
   
@@ -265,13 +215,13 @@ export const navItems = [
     {
       id: 1,
       category:"Computers and Laptops",
-      name: "MacBook pro M2 chipset 256gb ssd 8gb ram space-gray color with apple 1 year warranty",
+      name: "Tomat asli daerah X",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+        "Tomat merah segar yang kaya akan vitamin C dan antioksidan. Cocok untuk digunakan dalam berbagai masakan, salad, dan jus. Tomat ini dipetik langsung dari kebun lokal dengan kualitas terbaik.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://www.istorebangladesh.com/images/thumbs/0000286_macbook-pro-m1_550.png",
+          url: "https://www.panahmerah.id/uploads/ngc_master_item_images/63f58917321b9_20230222101639-1.jpg",
         },
         {
           public_id: "test",
@@ -279,15 +229,15 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Apple inc.",
+        name: "Toko Pak Supriado.",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 1099,
-      discount_price: 1049,
+      price: 12000,
+      discount_price: 10000,
       rating: 4,
       total_sell: 35,
       stock: 10,
@@ -295,13 +245,13 @@ export const navItems = [
     {
       id: 2,
       category:"Mobile and Tablets",
-      name: "Iphone 14 pro max 256 gb ssd and 8 gb ram silver colour",
+      name: "Cabai Merah Keriting",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+        "Cabai merah keriting yang pedas dan segar. Ideal untuk memberikan rasa pedas yang menggugah selera pada setiap masakan Anda. Ditanam secara organik dan dipanen pada puncak kesegarannya.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://m.media-amazon.com/images/I/31Vle5fVdaL.jpg",
+          url: "https://down-id.img.susercontent.com/file/264b5a15c25c246c36433a539f2f78ad",
         },
         {
           public_id: "test",
@@ -309,29 +259,29 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Amazon Ltd",
+        name: "Toko Pak Umar",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      discount_price: 1099,
+      discount_price: 15000,
       rating: 5,
       total_sell: 80,
       stock: 10,
 
     },
     {
-      id: 1,
+      id: 3,
       category:"Computers and Laptop",
-      name: "MacBook pro M2 chipset 256gb ssd 8gb ram space gray color with apple 1 year warranty",
+      name: "Bawang Merah Asli",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+        "Bawang merah segar yang harum dan memiliki rasa yang tajam. Penting untuk bumbu dasar di berbagai masakan Indonesia. Kami menyediakan bawang merah dengan kualitas terbaik, langsung dari petani lokal.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://www.istorebangladesh.com/images/thumbs/0000286_macbook-pro-m1_550.png",
+          url: "https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2023/03/06043446/Jarang-Diketahui-Ini-10-Manfaat-Bawang-Merah-untuk-Kesehatan-Tubuh.jpg.webp",
         },
         {
           public_id: "test",
@@ -339,15 +289,15 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Apple inc.",
+        name: "Toko Rosyidin",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 1099,
-      discount_price: 1049,
+      price: 20000,
+      discount_price: 18000,
       rating: 4,
       total_sell: 75,
       stock: 10,
@@ -356,13 +306,13 @@ export const navItems = [
     {
       id: 4,
       category:"Others",
-      name: "New Fashionable Watch for men 2023 with multiple colors",
-      description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+      name: "Sawi Hijau Segar",
+      description: "Sawi hijau yang renyah dan bergizi. Kaya akan vitamin A dan C, serta serat yang baik untuk pencernaan. Cocok untuk tumisan, sup, atau sebagai campuran dalam salad.",
+
       image_Url: [
         {
           public_id: "test",
-          url: "https://i0.wp.com/eccocibd.com/wp-content/uploads/2022/01/1802NL02_1.png?fit=550%2C550&ssl=1",
+          url: "https://images.tokopedia.net/img/cache/500-square/product-1/2020/6/29/8896250/8896250_41f61805-9257-49d2-bd5f-01deba29e84c_785_785.jpg",
         },
         {
           public_id: "test",
@@ -370,16 +320,16 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Shahriar Watch House",
+        name: "Toko Khalid",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       category:"Others"
       },
-      price: 100,
-      discount_price: 79,
+      price: 10000,
+      discount_price: 8000,
       rating: 4,
       total_sell: 12,
       stock: 10,
@@ -387,13 +337,13 @@ export const navItems = [
     {
       id: 5,
       category:"Shoes",
-      name: "New Trend shoes for gents with all sizes",
+      name: "Bayam Organik",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+        "Bayam organik segar yang kaya akan zat besi dan vitamin K. Sangat baik untuk kesehatan tulang dan darah. Dapat digunakan dalam berbagai masakan, mulai dari tumisan, sup, hingga smoothie.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://mirzacdns3.s3.ap-south-1.amazonaws.com/cache/catalog/RLV0015/2-800x800.jpg",
+          url: "https://dkpp.bulelengkab.go.id/public/uploads/konten/91_jenis-bayam-konsumsi-yang-mudah-dibudidayakan.jpg",
         },
         {
           public_id: "test",
@@ -401,29 +351,29 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Alisha Shoes Mart",
+        name: "Toko Pak Rusdi",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 120,
-      discount_price: 89,
+      price: 9500,
+      discount_price: 8500,
       rating: 5,
       total_sell: 49,
       stock: 10,
       
     },
     {
-      id: 1,
-      name: "Gaming Headphone Asus with mutiple color and free delivery",
+      id: 6,
+      name: "Timun Segar",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+      "Timun segar yang renyah dan menyegarkan. Cocok untuk salad, acar, atau sebagai camilan sehat. Kaya akan air dan vitamin K, baik untuk hidrasi dan kesehatan kulit.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://www.startech.com.bd/image/cache/catalog/headphone/havit/h763d/h763d-02-500x500.jpg",
+          url: "https://pasarsegar.co.id/wp-content/uploads/2022/07/image_picker125504718924767887-1.jpg",
         },
         {
           public_id: "test",
@@ -431,15 +381,15 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Asus Ltd",
+        name: "Toko Asep Asiap",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 300,
-      discount_price: 239,
+      price: 5000,
+      discount_price: 4000,
       rating: 4.5,
       reviews: [
         {
@@ -455,14 +405,14 @@ export const navItems = [
       category:"Music and Gaming"
     },
     {
-      id: 4,
-      name: "New Fashionable Watch for men 2023 with multiple colors",
+      id: 7,
+      name: "Kangkung Segar",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+      "Kangkung segar yang lembut dan bergizi. Sumber vitamin A dan C, serta zat besi. Sangat enak untuk ditumis dengan bumbu sederhana atau dijadikan bahan utama dalam sayur bening.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://i0.wp.com/eccocibd.com/wp-content/uploads/2022/01/1802NL02_1.png?fit=550%2C550&ssl=1",
+          url: "https://qph.cf2.quoracdn.net/main-qimg-9b80e4803aa4a34e09d9d58a30645ff3-lq",
         },
         {
           public_id: "test",
@@ -470,28 +420,28 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Shahriar Watch House",
+        name: "Toko Messi",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 100,
-      discount_price: 79,
+      price: 5000,
+      discount_price: 4500,
       rating: 4,
       total_sell: 62,
       stock: 10,
     },
     {
-      id: 1,
-      name: "Gaming Headphone Asus with mutiple color and free delivery",
+      id: 8,
+      name: "Seledri Segar",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+      "Seledri segar yang harum dan kaya akan serat serta vitamin K. Cocok untuk berbagai masakan seperti sup, salad, atau jus. Seledri kami dipanen dengan hati-hati untuk menjaga kesegarannya.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://www.startech.com.bd/image/cache/catalog/headphone/havit/h763d/h763d-02-500x500.jpg",
+          url: "https://akcdn.detik.net.id/visual/2015/03/03/8fa1cc57-e204-483c-bc66-d27748708692_169.jpg?w=650",
         },
         {
           public_id: "test",
@@ -499,15 +449,15 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Asus Ltd",
+        name: "Toko Ucok",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 300,
-      discount_price: 239,
+      price: 4000,
+      discount_price: 3500,
       rating: 4.5,
       reviews: [
         {
@@ -522,15 +472,15 @@ export const navItems = [
       stock: 10,
     },
     {
-      id: 2,
+      id: 9,
       category:"Mobile and Tablets",
-      name: "Iphone 14 pro max 256 gb ssd and 8 gb ram silver colour",
+      name: "Daun Mint Segar",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+      "Daun mint segar yang harum dan menyegarkan. Ideal untuk campuran minuman, teh, atau sebagai garnish untuk berbagai hidangan. Mint kami ditanam secara organik dan dipetik pada puncak kesegarannya.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://m.media-amazon.com/images/I/31Vle5fVdaL.jpg",
+          url: "https://st4.depositphotos.com/2801855/25244/i/450/depositphotos_252448674-stock-photo-pepper-mint-leaves-for-cooking.jpg",
         },
         {
           public_id: "test",
@@ -538,28 +488,28 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Amazon Ltd",
+        name: "Toko Rosyid",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      discount_price: 1099,
+      discount_price: 7000,
       rating: 5,
       total_sell: 20,
       stock: 10,
     },
     {
-      id: 1,
-      category:"Music and Gaming",
-      name: "Gaming Headphone Asus with mutiple color and free delivery",
+      id: 10,
+      category:"Pisang Cavendish Segar",
+      name: "Pisang Cavendish Segar",
       description:
-        "Product details are a crucial part of any eCommerce website or online marketplace. These details help the potential customers to make an informed decision about the product they are interested in buying. A well-written product description can also be a powerful marketing tool that can help to increase sales.Product details typically include information about the product's features, specifications, dimensions, weight, materials, and other relevant information that can help customers to understand the product better. The product details section should also include high-quality images and videos of the product, as well as customer reviews and ratings.",
+      "Pisang Cavendish segar yang manis dan kaya akan nutrisi. Pisang ini adalah sumber yang baik dari vitamin B6, vitamin C, dan kalium. Cocok untuk dijadikan camilan sehat, bahan dasar smoothies, atau diolah menjadi berbagai jenis kue dan makanan penutup. Pisang Cavendish kami dipetik pada tingkat kematangan yang tepat untuk memastikan kualitas dan rasa terbaik.",
       image_Url: [
         {
           public_id: "test",
-          url: "https://www.startech.com.bd/image/cache/catalog/headphone/havit/h763d/h763d-02-500x500.jpg",
+          url: "https://www.pasuruankab.go.id/files/berita/1dd2e50b4fc7519773e48aacb5652554.jpeg",
         },
         {
           public_id: "test",
@@ -567,15 +517,15 @@ export const navItems = [
         },
       ],
       shop: {
-        name: "Asus Ltd",
+        name: "Toko Amir",
         shop_avatar: {
           public_id: "test",
-          url: "https://www.hatchwise.com/wp-content/uploads/2022/05/amazon-logo-1024x683.png",
+          url: "https://registrasi.unsoed.ac.id/infomhs/foto/H1A021029",
         },
         ratings: 4.2,
       },
-      price: 300,
-      discount_price: 239,
+      price: 15000,
+      discount_price: 13499,
       rating: 4.5,
       reviews: [
         {

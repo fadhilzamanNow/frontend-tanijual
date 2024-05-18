@@ -29,7 +29,7 @@ const Hero = () => {
                 </p>
                 </p>
                 <Link to="/products">
-                    <div className={`bg-green-800 flex flex-row justify-center items-center mt-5 w-[200px] h-[80px] rounded-md`}>
+                    <div className={`bg-green-800 flex flex-row justify-center items-center mt-5 w-[200px] h-[80px] rounded-md mb-5`}>
                         <span className="text-white font-[Poppins] text-[18px]">Belanja Sekarang</span>
                     </div>
                 </Link>

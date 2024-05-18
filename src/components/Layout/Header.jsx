@@ -9,7 +9,10 @@ import DropDown from "./Dropdown"
 import Navbar from "./Navbar"
 import {CgProfile} from "react-icons/cg"
 import { useSelector } from "react-redux";
-import { backend_url } from "../../server";
+import { backend_url, server } from "../../server";
+import Cart from "../cart/Cart"
+import { RxCross1 } from "react-icons/rx";
+import Wishlist from "../Wishlist/Wishlist"
 const Header = ({activeHeading}) => {
   const {isAuthenticated, user} = useSelector((state) => state.user);
   
@@ -18,6 +21,10 @@ const Header = ({activeHeading}) => {
   const [active,setActive] = useState(false);
   const [dropDown,setDropDown] = useState(false)
   const inputChange = useRef(null)
+
+  const [openCart,setOpenCart] = useState(false);
+  const [openWishlist,setOpenWishlist] = useState(false);
+  const [open,setOpen] = useState(false)
 
   const handleSearchChange = (e) => {
     inputChange.current = e.target.value;
@@ -49,7 +56,7 @@ const Header = ({activeHeading}) => {
   }
   return (
     <>
-         <div>
+         <>
                  <div className={`${styles.section}`}>
       <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
         <div>
@@ -137,12 +144,12 @@ const Header = ({activeHeading}) => {
                     
                 </div>
                 {/* navitems */}
-                <div className={`${styles.noramlFlex}`}>
+                <div className={`${styles.noramlFlex} mt-5`}>
                         <Navbar active={activeHeading}/>
                         </div>
                 <div className="flex flex-row">
                     <div className={`${styles.noramlFlex}`}>
-                        <div className="relative cursor-pointer mr-[15px]">
+                        <div className="relative cursor-pointer mr-[15px]" onClick={() => setOpenWishlist(true)}>
                             <AiOutlineHeart 
                                 size={30}
                                 className="text-white"
@@ -157,6 +164,7 @@ const Header = ({activeHeading}) => {
                             <AiOutlineShoppingCart
                                 size={30}
                                 className="text-white"
+                                onClick ={() => setOpenCart(true)}
                             />
                             <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
 
@@ -166,7 +174,7 @@ const Header = ({activeHeading}) => {
                     <div className={`${styles.noramlFlex}`}>
                         <div className="relative cursor-pointer mr-[15px]">
                         {isAuthenticated ? (
-                                 <Link to="/profile">
+                                 <Link to={`/profile`}>
                                     <img src={`${backend_url}/${user.avatar}`} alt="" className="w-[30px] h-[30px] rounded-full" />
                                  </Link>
                             ) : (
@@ -182,10 +190,113 @@ const Header = ({activeHeading}) => {
                         
                         </div>
                     </div>
+
+                    {/* keranjang */}
+
+                    {
+                        openCart ? (
+                            <Cart setOpenCart={setOpenCart} />
+                        ) : (null)
+                    }
+                    
+
+                    { /* wishlist */}
+                    {
+                        openWishlist ? (<Wishlist setOpenWishlist={setOpenWishlist} />) : (null)
+                    }
                 </div>
       </div>
       </div>
+
+      {/*  tampilan untuk di mobile */}
+
+      <div className="w-full h-[70px] fixed bg-[#fffefe] z-50 top-0 left-0 shadow-sm 800px:hidden items-center flex justify-center">
+            <div className="w-full flex items-center justify-between">
+                    <div>
+                        <BiMenuAltLeft 
+                            size={40}
+                            className="ml-[20px]"
+                            onClick={() => setOpen(true)}
+                        />
+                    </div>
+                    <div>
+                    <Link to="/" className="flex flex-row text-4xl font-extrabold">
+                        <p className="text-green-500">Jual</p>
+                        <p className="text-green-200">Tani</p>
+                    </Link>
+                    </div>
+                    <div>
+                        <div className="relative mr-[20px]">
+                            <AiOutlineShoppingCart 
+                                size={30}
+                            />
+                        </div>
+                    </div>
             </div>
+
+            {
+                open && (
+                    <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0">
+                        <div className="fixed w-[60%] bg-white h-screen top-0 left-0 z-10">
+                            <div className="w-full justify-between flex pr-3">
+                                <div>
+                                    <div className="relative mr-[15px]">
+                                        <AiOutlineHeart 
+                                            size={30}
+                                            className="mt-5 ml-3 relative" 
+                                        />
+                                        <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                                            1
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <RxCross1 
+                                        size={30}
+                                        className="ml-4 mt-5"
+                                        onClick={() => setOpen(false)}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="my-8 w-[92%] m-auto h-[40px]">
+                                <input  type="search" 
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                        className="h-[40px] w-full px-2 border-green-200 border-[2px] rounded-md focus:border-green-500 "
+                                        placeholder="Mencari buah dan sayuran ...."
+                                />
+                                { searchData && searchData.length !==0 ? (
+                                    <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+                                    {searchData && searchData.map((i, index) => {
+                                        const d = i.name;
+
+                                        const Product_name = d.replace(/\s+/g,"-");
+                                        return (
+                                            <Link to={`/product/${Product_name}}`}>
+                                                <div className="w-full flex items-start py-3" key={index}>
+                                                    <img src={i.image_Url[0].url} alt="" 
+                                                        className="w-[40px] h-[40px] mr-[10px]"
+                                                    />
+                                                    <div>
+                                                        {i.name}
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        )
+                                    })}
+                </div>
+            ) : (null)}
+                            </div>
+                            <div>
+                            <Navbar active={activeHeading}/>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+      </div>
+            </>
     </>
   );
 };

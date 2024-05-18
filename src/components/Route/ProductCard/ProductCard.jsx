@@ -14,13 +14,17 @@ const ProductCard = ({data}) => {
   return (
     <>
     <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
-        <div className=" justify-end">
+        <div className="">
+            <div className='w-full  flex items-center justify-center'>
+
+            
             <Link to={`/product/${product_name}`}>
                 <img src={data.image_Url[0].url} 
                     alt = ""
-                    className='w-full h-[170px] object-contain'
+                    className='w-[170px] h-[170px] object-cover items-center justify-center rounded-md'
                 />
             </Link>
+            </div>
             <Link to="/">
                 <h5 className={`${styles.shop_name} text-[20px]`}>{data.shop.name}</h5>
             </Link>

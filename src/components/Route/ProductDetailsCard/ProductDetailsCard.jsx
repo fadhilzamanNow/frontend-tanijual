@@ -25,11 +25,11 @@ const ProductDetailsCard = ({data,setOpen}) => {
                 <div className="fixed w-full h-screen top-0 left-0 bg-[#34dd251c] z-40 flex items-center justify-center">
                     <div className="w-[90%] 800px:w-[60%] h-[90vh] overflow-y-scroll 800px:h-[75vh] bg-white rounded-md shadow-sm relative p-4">
                         <RxCross1 size={30} className="absolute right-3 top-3 z-50" onClick={() => setOpen(false)} />
-                        <div className="block w-full 800px:flex">
-                            <div className="w-full 800px:w-[50%] ">
-                                <img src={data.image_Url[0].url} alt="" />
-                                <div className="flex">
-                                    <img src="{data.shop.shop_avatar.url" alt="" className='w-[50px] h-[50px] rounded-full'/>
+                        <div className="block w-full 800px:flex ">
+                            <div className="w-full 800px:w-[50%]  ">
+                                <img src={data.image_Url[0].url} alt="" className="h-[300px] w-[300px] object-cover ml-20 mt-10" />
+                                <div className="flex items-center ml-5">
+                                    <img src={data.shop.shop_avatar.url} alt="" className='w-[50px] h-[50px] rounded-full object-cover ml-[65px]'/>
                                     <div>
                                         <h3 className={`${styles.shop_name}`}>
                                             {data.shop.name}
@@ -40,12 +40,12 @@ const ProductDetailsCard = ({data,setOpen}) => {
                                     </div>
                                     
                                 </div>
-                                <div className={`${styles.button} bg-black mt-4 rounded-[4px] h-11`} onClick={handleMessageSubmit}>
+                                <div className={`${styles.button} bg-black mt-4 rounded-[4px] h-11 ml-20`} onClick={handleMessageSubmit}>
                                         <span className="text- white flex items-center">
                                             Kirimkan Pesan <AiOutlineMessage className="ml-1 "/>
                                         </span>
                                     </div>
-                                    <h5 className="text-[16px] text-red-600 mt-5">
+                                    <h5 className="text-[16px] text-red-600 mt-5 ml-20">
                                         ({data.total_sell}) Terjual
                                     </h5>
                             </div>
@@ -53,7 +53,7 @@ const ProductDetailsCard = ({data,setOpen}) => {
                                 <h1 className={`${styles.productTitle}} text-[20px]`}>
                                     {data.name}
                                 </h1>
-                                <p>
+                                <p className="text-justify">
                                     {data.description}
                                 </p>
                                 <div className="flex pt-3">
