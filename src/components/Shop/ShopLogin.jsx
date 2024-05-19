@@ -21,7 +21,7 @@ const ShopLogin = () => {
         password,
       },{ withCredentials: true }).then((res) => {
         toast.success("Login Berhasil")
-        navigate("/")
+        navigate("/dashboard");
         window.location.reload(true);
         
         window.location.reload()

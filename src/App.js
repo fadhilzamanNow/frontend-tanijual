@@ -1,20 +1,20 @@
 
 import "./App.css"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import { LoginPage, SignUpPage,ActivationPage, HomePage, ProductsPage, BestSellingPage, EventsPage, FAQPage, ProductDetailsPage, CheckoutPage, PaymentPage,OrderSuccessPage, ProfilePage, ShopCreatePage,SellerActivationPage, ShopLoginPage } from "./Routes"
+import { LoginPage, SignUpPage,ActivationPage, HomePage, ProductsPage, BestSellingPage, EventsPage, FAQPage, ProductDetailsPage, CheckoutPage, PaymentPage,OrderSuccessPage, ProfilePage, ShopCreatePage,SellerActivationPage, ShopLoginPage } from "./routes/Routes.js"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 import {ShopHomePage} from "./ShopRoutes.js" 
+import { ShopDashboardPage, ShopCreateProduct , ShopAllProducts, ShopCreateEvents, ShopAllEvents } from "./routes/ShopRoutes.js";
 import Store from "./redux/store";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import { useSelector } from "react-redux";
-import ProtectedRoute from "./ProtectedRoute";
-import SellerProtectedRoute from "./SellerProtectedRoute.js";
+import ProtectedRoute from "./routes/ProtectedRoute.js";
+import SellerProtectedRoute from "./routes/SellerProtectedRoute.js";
 export default function App() {
   
-  const {loading, isAuthenticated} = useSelector((state) => state.user);
-  const {isSeller, seller, isLoading} = useSelector((state) => state.seller)
+  
 
   useEffect(() => {
     Store.dispatch(loadUser());
@@ -23,11 +23,9 @@ export default function App() {
     
   },[])
 
-    console.log("seller : ",isSeller,seller, "isLoading :", isLoading)
   return (
-    <>
-      {
-        loading || isLoading ? (null) : (
+  
+      
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -44,14 +42,39 @@ export default function App() {
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/order/success/:id" element={<OrderSuccessPage />} />
               <Route path="/profile" element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ProtectedRoute >
                   <ProfilePage />
               </ProtectedRoute>} />
               <Route path="/shop-create" element={<ShopCreatePage/>} />
               <Route path="/shop-login" element={<ShopLoginPage />} />
               <Route path="/shop/:id" element={
-                <SellerProtectedRoute isSeller={isSeller}>
+                <SellerProtectedRoute >
                   <ShopHomePage />
+                </SellerProtectedRoute>
+              } />
+              <Route path="/dashboard" element={
+                <SellerProtectedRoute >
+                  <ShopDashboardPage />
+                </SellerProtectedRoute>
+              } />
+              <Route path="/dashboard-create-product" element={
+                <SellerProtectedRoute >
+                  <ShopCreateProduct />
+                </SellerProtectedRoute>
+              } />
+               <Route path="/dashboard-products" element={
+                <SellerProtectedRoute >
+                  <ShopAllProducts />
+                </SellerProtectedRoute>
+              } />
+               <Route path="/dashboard-create-event" element={
+                <SellerProtectedRoute >
+                  <ShopCreateEvents />
+                </SellerProtectedRoute>
+              } />
+              <Route path="/dashboard-events" element={
+                <SellerProtectedRoute >
+                  <ShopAllEvents />
                 </SellerProtectedRoute>
               } />
             </Routes>
@@ -69,9 +92,7 @@ export default function App() {
             
             />
       </BrowserRouter>
-        )
-      }
-    </>
+     
       
   )
 }
