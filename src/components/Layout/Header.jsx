@@ -102,7 +102,7 @@ const Header = ({activeHeading}) => {
             ) : (null)}
           </div>
             <div className="flex flex-row  h-[45px] w-[200px] bg-green-500 items-center justify-center rounded-md">
-                <Link to="/seller" className="flex flex-1 flex-row items-center justify-evenly">
+                <Link to="/shop-create" className="flex flex-1 flex-row items-center justify-evenly">
                     <h1 className="text-white">
                     Daftar Sebagai Penjual </h1>
                     <IoIosArrowForward className="text-green-100 mt-1" size={16}/>
@@ -112,7 +112,7 @@ const Header = ({activeHeading}) => {
       </div>
       
     </div>
-    <div className={`${active ? "shadow-sm fixed top-0 left-0 z-10" : null} transition hidden 800px:flex item-center justify-between w-full bg-green-500 h-[70px]`}>
+    <div className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null} transition hidden 800px:flex item-center justify-between w-full bg-green-500 h-[70px]`}>
       <div className={`${styles.section} relative ${styles.noramlFlex} justify-between`}>
         {/* categories */}
                 <div>
@@ -210,7 +210,7 @@ const Header = ({activeHeading}) => {
 
       {/*  tampilan untuk di mobile */}
 
-      <div className="w-full h-[70px] fixed bg-[#fffefe] z-50 top-0 left-0 shadow-sm 800px:hidden items-center flex justify-center">
+      <div className={`${active === true ? "shadow-sm fixed top-0 left-0 z-10" : null} w-full h-[70px] fixed bg-[#fffefe] z-50 top-0 left-0 shadow-sm 800px:hidden items-center flex justify-center`}>
             <div className="w-full flex items-center justify-between">
                     <div>
                         <BiMenuAltLeft 
@@ -225,19 +225,36 @@ const Header = ({activeHeading}) => {
                         <p className="text-green-200">Tani</p>
                     </Link>
                     </div>
-                    <div>
+                    <div className="flex">
                         <div className="relative mr-[20px]">
                             <AiOutlineShoppingCart 
                                 size={30}
                             />
+                        </div>
+                        <div className="relative cursor-pointer mr-[15px]">
+                        {isAuthenticated ? (
+                                 <Link to={`/profile`}>
+                                    <img src={`${backend_url}/${user.avatar}`} alt="" className="w-[30px] h-[30px] rounded-full" />
+                                 </Link>
+                            ) : (
+                                <Link to="/login">
+                                 <CgProfile
+                                     size={30}
+                                     className="text-white"
+                                 />
+                                 </Link>
+                            )
+                            }
+                           
+                        
                         </div>
                     </div>
             </div>
 
             {
                 open && (
-                    <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0">
-                        <div className="fixed w-[60%] bg-white h-screen top-0 left-0 z-10">
+                    <div className="fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0 ">
+                        <div className="fixed w-[60%] bg-white h-screen top-0 left-0 z-10 overflow-y-scroll">
                             <div className="w-full justify-between flex pr-3">
                                 <div>
                                     <div className="relative mr-[15px]">
@@ -273,7 +290,7 @@ const Header = ({activeHeading}) => {
 
                                         const Product_name = d.replace(/\s+/g,"-");
                                         return (
-                                            <Link to={`/product/${Product_name}}`}>
+                                            <Link to={`/product/${Product_name}`}>
                                                 <div className="w-full flex items-start py-3" key={index}>
                                                     <img src={i.image_Url[0].url} alt="" 
                                                         className="w-[40px] h-[40px] mr-[10px]"
@@ -291,6 +308,28 @@ const Header = ({activeHeading}) => {
                             <div>
                             <Navbar active={activeHeading}/>
                             </div>
+                            <br />
+                            <br />
+                            <div className=" flex text-[18px] w-full justify-center gap-x-2 items-center">
+
+                            {
+                                isAuthenticated === true ? (
+                                    <div className="flex-col items-center justify-center">
+                                    <Link to={`/profile`}>
+                                    <img src={`${backend_url}/${user.avatar}`} alt="" className="w-[75px] h-[75px] rounded-full object-cover border" />
+                                    </Link>
+                                    
+                                   </div>
+                                ) : (
+                                    <>
+                                    <Link to="/login">Masuk</Link>
+                                    / 
+                                    <Link to="/sign-up">Daftar</Link>
+                                    </>
+                                )
+                            }
+                            </div>
+
                         </div>
                     </div>
                 )

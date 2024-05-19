@@ -15,10 +15,10 @@ const Hero = () => {
             <div className={`${styles.section} w-[90%] 800px:w-[60%]`}>
                 <h1 className={`text=[35px] leading-[1.2] 800px:text-[60px] font-[800] capitalize text-green-600`}>
                     Produk Segar <br/>
-                    <p className="text-white">Buah Buahan dan Sayur Sayuran</p>
+                    <p className="text-black">Buah Buahan dan Sayur Sayuran</p>
                 </h1>
-                <p className="pt-5 text-[16px] font-[Poppins] font-[600] text-white text-justify mt-[80px] flex flex-col gap-y-8" >
-                <p>
+                <p className="pt-5 text-[16px] font-[Poppins] font-[600] text-justify mt-[80px] flex flex-col gap-y-8 text-black" >
+                <p className='text-black'>
                 Nikmati kesegaran alami dari buah-buahan dan sayur-sayuran terbaik, langsung dari sumbernya. Setiap produk dipilih dengan teliti untuk memastikan kualitas dan kesegarannya, memberikan Anda rasa yang luar biasa dan manfaat kesehatan optimal. Temukan kenikmatan sejati dari hasil bumi yang dipanen pada puncak kesegarannya.
                 </p>
                 <p>

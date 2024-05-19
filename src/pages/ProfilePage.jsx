@@ -11,7 +11,7 @@ const ProfilePage = () => {
     <div>
         <Header />
         <div className={`${styles.section} flex bg-white py-10`}>
-            <div className="w-[335px]">
+            <div className="800px:w-[335px] w-[50px] mt-2">
                 <ProfileSideBar active={active} setActive={setActive} />
             </div>
                 <ProfileContent active={active}/>
