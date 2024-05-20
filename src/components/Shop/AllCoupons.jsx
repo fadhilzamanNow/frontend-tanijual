@@ -1,0 +1,226 @@
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteProduct, getAllProductsShop } from '../../redux/actions/product';
+import { Button } from '@material-ui/core';
+import { AiOutlineDelete, AiOutlineEye } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
+import Loader from '../Layout/Loader';
+import { DataGrid } from '@material-ui/data-grid';
+import styles from '../../styles/styles';
+import { RxCross1 } from 'react-icons/rx';
+import { categoriesData } from '../../static/data';
+import axios from 'axios';
+import { server } from '../../server';
+import { toast } from 'react-toastify';
+
+const AllCoupons = () => {
+    const {products, isLoading} = useSelector((state) => state.products);
+    const {seller} = useSelector((state) => state.seller)
+    const [open,setOpen] = useState(false);
+    const [name,setName] = useState("");
+    const [value,setValue] = useState("");
+    const [minAmount,setMinAmount] = useState();
+    const [maxAmount,setMaxAmount] = useState();
+    const [selectedProduct,setSelectedProduct] = useState("");
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllProductsShop(seller._id))
+    },[dispatch])
+
+    const handleDelete = (id) => {
+        dispatch(deleteProduct(id))
+        window.location.reload()
+    }
+
+    const columns = [
+        {field : "id", headerName : "Product Id", minWidth : 150, flex : 0.7},
+        {
+            field : "name",
+            headerName : "Name",
+            minWidth : 180,
+            flex : 1.4
+        },
+        {
+            field : "price",
+            headerName : "Price",
+            minWidth : 100,
+            flex : 0.6
+        },
+        {
+            field : "stock",
+            headerName : "Stock",
+            minWidth : 80,
+            flex : 0.5
+        },
+        {
+            field : "sold",
+            headerName : "Sold Out",
+            minWidth : 130,
+            flex : 0.6
+        },
+        {
+            field : "Preview",
+            flex : 0.8,
+            minWidth : 100,
+            headerName : "",
+            type : "number",
+            sortable : false,
+            renderCell : (params) => {
+                const d = params.row.name;
+                const product_name = d.replace(/\s+/g,"-");
+                return (
+                    <>
+                    <Link to={`/product/${product_name}`} >
+                        <Button>
+                            <AiOutlineEye size={20}/>
+                        </Button>
+                    </Link>
+                    </>
+                )
+            }
+
+        },
+        {
+            field : "Delete",
+            flex : 0.8,
+            minWidth : 120,
+            headerName : "",
+            type : "number",
+            sortable : false,
+            renderCell : (params) => {
+                
+                return (
+                    <>
+                        <Button onClick={() => handleDelete(params.id)}>
+                            <AiOutlineDelete size={20}/>
+                        </Button>  
+                    </>
+                )
+            }
+
+        }
+    ];
+
+
+    const row = [];
+
+    products && products.forEach((item) => {
+        row.push({
+            id : item._id,
+            name : item.name,
+            price: "Rp. " + item.discountPrice,
+            stock : item.stock,
+            sold : 10
+        })
+    })
+
+    const handleSubmit =  async (e) => {
+        e.preventDefault();
+        await axios.post(`${server}/coupon/create-coupon-code`,{
+            name,
+            minAmount,
+            maxAmount,
+            selectedProduct,
+            value,
+            shopId : seller._id
+        },{withCredentials : true}).then((res) => {
+            console.log(res.data)
+        }).catch((e) => {
+            toast.error(e)
+        })
+    }
+
+    console.log(products);
+
+  return (
+    <>
+    {
+        isLoading ? (<Loader />) : (
+            <div className="w-full mx-8 pt-1 mt-10 bg-white">
+                <div className="w-full flex justify-end mb-5">
+                    <div className={`${styles.button} !w-[150px] mr-3`} onClick={() => setOpen(true)}>
+                        <span className="text-white">Buat Kode Promo</span>
+                    </div>
+                </div>
+                <DataGrid 
+                rows={row}
+                columns={columns}
+                pageSize={10}
+                disableSelectionOnClick
+                autoHeight
+                />
+                {
+                    open && (
+                        <div className="fixed top-0 left-0 w-full h-screen bg-[#10111136] z-[2000] flex items-center justify-center">
+                            <div className='800px:w-[75%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll'>
+                                <div className="w-full flex justify-end">
+                                    <RxCross1 size={30} className="mr-3 mt-3 cursor-pointer" onClick={() => setOpen(false)}/>
+                                </div>
+                                <h5 className="text-[20px] font-Poppins text-center">
+                                    Membuat Kode Promo
+                                </h5>
+                                <form onSubmit={handleSubmit} aria-required={true}>
+                                    <div>
+                                        <label htmlFor="name" className='pb-2'>
+                                            Name <span className='text-red-400'>*</span>
+                                        </label>
+                                        <input type="text" name='name'  required value={name} onChange={(e)=> setName(e.target.value)} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan nama kupon'/>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <label htmlFor="name" className='pb-2'>
+                                            Nilai Diskon (%) <span className='text-red-400'>*</span>
+                                        </label>
+                                        <input type="text" name='name' required value={value} onChange={(e)=> setValue(e.target.value)} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan persentase diskon kupon'/>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <label htmlFor="name" className='pb-2'>
+                                            Minimal Pembayaran 
+                                        </label>
+                                        <input type="number" name='name'  value={minAmount} onChange={(e)=> setMinAmount(e.target.value)} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan Minimal Pembayaran'/>
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <label htmlFor="name" className='pb-2'>
+                                            Maksimal Pembayaran 
+                                        </label>
+                                        <input type="number" name='name'  value={maxAmount} onChange={(e)=> setMaxAmount(e.target.value)} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan Maksimal Pembayaran'/>
+                                    </div>
+                                    <br />
+                                   
+                                    <div>
+                                        <label htmlFor="name" className='pb-2'>
+                                            Pilih Produk <span className='text-red-400'>*</span>
+                                        </label>
+                                        <select name="category" id="" className=" mt-2 border h-[35px] rounded-[5px] w-full" value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
+                                            <option value="Pilih Kategori Produk">Pilih Kategori Produk </option>
+                                                {
+                                                    products && products.map((i) => {
+                                                        return (<option value={i.name} key={i.name}>
+                                                            {i.name}
+                                                        </option> )
+                                                    })
+                                                }
+                                        
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="submit" name='name' value="Buat Kode Promo" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' />
+                                    </div>
+                                </form>
+                            </div> 
+                        </div>
+                    )
+                }
+            </div>
+           
+        )
+    }
+    </>
+  )
+}
+
+export default AllCoupons

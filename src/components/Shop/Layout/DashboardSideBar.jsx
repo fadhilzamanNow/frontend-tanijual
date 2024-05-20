@@ -79,7 +79,7 @@ const DashboardSideBar = ({active}) => {
             </Link>
         </div>
         <div className="w-full flex items-center p-4">
-            <Link to="/dashboard/coupons" className="w-full flex items-center">
+            <Link to="/dashboard-coupons" className="w-full flex items-center">
                 <AiOutlineGift size={30}  className={`${active === 9 ? "text-red-400" : "grey"} `}/>
                 <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 9 ? "text-red-400" : "grey"} `}>
                     Kode Diskon

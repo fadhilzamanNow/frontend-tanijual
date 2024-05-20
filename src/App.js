@@ -1,15 +1,14 @@
 
 import "./App.css"
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { LoginPage, SignUpPage,ActivationPage, HomePage, ProductsPage, BestSellingPage, EventsPage, FAQPage, ProductDetailsPage, CheckoutPage, PaymentPage,OrderSuccessPage, ProfilePage, ShopCreatePage,SellerActivationPage, ShopLoginPage } from "./routes/Routes.js"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 import {ShopHomePage} from "./ShopRoutes.js" 
-import { ShopDashboardPage, ShopCreateProduct , ShopAllProducts, ShopCreateEvents, ShopAllEvents } from "./routes/ShopRoutes.js";
+import { ShopDashboardPage, ShopCreateProduct , ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupons } from "./routes/ShopRoutes.js";
 import Store from "./redux/store";
 import { loadSeller, loadUser } from "./redux/actions/user";
-import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.js";
 export default function App() {
@@ -75,6 +74,11 @@ export default function App() {
               <Route path="/dashboard-events" element={
                 <SellerProtectedRoute >
                   <ShopAllEvents />
+                </SellerProtectedRoute>
+              } />
+              <Route path="/dashboard-coupons" element={
+                <SellerProtectedRoute >
+                  <ShopAllCoupons />
                 </SellerProtectedRoute>
               } />
             </Routes>
