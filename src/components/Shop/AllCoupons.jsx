@@ -14,7 +14,7 @@ import { server } from '../../server';
 import { toast } from 'react-toastify';
 
 const AllCoupons = () => {
-    const {products, isLoading} = useSelector((state) => state.products);
+    const {products} = useSelector((state) => state.products);
     const {seller} = useSelector((state) => state.seller)
     const [open,setOpen] = useState(false);
     const [name,setName] = useState("");
@@ -22,65 +22,47 @@ const AllCoupons = () => {
     const [minAmount,setMinAmount] = useState();
     const [maxAmount,setMaxAmount] = useState();
     const [selectedProduct,setSelectedProduct] = useState("");
+    const [coupons,setCoupons] = useState([]);
+    const [isLoading,setIsLoading] = useState(true);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllProductsShop(seller._id))
+        //dispatch(getAllProductsShop(seller._id))
+        setIsLoading(true)
+        axios.get(`${server}/coupon/get-coupon/${seller._id}`,{withCredentials : true}).then((res) => {
+            setIsLoading(false);
+            setCoupons(res.data.couponCodes)
+        }).catch((err) => {
+            setIsLoading(false);
+            console.log("ada salah kocak :", err)
+        })
     },[dispatch])
 
     const handleDelete = (id) => {
-        dispatch(deleteProduct(id))
-        window.location.reload()
+        console.log("id yang ingin didelete : " , id)
+        axios.delete(`${server}/coupon/delete-coupon/${id}`,{withCredentials : true}).then((res) => {
+            toast.success("Selamat anda berhasil menghapus kupon");
+            window.location.reload()
+
+        }).catch((err) => {
+            toast.error("Maaf tidak dapat menghapus karena : ",err);
+        })
     }
 
     const columns = [
-        {field : "id", headerName : "Product Id", minWidth : 150, flex : 0.7},
+        {field : "id", headerName : "Coupon Id", minWidth : 150, flex : 0.7},
         {
             field : "name",
-            headerName : "Name",
+            headerName : "Nama Kupon Diskon",
             minWidth : 180,
             flex : 1.4
         },
         {
             field : "price",
-            headerName : "Price",
+            headerName : "Persentase Diskon",
             minWidth : 100,
             flex : 0.6
-        },
-        {
-            field : "stock",
-            headerName : "Stock",
-            minWidth : 80,
-            flex : 0.5
-        },
-        {
-            field : "sold",
-            headerName : "Sold Out",
-            minWidth : 130,
-            flex : 0.6
-        },
-        {
-            field : "Preview",
-            flex : 0.8,
-            minWidth : 100,
-            headerName : "",
-            type : "number",
-            sortable : false,
-            renderCell : (params) => {
-                const d = params.row.name;
-                const product_name = d.replace(/\s+/g,"-");
-                return (
-                    <>
-                    <Link to={`/product/${product_name}`} >
-                        <Button>
-                            <AiOutlineEye size={20}/>
-                        </Button>
-                    </Link>
-                    </>
-                )
-            }
-
         },
         {
             field : "Delete",
@@ -106,13 +88,13 @@ const AllCoupons = () => {
 
     const row = [];
 
-    products && products.forEach((item) => {
+    coupons && coupons.forEach((item) => {
         row.push({
             id : item._id,
             name : item.name,
-            price: "Rp. " + item.discountPrice,
-            stock : item.stock,
-            sold : 10
+            price: item.value + " %",
+            
+           
         })
     })
 
@@ -127,6 +109,8 @@ const AllCoupons = () => {
             shopId : seller._id
         },{withCredentials : true}).then((res) => {
             console.log(res.data)
+            toast.success("Mantap telah dibuaat kuponnya")
+            window.location.reload()
         }).catch((e) => {
             toast.error(e)
         })
