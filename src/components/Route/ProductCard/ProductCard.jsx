@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from 'react-icons/ai';
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx"
+import { backend_url } from '../../../server.js';
 
 const ProductCard = ({data}) => {
 
@@ -11,20 +12,27 @@ const ProductCard = ({data}) => {
 
     const d = data.name;
     const product_name = d.replace(/\s+/g,"-");
+    console.log("berhasil masuk sini")
+
+
   return (
     <>
-    <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+    {/* <div>
+        
+        <img src={`${backend_url}/${data?.images[0]}`} alt="" className="w-[100px] h-[100px] rounded-full object-contain" />
+    </div> */}
+    <div className="w-full h-[370px] bg-white rounded-lg  p-3 relative cursor-pointer shadow-2xl">
         <div className="">
             <div className='w-full  flex items-center justify-center'>
 
             
             <Link to={`/product/${product_name}`}>
-                <img src={data.image_Url[0].url} 
+                <img src={`${backend_url}/${data?.images[0]}`} 
                     alt = ""
-                    className='w-[170px] h-[170px] object-cover items-center justify-center rounded-md'
+                    className='w-[170px] h-[170px] object-cover items-center justify-center rounded-md shadow-sm'
                 />
             </Link>
-            </div>
+            </div>  
             <Link to="/">
                 <h5 className={`${styles.shop_name} text-[20px]`}>{data.shop.name}</h5>
             </Link>
@@ -42,10 +50,10 @@ const ProductCard = ({data}) => {
                 <div className="py-2 flex items-center justify-between">
                     <div className="flex">
                         <h5 className={`${styles.productDiscountPrice}`}>
-                           Rp. {data.price === 0 ? (data.price=== 0) : (data.discount_price)}
+                           Rp. {data.discountPrice}
                         </h5>
                         <h4 className={`${styles.price}`}>
-                            {data.price ? "Rp. " + data.price  : (null)}
+                            Rp. {data.originalPrice}
                         </h4>
                         
                     </div>

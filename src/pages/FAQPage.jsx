@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Layout/Header'
 import Footer from '../components/Layout/Footer'
 import styles from '../styles/styles'
+import { useDispatch } from 'react-redux'
+import { getAllProducts } from '../redux/actions/product'
 
 const FAQPage = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getAllProducts());
+     },[])
   return (
     <div>
         <Header activeHeading={5}/>

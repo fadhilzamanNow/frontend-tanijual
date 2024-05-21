@@ -5,28 +5,33 @@ import { productData } from '../static/data.js';
 import { useParams } from 'react-router-dom';
 import Footer from '../components/Layout/Footer.jsx';
 import SuggestedProduct from "../components/Products/SuggestedProduct"
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../components/Layout/Loader.jsx';
+import { getAllProductsShop } from '../redux/actions/product.js';
 
 const ProductDetailsPage = () => {
 
     const {name} = useParams();
     const [data,setData] = useState(null)
     const productName = name.replace(/-/g," ");
+    const {allProducts, isLoading} = useSelector((state) => state.products)
 
     console.log(productName);
     useEffect(()=> {
-        const data = productData.find((i) => i.name === productName);
+        const data = allProducts && allProducts.find((i) => i.name === productName);
         setData(data);
-    },[productName])
-
+    },[allProducts])
     
   return (
     <div>
         <Header />
-        <ProductDetails data={data}/>
+        {isLoading ? (<Loader />) : (<ProductDetails data={data}/>)}
+        
         {
             data && <SuggestedProduct data={data} />
         }
-       <Footer />
+        <Footer />
+       
     </div>
   )
 }

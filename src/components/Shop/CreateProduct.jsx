@@ -28,7 +28,7 @@ const CreateProduct = () => {
         }
         if(success){
             toast.success("Product telah berhasil dibuat");
-            navigate("/dashboard");
+            navigate("/dashboard-products");
             window.location.reload();
         }
     },[dispatch,error,success])

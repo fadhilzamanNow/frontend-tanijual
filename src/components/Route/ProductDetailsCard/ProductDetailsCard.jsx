@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import { RxCross1 } from 'react-icons/rx';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineShoppingCart } from 'react-icons/ai';
+import { backend_url } from '../../../server';
+import { Link } from 'react-router-dom';
 
 const ProductDetailsCard = ({data,setOpen}) => {
     const [count,setCount] = useState(1);
@@ -27,18 +29,19 @@ const ProductDetailsCard = ({data,setOpen}) => {
                         <RxCross1 size={30} className="absolute right-3 top-3 z-50" onClick={() => setOpen(false)} />
                         <div className="block w-full 800px:flex ">
                             <div className="w-full 800px:w-[50%]  ">
-                                <img src={data.image_Url[0].url} alt="" className="h-[300px] w-[300px] object-cover ml-20 mt-10" />
+                                <img src={`${backend_url}/${data?.images[0]}`} alt="" className="h-[300px] w-[300px] object-cover ml-20 mt-10" />
                                 <div className="flex items-center ml-5">
-                                    <img src={data.shop.shop_avatar.url} alt="" className='w-[50px] h-[50px] rounded-full object-cover ml-[65px]'/>
+                                    <Link to={`/shop/preview/${data.shop._id} `}>
+                                    <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" className='w-[50px] h-[50px] rounded-full object-cover ml-[65px]'/>
                                     <div>
                                         <h3 className={`${styles.shop_name}`}>
                                             {data.shop.name}
                                         </h3>
                                         <h5 className='pb-3 text-[15px]'>
-                                            ({data.shop.ratings}) Ratings
+                                            
                                         </h5>
                                     </div>
-                                    
+                                    </Link>
                                 </div>
                                 <div className={`${styles.button} bg-black mt-4 rounded-[4px] h-11 ml-20`} onClick={handleMessageSubmit}>
                                         <span className="text- white flex items-center">
@@ -46,7 +49,7 @@ const ProductDetailsCard = ({data,setOpen}) => {
                                         </span>
                                     </div>
                                     <h5 className="text-[16px] text-red-600 mt-5 ml-20">
-                                        ({data.total_sell}) Terjual
+                                        X Terjual
                                     </h5>
                             </div>
                             <div className="w-full 800px:w-[50%] pt-5 pl-[px] pr-[5px]">
@@ -58,10 +61,10 @@ const ProductDetailsCard = ({data,setOpen}) => {
                                 </p>
                                 <div className="flex pt-3">
                                 <h4 className={`${styles.productDiscountPrice}}`}>
-                                    Rp .{data.discount_price}    
+                                    Rp. {data.discountPrice}    
                                 </h4> 
                                 <h3 className={`${styles.price}`}>
-                                    {data.price ? "Rp. " + data.price : null}
+                                    {data.originalPrice ? "Rp. " + data.originalPrice : null}
                                 </h3>
                              </div>
                              <div className="flex items-center mt-12 justify-between pr-3">

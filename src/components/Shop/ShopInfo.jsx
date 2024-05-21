@@ -1,29 +1,53 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { backend_url, server } from '../../server'
 import styles from '../../styles/styles'
 import axios from 'axios'
+import { getAllProductsShop } from '../../redux/actions/product'
+import { useParams } from 'react-router-dom'
+import Loader from '../Layout/Loader'
 
 const ShopInfo = ({isOwner}) => {
-    const {seller} = useSelector((state) => state.seller)
+    
+    const {id} = useParams();
+    const [data,setData] = useState({});
+    const [isLoading,setIsLoading] = useState(true);
+    
+
+    useEffect(() => {
+        setIsLoading(true);
+        axios.get(`${server}/shop/get-shop-info/${id}`,{withCredentials : true}).then((res) => {
+            setData(res.data.shop);
+            console.log(data)
+            setIsLoading(false);
+        }).catch((error) => {
+            console.log(error)
+        })
+    },[])
+
+
+    
 
     const logoutHandler = () => {
         axios.get(`${server}/shop/logout`, {withCredentials : true})
         window.location.reload();
     }
   return (
-    <div>
+    <>
+    {
+        isLoading ? (<Loader />) : (
+            <div>
          <div className="w-full py-5">
             <div className="w-full flex item-center justify-center">
-                <img src={`${backend_url}/${seller?.avatar}`} alt="" 
+                <img src={`${backend_url}/${data?.avatar}`} alt="" 
                     className="w-[150px] h-[150px] object-cover rounded-full"
                 />
             </div>
             <h3 className="text-center py-2 text-[20px]">
-                {seller?.name}
+                {data?.name}
             </h3>
             <p className="text-[16px] text-black p-[10px] flex items-center text-justify">
-                {seller?.description}
+                {data?.description}
             </p>
         </div>
         <div className="p-3">
@@ -31,7 +55,7 @@ const ShopInfo = ({isOwner}) => {
                 Alamat
             </h5>
             <h4 className="text-black">
-                {seller?.address}
+                {data?.address}
             </h4>
         </div>
         <div className="p-3">
@@ -39,7 +63,7 @@ const ShopInfo = ({isOwner}) => {
                 Nomor
             </h5>
             <h4 className="text-black">
-                0{seller?.phoneNumber}
+                0{data?.phoneNumber}
             </h4>
         </div>
         <div className="p-3">
@@ -63,7 +87,7 @@ const ShopInfo = ({isOwner}) => {
                 Bergabung Sejak
             </h5>
             <h4 className="text-black">
-                {seller?.createdAt.slice(0,10)}
+                {data?.createdAt.slice(0,10)}
             </h4>
         </div>
         {
@@ -83,8 +107,9 @@ const ShopInfo = ({isOwner}) => {
             )
         }
     </div>
-
-   
+        )
+    }
+    </>
   )
 }
 

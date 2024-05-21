@@ -1,16 +1,34 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styles from '../../styles/styles';
 import { AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
+import { backend_url, server } from '../../server';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProducts, getAllProductsShop } from '../../redux/actions/product';
+import axios from 'axios';
 
 
 const ProductDetails = ({data}) => {
-    console.log("the data", data)
 
     const [count,setCount] = useState(1);
     const [click,setClick] = useState(false);
     const navigate = useNavigate()
     const [select,setSelect] = useState(0)
+    const [isLoading,setIsLoading] = useState(true)
+    const [products,setProducts] = useState([]);
+    
+    useEffect(() => {
+        setIsLoading(true)
+        console.log("data : ", data?.shopId)
+        axios.get(`${server}/product/get-all-products-shop/${data?.shopId}`).then((res) => {
+            setProducts(res.data.products)
+        }).catch((err) => {
+            console.log(err)
+        })
+    },[data])
+
+    
+    
 
     const incrementCount = () => {
         setCount(count + 1);
@@ -29,22 +47,22 @@ const ProductDetails = ({data}) => {
     <div className="bg-white">
         {
             data ? (
-                <div className={`${styles.section} w-[90%] 800px:w-[80%] h-screen`}>
+                <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
                     <div className="w-full py-5">
                         <div className="block w-full 800px:flex pt-5">
                             <div className="w-full flex-col items-center 800px:w-[50%] 800px:flex-col 800px:items-center">
                                 <div>
-                                <img src={data.image_Url[select].url} alt="" className="w-[80%]"/>
+                                <img src={`${backend_url}/${data?.images[select]}`} alt="" className="w-[80%]"/>
                                 </div>
                                 <div className="w-full flex">
                                     <div className={`${select === 0 ? "border" : "null"} cursor-pointer`}>
-                                            <img src={data?.image_Url[0].url} alt="" 
+                                            <img src={`${backend_url}/${data?.images[0]}`} alt="" 
                                                 className="h-[200px]"
                                                 onClick={() => setSelect(0)}
                                             />
                                     </div>
                                     <div className={`${select === 1 ? "border" : "null"} cursor-pointer self-center`}>
-                                            <img src={data?.image_Url[1].url} alt="" 
+                                            <img src={`${backend_url}/${data?.images[1]}`} alt="" 
                                                 className="h-[200px]"
                                                 onClick={() => setSelect(1)}
                                             />
@@ -59,10 +77,10 @@ const ProductDetails = ({data}) => {
                                     {data.description}
                                 </p>
                                 <h4 className={`${styles.productDiscountPrice}`}>
-                                    Rp. {data.discount_price}
+                                    Rp. {data.discountPrice}
                                 </h4>
                                 <h3 className={`${styles.price}`}>
-                                    {data.price ? "Rp. " + data.price : null}
+                                    {data.originalPrice ? "Rp. " + data.originalPrice : null}
                                 </h3>
                                 <div className="flex items-center mt-12 justify-between pr-3">
                                 <div>
@@ -110,7 +128,7 @@ const ProductDetails = ({data}) => {
                             </div>
                         </div> 
                         <div className="flex items-center pt-8">
-                            <img src={data.shop.shop_avatar.url} alt="" 
+                            <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" 
                                 className="w-[50px] h-[50px] rounded-full mr-2"
                             />
                             <div>
@@ -118,7 +136,7 @@ const ProductDetails = ({data}) => {
                                     {data.shop.name}
                                 </h3>
                                 <h5 className="pb-3 text-[15px]">
-                                    ({data.shop.ratings}) Rating
+                                    X Rating
                                 </h5>
                             </div>
                             <div className="bg-green-400 w-[250px] p-4 rounded-xl items-center flex flex-col ml-3" onClick={handleMessageSubmit}>
@@ -138,7 +156,7 @@ const ProductDetails = ({data}) => {
                     <br />
                     <br />
                     <br />
-                    <ProductDetailsInfo data={data} />
+                    <ProductDetailsInfo data={data} products = {products}/>
                 </div>
             ) : 
             (null)
@@ -147,9 +165,10 @@ const ProductDetails = ({data}) => {
   )
 }
 
-const ProductDetailsInfo = ({data}) => {
+const ProductDetailsInfo = ({data,products}) => {
     const [active,setActive] = useState(1);
 
+    
 
     return (
         <div className="bg-white px-3 800px:px-10 py-2 rounded ">
@@ -178,7 +197,7 @@ const ProductDetailsInfo = ({data}) => {
                             }
                         
                     </div>
-                    <div className="relative">
+                    <div className="">
                         <h5 className={`text-black text-[18px] px-1 leading-5 font-[600] cursoir-pointer 800px:text-[20px] `} onClick={() => setActive(3)} >
                             Informasi Penjual</h5>
                             {
@@ -194,19 +213,8 @@ const ProductDetailsInfo = ({data}) => {
                 {
                     active === 1 ? (
                         <>
-                        <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis exercitationem maiores, molestias accusamus, natus quod numquam debitis, officiis corporis tempora laboriosam. Ab rerum itaque aut soluta eligendi quisquam placeat quibusdam.
-                        Hic, in inventore facere possimus ratione, esse quos provident pariatur unde ducimus similique amet est ipsum deserunt. Explicabo architecto doloribus voluptates. At ducimus adipisci sunt voluptatibus ullam iure! Odio, ipsum.
-                        Veritatis aliquid laboriosam recusandae amet velit qui, id assumenda nihil explicabo necessitatibus possimus, commodi in dolorem consectetur sint libero accusamus, quia reiciendis provident similique ex illo autem ab reprehenderit? Maxime!
-                        Beatae voluptatum id autem harum nostrum architecto molestiae voluptates natus earum ab blanditiis enim quis reprehenderit in nesciunt eveniet exercitationem veritatis sed iusto hic officiis quam, illo eligendi? Incidunt, id.
-                        Repellat aliquid nesciunt aut. Delectus incidunt recusandae laboriosam aliquid quisquam illum. Mollitia doloribus iusto labore facere corporis, reiciendis, nisi fugiat tempore magni quaerat quisquam quod a, nobis consequuntur aliquam odio!
-                        </p>
-                        <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis exercitationem maiores, molestias accusamus, natus quod numquam debitis, officiis corporis tempora laboriosam. Ab rerum itaque aut soluta eligendi quisquam placeat quibusdam.
-                        Hic, in inventore facere possimus ratione, esse quos provident pariatur unde ducimus similique amet est ipsum deserunt. Explicabo architecto doloribus voluptates. At ducimus adipisci sunt voluptatibus ullam iure! Odio, ipsum.
-                        Veritatis aliquid laboriosam recusandae amet velit qui, id assumenda nihil explicabo necessitatibus possimus, commodi in dolorem consectetur sint libero accusamus, quia reiciendis provident similique ex illo autem ab reprehenderit? Maxime!
-                        Beatae voluptatum id autem harum nostrum architecto molestiae voluptates natus earum ab blanditiis enim quis reprehenderit in nesciunt eveniet exercitationem veritatis sed iusto hic officiis quam, illo eligendi? Incidunt, id.
-                        Repellat aliquid nesciunt aut. Delectus incidunt recusandae laboriosam aliquid quisquam illum. Mollitia doloribus iusto labore facere corporis, reiciendis, nisi fugiat tempore magni quaerat quisquam quod a, nobis consequuntur aliquam odio!
+                        <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
+                            {data?.description}
                         </p>
                         
                         </>
@@ -227,32 +235,35 @@ const ProductDetailsInfo = ({data}) => {
                         <>
                        <div className="w-full block 800px:flex p-5 h-[50vh]">
                             <div className="w-full 800px:w-[50%] h-[50vh]">
-                                <div className="flex items-center pl-3">
-                                    <img src={data.shop.shop_avatar.url} alt="" className="w-[50px] h-[50px] rounded-full object-cover" />
+                                <Link to={`/shop/preview/${data.shop._id}`}>
+                                <div className="flex items-center pl-3">                
+                                    <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" className="w-[50px] h-[50px] rounded-full object-cover" />
                                     <div>
                                         <h3 className={`${styles.shop_name}`}>
                                             {data.shop.name}
                                         </h3>
                                         <h5 className='pb-3 text-[15px]'>
-                                            ({data.shop.ratings}) Ratings
+                                            X Ratings
                                         </h5>
                                     </div>
+                                   
                                 </div>
+                                </Link>
                                 <div className="pt-2">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat iusto tenetur nihil similique ipsam soluta ex dolor saepe eligendi aperiam architecto, laudantium molestias incidunt, impedit quibusdam quae hic! Natus, modi.
+                                    {data?.shop?.description}
                                     </div>
                                 
                             </div>
                             <div className="w-full 800px:w-[50%]">
                                 <div className="text-left">
                                     <h5 className="font-[600] mt-5 800px:mt-0 800px:flex flex-col items-end">
-                                        Bergabung sejaka <span className="font-[500]"> 14 Mei 2024</span>
+                                        Bergabung sejak <span className="font-[100]">{data?.shop?.createdAt?.slice(0,10)}</span>
                                     </h5>
                                     <h5 className="font-[600] mt-5 800px:mt-0 800px:flex flex-col items-end">
-                                        Total Produk yang dijual <span className="font-[500]"> 12</span>
+                                        Total Produk yang dijual <span className="font-[100]">{products?.length}</span>
                                     </h5>
                                     <h5 className="font-[600] mt-5 800px:mt-0 800px:flex flex-col items-end">
-                                        Total Review <span className="font-[500]"> 153</span>
+                                        Total Review <span className="font-[100]"> 153</span>
                                     </h5>
                                     <Link to="/">
                                         <div className={`${styles.button} rounded-[4px] h-[39.5px] mt-3 items-end`}>
