@@ -15,6 +15,8 @@ import { RxCross1 } from "react-icons/rx";
 import Wishlist from "../Wishlist/Wishlist"
 const Header = ({activeHeading}) => {
   const {isAuthenticated, user} = useSelector((state) => state.user);
+  const {cart} = useSelector ((state) => state.cart)
+  const {wishlist} = useSelector((state) => state.wishlist)
   
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState("");
@@ -144,7 +146,7 @@ const Header = ({activeHeading}) => {
                     
                 </div>
                 {/* navitems */}
-                <div className={`${styles.noramlFlex} mt-5`}>
+                <div className={`${styles.noramlFlex}`}>
                         <Navbar active={activeHeading}/>
                         </div>
                 <div className="flex flex-row">
@@ -155,7 +157,7 @@ const Header = ({activeHeading}) => {
                                 className="text-white"
                             />
                             <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-
+                            {wishlist && wishlist.length}
                             </span>
                         </div>
                     </div>
@@ -167,7 +169,7 @@ const Header = ({activeHeading}) => {
                                 onClick ={() => setOpenCart(true)}
                             />
                             <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-
+                                {cart && cart.length}
                             </span>
                         </div>
                     </div>
@@ -230,6 +232,9 @@ const Header = ({activeHeading}) => {
                             <AiOutlineShoppingCart 
                                 size={30}
                             />
+                              <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                                {cart && cart.length}
+                            </span>
                         </div>
                         <div className="relative cursor-pointer mr-[15px]">
                         {isAuthenticated ? (
@@ -263,7 +268,7 @@ const Header = ({activeHeading}) => {
                                             className="mt-5 ml-3 relative" 
                                         />
                                         <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                                            1
+                                        {wishlist && wishlist.length}
                                         </span>
                                     </div>
                                 </div>

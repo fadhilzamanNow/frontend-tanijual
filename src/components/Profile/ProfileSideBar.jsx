@@ -46,7 +46,7 @@ const ProfileSideBar = ({active,setActive}) => {
         </div>
         <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(6)}>
             <AiOutlineCreditCard size={20} color={active === 6 ? "red" : ""} />
-            <span className={`pl-3 ${active === 6 ? "text-red-400" : ""} 800px:block hidden`}>Metode Pembayaran</span>
+            <span className={`pl-3 ${active === 6 ? "text-red-400" : ""} 800px:block hidden`}>Ganti Password</span>
         </div>
         <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(7)}>
             <TbAddressBook size={20} color={active === 7 ? "red" : ""} />

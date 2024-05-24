@@ -1,19 +1,68 @@
-import React,{useState} from 'react'
-import { Link } from 'react-router-dom';
+import React,{useEffect, useState} from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiFillStar, AiOutlineEye, AiOutlineHeart, AiOutlineShoppingCart, AiOutlineStar } from 'react-icons/ai';
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx"
 import { backend_url } from '../../../server.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishlist.js';
+import { toast } from 'react-toastify';
+import { addToCart } from '../../../redux/actions/cart.js';
 
 const ProductCard = ({data}) => {
 
     const [click,setClick] = useState(false);
     const [open,setOpen] = useState(false);
+    const {cart} = useSelector((state) => state.cart)
 
     const d = data.name;
     const product_name = d.replace(/\s+/g,"-");
     console.log("berhasil masuk sini")
 
+    const dispatch = useDispatch()
+
+    const addToWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(addToWishlist(data))
+    }
+
+    const deleteFromWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(removeFromWishlist(data))
+
+    }
+
+
+    const addToCartHandler = (id) => {
+        const isItemExists = cart && cart.find((i) => i._id === id)
+        if(isItemExists){
+            toast.error("Produk sudah ditambahkan ke dalam keranjang !")
+        }else{
+            if(data.stock < 1){
+                toast.error("Jumlah yang masukkan melebihi stok")
+            } else{
+                const cartData = {...data, qty : 1}
+                dispatch(addToCart(cartData));
+                toast.success("Produk berhasil ditambahkan")
+            }
+        }
+    }
+
+    const {wishlist} = useSelector((state) => state.wishlist)
+
+    useEffect(() => {
+        if(wishlist && wishlist.find((i) => i._id === data._id )){
+            setClick(true);
+        }else{
+            setClick(false);
+        }
+    },[wishlist])
+
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate(`/product/${data._id}`)
+        
+    }
 
   return (
     <>
@@ -26,17 +75,18 @@ const ProductCard = ({data}) => {
             <div className='w-full  flex items-center justify-center'>
 
             
-            <Link to={`/product/${product_name}`}>
+            
                 <img src={`${backend_url}/${data?.images[0]}`} 
                     alt = ""
                     className='w-[170px] h-[170px] object-cover items-center justify-center rounded-md shadow-sm'
+                    onClick={() => handleClick()}
                 />
-            </Link>
+            
             </div>  
-            <Link to="/">
+            <Link to={`/shop/preview/${data.shopId}`}>
                 <h5 className={`${styles.shop_name} text-[20px]`}>{data.shop.name}</h5>
             </Link>
-            <Link to={`/product/${product_name}`}>
+            <Link to={`/product/${data._id}`}>
                 <h4 className="pb-3 font-[500] text-justify ">
                     {data.name.length > 49 ? data.name.slice(0, 40) + "..." : data.name }
                 </h4>
@@ -68,14 +118,14 @@ const ProductCard = ({data}) => {
                     <AiFillHeart 
                     size={22}
                     className="cursor-pointer absolute right-2 top-5" 
-                    onClick={() => setClick(!click)}
+                    onClick={() => deleteFromWishlistHandler(data)}
                     color={click ? "red" : "gray"}
                     title='Remove dari Wishlist'
                     />
                 ) : (
                     <AiOutlineHeart 
                     className="cursor-pointer absolute right-2 top-5" 
-                    onClick={() => setClick(!click)}
+                    onClick={() => addToWishlistHandler(data)}
                     color={click ? "red" : "gray"}
                     title='Tambahkan ke Wishlist'
                     />
@@ -91,7 +141,7 @@ const ProductCard = ({data}) => {
                 
                 <AiOutlineShoppingCart 
                 className="cursor-pointer absolute right-2 top-24" 
-                onClick={() => setClick(!click)}
+                onClick={() => addToCartHandler(data._id)}
                 color="gray"
                 title='Tambahkan ke Keranjang'
                 />

@@ -6,6 +6,9 @@ import { backend_url, server } from '../../server';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts, getAllProductsShop } from '../../redux/actions/product';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { addToWishlist, removeFromWishlist } from '../../redux/actions/wishlist';
+import { addToCart } from '../../redux/actions/cart';
 
 
 const ProductDetails = ({data}) => {
@@ -16,6 +19,10 @@ const ProductDetails = ({data}) => {
     const [select,setSelect] = useState(0)
     const [isLoading,setIsLoading] = useState(true)
     const [products,setProducts] = useState([]);
+    const {wishlist} = useSelector((state) => state.wishlist)
+    const {cart} = useSelector((state) => state.cart)
+
+    const dispatch = useDispatch();
     
     useEffect(() => {
         setIsLoading(true)
@@ -25,7 +32,41 @@ const ProductDetails = ({data}) => {
         }).catch((err) => {
             console.log(err)
         })
-    },[data])
+
+        if(wishlist && wishlist.find((i) => i._id === data?._id)){
+            setClick(true);
+        }else{
+            setClick(false);
+        }
+        
+    },[data,wishlist])
+
+    const addToWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(addToWishlist(data))
+    }
+
+    const deleteFromWishlistHandler = (data) => {
+        setClick(!click);
+        dispatch(removeFromWishlist(data))
+
+    }
+
+
+    const addToCartHandler = (id) => {
+        const isItemExists = cart && cart.find((i) => i._id === id)
+        if(isItemExists){
+            toast.error("Produk sudah ditambahkan ke dalam keranjang !")
+        }else{
+            if(data.stock < count){
+                toast.error("Jumlah yang masukkan melebihi stok")
+            } else{
+                const cartData = {...data, qty : count}
+                dispatch(addToCart(cartData));
+                toast.success("Produk berhasil ditambahkan")
+            }
+        }
+    }
 
     
     
@@ -102,7 +143,7 @@ const ProductDetails = ({data}) => {
                             <AiFillHeart
                             size={30}
                             className="cursor-pointer " 
-                            onClick={() => setClick(!click)}
+                            onClick={() => deleteFromWishlistHandler(data)}
                             color={click ? "red" : "gray"}
                             title='Remove dari Wishlist'
                             />
@@ -110,7 +151,7 @@ const ProductDetails = ({data}) => {
                             <AiOutlineHeart 
                             className="cursor-pointer " 
                             size={30}
-                            onClick={() => setClick(!click)}
+                            onClick={() => addToWishlistHandler(data)}
                             color={click ? "red" : "gray"}
                             title='Tambahkan ke Wishlist'
                             />
@@ -119,7 +160,7 @@ const ProductDetails = ({data}) => {
                             
                         </div> 
 
-                        <div className={`rounded-xl mt-6 h-11 flex items-center w-[250px] bg-black text-white justify-between`}>
+                        <div className={`rounded-xl mt-6 h-11 flex items-center w-[250px] bg-black text-white justify-between`} onClick={() => addToCartHandler(data._id)}>
                             <div className="ml-4">
                                 Tambahkan ke Keranjang
                             </div>
@@ -128,13 +169,17 @@ const ProductDetails = ({data}) => {
                             </div>
                         </div> 
                         <div className="flex items-center pt-8">
+                            <Link to={`/shop/preview/${data.shop._id}`}>
                             <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" 
                                 className="w-[50px] h-[50px] rounded-full mr-2"
                             />
+                            </Link>
                             <div>
+                            <Link to={`/shop/preview/${data.shop._id}`}>
                             <h3 className={styles.shop_name}>
                                     {data.shop.name}
                                 </h3>
+                            </Link>
                                 <h5 className="pb-3 text-[15px]">
                                     X Rating
                                 </h5>
