@@ -71,7 +71,7 @@ const DashboardSideBar = ({active}) => {
             </Link>
         </div>
         <div className="w-full flex items-center p-4">
-            <Link to="/dashboard-inbox" className="w-full flex items-center">
+            <Link to="/dashboard-messages" className="w-full flex items-center">
                 <BiMessageSquareDetail size={30}  className={`${active === 8 ? "text-red-400" : "grey"} `}/>
                 <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 8 ? "text-red-400" : "grey"} `}>
                     Pesan 

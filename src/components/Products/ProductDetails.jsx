@@ -9,6 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { addToWishlist, removeFromWishlist } from '../../redux/actions/wishlist';
 import { addToCart } from '../../redux/actions/cart';
+import Ratings from './Ratings';
 
 
 const ProductDetails = ({data}) => {
@@ -21,8 +22,13 @@ const ProductDetails = ({data}) => {
     const [products,setProducts] = useState([]);
     const {wishlist} = useSelector((state) => state.wishlist)
     const {cart} = useSelector((state) => state.cart)
+    const {user,isAuthenticated} = useSelector((state) => state.user)
 
     const dispatch = useDispatch();
+
+
+    
+    
     
     useEffect(() => {
         setIsLoading(true)
@@ -68,7 +74,7 @@ const ProductDetails = ({data}) => {
         }
     }
 
-    
+    console.log("data adalah : ", data);
     
 
     const incrementCount = () => {
@@ -79,11 +85,36 @@ const ProductDetails = ({data}) => {
         setCount(count - 1);
     }
 
-    const handleMessageSubmit = () => {
-        navigate("/inbox?conversation=501231231131e")
+    console.log("data adalah : ", data)
+    const handleMessageSubmit = async(e) => {
+        if(isAuthenticated){
+            const groupTitle = data._id + user._id
+            const userId = user._id 
+            const sellerId = data?.shopId
+            await axios.post(`${server}/conversation/create-new-conversation`,{
+                groupTitle,userId,sellerId
+            }).then((res) => {
+                navigate(`/ conversation/${res.data.conversation._id}`)
+            }).catch((err) => {
+                toast.error(`${err.response.data.message}`)
+            })
+        }else{
+            toast.error("Untuk memulai pembicaran, login terlebih dahulu")
+        }
     }
 
 
+    const totalReviewsLength = products && products.reduce((acc,product) => {
+        return acc + product.reviews.length
+},0)
+
+    const totalRatings = products && products.reduce((acc,product) => {
+        return acc + product.reviews.reduce((sum,review) => {
+            return sum + review.rating
+        },0)
+    },0)
+
+    const averageRating = totalRatings / totalReviewsLength || 0;
   return (
     <div className="bg-white">
         {
@@ -181,7 +212,7 @@ const ProductDetails = ({data}) => {
                                 </h3>
                             </Link>
                                 <h5 className="pb-3 text-[15px]">
-                                    X Rating
+                                    {averageRating}/5 Rating
                                 </h5>
                             </div>
                             <div className="bg-green-400 w-[250px] p-4 rounded-xl items-center flex flex-col ml-3" onClick={handleMessageSubmit}>
@@ -201,7 +232,7 @@ const ProductDetails = ({data}) => {
                     <br />
                     <br />
                     <br />
-                    <ProductDetailsInfo data={data} products = {products}/>
+                    <ProductDetailsInfo data={data} products = {products} totalReviewsLength = {totalReviewsLength} averageRating = {averageRating} />
                 </div>
             ) : 
             (null)
@@ -210,14 +241,14 @@ const ProductDetails = ({data}) => {
   )
 }
 
-const ProductDetailsInfo = ({data,products}) => {
+const ProductDetailsInfo = ({data,products, totalReviewsLength,averageRating}) => {
     const [active,setActive] = useState(1);
 
     
 
     return (
         <div className="bg-white px-3 800px:px-10 py-2 rounded ">
-                <div className="w-full flex justify-between border-b pt-10 pb-2">
+                <div className="w-full flex justify-between border-b pt-10 pb-2 ">
                     <div className="relative">
                         <h5 className={`text-black text-[18px] px-1 leading-5 font-[600] cursoir-pointer 800px:text-[20px] `} onClick={() => setActive(1)} >
                             Detail Produk</h5>
@@ -242,7 +273,7 @@ const ProductDetailsInfo = ({data,products}) => {
                             }
                         
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <h5 className={`text-black text-[18px] px-1 leading-5 font-[600] cursoir-pointer 800px:text-[20px] `} onClick={() => setActive(3)} >
                             Informasi Penjual</h5>
                             {
@@ -258,7 +289,7 @@ const ProductDetailsInfo = ({data,products}) => {
                 {
                     active === 1 ? (
                         <>
-                        <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
+                        <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line min-h-[40vh]">
                             {data?.description}
                         </p>
                         
@@ -267,18 +298,38 @@ const ProductDetailsInfo = ({data,products}) => {
                 }
                 {
                     active === 2 ? (
-                        <>
-                        <p>
-                        Belum ada review
-                        </p>
-                        
-                        </>
+                       <div className = "w-full mt-3 min-h-[40vh] flex flex-col items-center overflow-y-scroll ">
+                        {
+                            data && data.reviews.map((item,index) => {
+                               
+                                return (
+                                    <div className="w-full flex my-2 items-center">
+                                        <img src={`${backend_url}/${item.user.avatar}`} alt="" className="w-[50px] h-[50px] rounded-full" />
+                                        <div>
+                                            <h1 className="pl-3 font-[600]">{item?.user?.name}</h1>
+                                            <p className="pl-3">
+                                            {item?.comment}
+                                            </p>
+            
+                                            <Ratings rating = {item?.rating}/>
+                                        </div>
+                                       
+                                    </div>
+                                )
+                            })
+                        }
+                        {
+                            data && data.reviews.length === 0 && (
+                                <h5>Belum ada review untuk produk ini   </h5>
+                            )
+                        }
+                       </div>
                     ) : (null)
                 }
                 {
                     active === 3 ? (
                         <>
-                       <div className="w-full block 800px:flex p-5 h-[50vh]">
+                       <div className="w-full block 800px:flex p-5 h-[40vh]">
                             <div className="w-full 800px:w-[50%] h-[50vh]">
                                 <Link to={`/shop/preview/${data.shop._id}`}>
                                 <div className="flex items-center pl-3">                
@@ -288,7 +339,7 @@ const ProductDetailsInfo = ({data,products}) => {
                                             {data.shop.name}
                                         </h3>
                                         <h5 className='pb-3 text-[15px]'>
-                                            X Ratings
+                                            {averageRating}/5 Rating
                                         </h5>
                                     </div>
                                    
@@ -308,7 +359,7 @@ const ProductDetailsInfo = ({data,products}) => {
                                         Total Produk yang dijual <span className="font-[100]">{products?.length}</span>
                                     </h5>
                                     <h5 className="font-[600] mt-5 800px:mt-0 800px:flex flex-col items-end">
-                                        Total Review <span className="font-[100]"> 153</span>
+                                        Total Review <span className="font-[100]">{totalReviewsLength}</span>
                                     </h5>
                                     <Link to="/">
                                         <div className={`${styles.button} rounded-[4px] h-[39.5px] mt-3 items-end`}>

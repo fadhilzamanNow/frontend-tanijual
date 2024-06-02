@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { RxCross1 } from 'react-icons/rx';
 import {Country, State} from "country-state-city"
+import { getAllOrdersOfUser } from '../../redux/actions/order';
 
 const ProfileContent = ({active}) => {
     const {user} = useSelector((state) => state.user);
@@ -182,27 +183,23 @@ const ProfileContent = ({active}) => {
 
 
 const AllOrders = () => {
-    const orders = [
-        {
-          _id: "7463hvbfbhfbrtr28820221",
-          orderItems: [
-            {
-              name: "Iphone 14 pro max",
-            },
-          ],
-          totalPrice: 12000,
-          orderStatus: "Processing",
-        },
-      ];
-    
+  
+    const {orders, isLoading} = useSelector((state) => state.order)
+    const {user} = useSelector((state) => state.user)
+    const dispatch = useDispatch()
+    useEffect(() => {
+      dispatch(getAllOrdersOfUser(user._id))
+    },[])
+    console.log("loading :", isLoading)
+    console.log("order : ", orders);
       const columns = [
-        { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+        { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.1 },
     
         {
           field: "status",
           headerName: "Status",
           minWidth: 130,
-          flex: 0.7,
+          flex: 0.1,
           cellClassName: (params) => {
             return params.getValue(params.id, "status") === "Delivered"
               ? "greenColor"
@@ -210,11 +207,11 @@ const AllOrders = () => {
           },
         },
         {
-          field: "itemsQty",
-          headerName: "Items Qty",
+          field: "itemQty",
+          headerName: "Jumlah",
           type: "number",
           minWidth: 130,
-          flex: 0.7,
+          flex: 0.1,
         },
     
         {
@@ -222,12 +219,12 @@ const AllOrders = () => {
           headerName: "Total",
           type: "number",
           minWidth: 130,
-          flex: 0.8,
+          flex: 0.1,
         },
     
         {
           field: " ",
-          flex: 1,
+          flex: 0.1,
           minWidth: 150,
           headerName: "",
           type: "number",
@@ -235,7 +232,7 @@ const AllOrders = () => {
           renderCell: (params) => {
             return (
               <>
-                <Link to={`/order/${params.id}`}>
+                <Link to={`/user/order/${params.id}`}>
                   <Button>
                     <AiOutlineArrowRight size={20} />
                   </Button>
@@ -249,12 +246,13 @@ const AllOrders = () => {
 
       const row = [];
 
-      orders && orders.forEach((item) => {
+      orders && orders?.forEach((item) => {
         row.push({
             id: item._id,
-            itemsQty : item.orderItems.length,
+            itemQty : item.cart.length,
             total : "Rp. " + item.totalPrice,
-            status : item.orderStatus
+            status : item.status
+           
         })
       });
 
@@ -274,81 +272,82 @@ const AllOrders = () => {
 
 const AllRefundOrders = () => {
 
-    const orders = [
-        {
-          _id: "7463hvbfbhfbrtr28820221",
-          orderItems: [
-            {
-              name: "Iphone 14 pro max",
-            },
-          ],
-          totalPrice: 12000,
-          orderStatus: "Processing",
-        },
-      ];
-    
-      const columns = [
-        { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-    
-        {
-          field: "status",
-          headerName: "Status",
-          minWidth: 130,
-          flex: 0.7,
-          cellClassName: (params) => {
-            return params.getValue(params.id, "status") === "Delivered"
-              ? "greenColor"
-              : "redColor";
-          },
-        },
-        {
-          field: "itemsQty",
-          headerName: "Items Qty",
-          type: "number",
-          minWidth: 130,
-          flex: 0.7,
-        },
-    
-        {
-          field: "total",
-          headerName: "Total",
-          type: "number",
-          minWidth: 130,
-          flex: 0.8,
-        },
-    
-        {
-          field: " ",
-          flex: 1,
-          minWidth: 150,
-          headerName: "",
-          type: "number",
-          sortable: false,
-          renderCell: (params) => {
-            return (
-              <>
-                <Link to={`/order/${params.id}`}>
-                  <Button>
-                    <AiOutlineArrowRight size={20} />
-                  </Button>
-                </Link>
-              </>
-            );
-          },
-        },
-      ];
+  const {orders, isLoading} = useSelector((state) => state.order)
+  const {user} = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id))
+  },[])
 
 
-      const row = [];
+  const orderbenar = orders && orders.filter((item) => {
+    return item.status === "Memproses Pembatalan"
+  })
+  console.log("loading :", isLoading)
+  console.log("order : ", orders);
+    const columns = [
+      { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.1 },
+  
+      {
+        field: "status",
+        headerName: "Status",
+        minWidth: 130,
+        flex: 0.1,
+        cellClassName: (params) => {
+          return params.getValue(params.id, "status") === "Delivered"
+            ? "greenColor"
+            : "redColor";
+        },
+      },
+      {
+        field: "itemQty",
+        headerName: "Jumlah",
+        type: "number",
+        minWidth: 130,
+        flex: 0.1,
+      },
+  
+      {
+        field: "total",
+        headerName: "Total",
+        type: "number",
+        minWidth: 130,
+        flex: 0.1,
+      },
+  
+      {
+        field: " ",
+        flex: 0.1,
+        minWidth: 150,
+        headerName: "",
+        type: "number",
+        sortable: false,
+        renderCell: (params) => {
+          return (
+            <>
+              <Link to={`/user/order/${params.id}`}>
+                <Button>
+                  <AiOutlineArrowRight size={20} />
+                </Button>
+              </Link>
+            </>
+          );
+        },
+      },
+    ];
 
-      orders && orders.forEach((item) => {
-        row.push({
-            id: item._id,
-            itemsQty : item.orderItems.length,
-            total : "Rp. " + item.totalPrice,
-            status : item.orderStatus
-        })
-      });
+
+    const row = [];
+
+    orderbenar && orderbenar?.forEach((item) => {
+      row.push({
+          id: item._id,
+          itemQty : item.cart.length,
+          total : "Rp. " + item.totalPrice,
+          status : item.status
+         
+      })
+    });
 
 
       return(
@@ -365,80 +364,77 @@ const AllRefundOrders = () => {
 }
 
 const TrackOrder = () => {
-    const orders = [
-        {
-          _id: "7463hvbfbhfbrtr28820221",
-          orderItems: [
-            {
-              name: "Iphone 14 pro max",
-            },
-          ],
-          totalPrice: 12000,
-          orderStatus: "Processing",
+  const {orders, isLoading} = useSelector((state) => state.order)
+  const {user} = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllOrdersOfUser(user._id))
+  },[])
+  console.log("loading :", isLoading)
+  console.log("order : ", orders);
+    const columns = [
+      { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.1 },
+  
+      {
+        field: "status",
+        headerName: "Status",
+        minWidth: 130,
+        flex: 0.1,
+        cellClassName: (params) => {
+          return params.getValue(params.id, "status") === "Delivered"
+            ? "greenColor"
+            : "redColor";
         },
-      ];
+      },
+      {
+        field: "itemQty",
+        headerName: "Jumlah",
+        type: "number",
+        minWidth: 130,
+        flex: 0.1,
+      },
+  
+      {
+        field: "total",
+        headerName: "Total",
+        type: "number",
+        minWidth: 130,
+        flex: 0.1,
+      },
+  
+      {
+        field: " ",
+        flex: 0.1,
+        minWidth: 150,
+        headerName: "",
+        type: "number",
+        sortable: false,
+        renderCell: (params) => {
+          return (
+            <>
+              <Link to={`/user/track/order/${params.id}`}>
+                <Button>
+                  <AiOutlineArrowRight size={20} />
+                </Button>
+              </Link>
+            </>
+          );
+        },
+      },
+    ];
 
-      const columns = [
-        { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-    
-        {
-          field: "status",
-          headerName: "Status",
-          minWidth: 130,
-          flex: 0.7,
-          cellClassName: (params) => {
-            return params.getValue(params.id, "status") === "Delivered"
-              ? "greenColor"
-              : "redColor";
-          },
-        },
-        {
-          field: "itemsQty",
-          headerName: "Items Qty",
-          type: "number",
-          minWidth: 130,
-          flex: 0.7,
-        },
-    
-        {
-          field: "total",
-          headerName: "Total",
-          type: "number",
-          minWidth: 130,
-          flex: 0.8,
-        },
-    
-        {
-          field: " ",
-          flex: 1,
-          minWidth: 150,
-          headerName: "",
-          type: "number",
-          sortable: false,
-          renderCell: (params) => {
-            return (
-              <>
-                <Link to={`/order/${params.id}`}>
-                  <Button>
-                    <MdOutlineTrackChanges size={20} />
-                  </Button>
-                </Link>
-              </>
-            );
-          },
-        },
-      ];
 
-      const row = [];
+    const row = [];
 
-      orders && orders.forEach((item) => {
-        row.push({
-            id: item._id,
-            itemsQty : item.orderItems.length,
-            total : "Rp. " + item.totalPrice,
-            status : item.orderStatus
-        })
-      });
+    orders && orders?.forEach((item) => {
+      row.push({
+          id: item._id,
+          itemQty : item.cart.length,
+          total : "Rp. " + item.totalPrice,
+          status : item.status
+         
+      })
+    });
 
 
     return (

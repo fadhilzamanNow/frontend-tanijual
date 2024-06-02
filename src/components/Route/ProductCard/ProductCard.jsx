@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishlist.js';
 import { toast } from 'react-toastify';
 import { addToCart } from '../../../redux/actions/cart.js';
+import Ratings from '../../Products/Ratings.jsx';
 
 const ProductCard = ({data}) => {
 
@@ -91,11 +92,7 @@ const ProductCard = ({data}) => {
                     {data.name.length > 49 ? data.name.slice(0, 40) + "..." : data.name }
                 </h4>
                 <div className= "flex self-end text-yellow-400">
-                <AiFillStar className="mr-2 cursor-pointer" size={20}/>
-                <AiFillStar className="mr-2 cursor-pointer" size={20}/>
-                <AiFillStar className="mr-2 cursor-pointer" size={20}/>
-                <AiFillStar className="mr-2 cursor-pointer" size={20}/>
-                <AiOutlineStar className="mr-2 cursor-pointer" size={20}/>
+                <Ratings rating={data?.ratings}/>
                 </div>
                 <div className="py-2 flex items-center justify-between">
                     <div className="flex">
@@ -108,7 +105,7 @@ const ProductCard = ({data}) => {
                         
                     </div>
                     <span className="font-[400] text-[17px] text-green-500">
-                            {data.total_sell ? data.total_sell + " terjual" : null }
+                            {data.sold_out ? data.sold_out + " terjual" : null }
                         </span>
                 </div>
                 </Link>

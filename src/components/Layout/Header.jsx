@@ -16,8 +16,8 @@ import Wishlist from "../Wishlist/Wishlist"
 const Header = ({activeHeading}) => {
   const {isAuthenticated, user} = useSelector((state) => state.user);
   const {cart} = useSelector ((state) => state.cart)
-  const {wishlist} = useSelector((state) => state.wishlist)
-  
+  const {wishlist} = useSelector((state) => state.wishlist);
+  const {isSeller} = useSelector((state) => state.seller); 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState("");
   const [active,setActive] = useState(false);
@@ -104,11 +104,23 @@ const Header = ({activeHeading}) => {
             ) : (null)}
           </div>
             <div className="flex flex-row  h-[45px] w-[200px] bg-green-500 items-center justify-center rounded-md">
-                <Link to="/shop-create" className="flex flex-1 flex-row items-center justify-evenly">
+                {
+                    isSeller ? (
+                        <Link to="/dashboard" className="flex flex-1 flex-row items-center justify-evenly">
                     <h1 className="text-white">
-                    Daftar Sebagai Penjual </h1>
+                   Dashboard Penjual
+                    </h1>
                     <IoIosArrowForward className="text-green-100 mt-1" size={16}/>
                 </Link>
+                    ) : (
+                    <Link to="/shop-create" className="flex flex-1 flex-row items-center justify-evenly">
+                    <h1 className="text-white">
+                   Daftar Sebagai Penjual 
+                    </h1>
+                    <IoIosArrowForward className="text-green-100 mt-1" size={16}/>
+                </Link>)
+                }
+                
             </div>
             
       </div>
