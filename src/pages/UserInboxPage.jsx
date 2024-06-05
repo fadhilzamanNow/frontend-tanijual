@@ -37,16 +37,18 @@ const UserInboxPage = () => {
     const [activeStatus,setActiveStatus] = useState(false);
     const [cariInfo,setCariInfo] = useState();
     const scrollRef = useRef(null);
+    const [images,setImages] = useState();
 
     useEffect(() => {
-        socketId.on("getMessage", (data) => {
+        socketId.on("getMessage", (data) => { 
           setArrivalMessage({
-            sender: data.senderId,
-            text: data.text,
-            createdAt: Date.now(),
-          });
-        });
-      }, []);
+            sender : data.senderId,
+            text : data.text,
+            createdAt : Date.now(),
+            images : [data.images],
+          })
+        })
+      },[])
     
       useEffect(() => {
         arrivalMessage &&
@@ -163,6 +165,55 @@ const UserInboxPage = () => {
         scrollRef.current?.scrollIntoView({ beahaviour: "smooth" });
       }, [messages]);
 
+
+      const handleImageUpload = async(e) => {
+        const file = e.target.files[0];
+        setImages(file);
+        imageSendingHandler(file);
+      }
+
+      const imageSendingHandler = async(e) => {
+        const formData = new FormData();
+        console.log("imagesending ", e.name)
+        formData.append("images", e)
+        formData.append("sender", user._id)
+        formData.append("text", newMessage)
+        formData.append("conversationId", currentChat._id)
+
+
+        const receiverId = currentChat.members.find((member) => member != user._id)
+
+        
+
+        try{
+          await axios.post(`${server}/message/create-new-message`, formData, {
+            headers : {
+              "Content-Type" : "multipart/form-data"
+            },
+
+          }).then((res) => {
+            setImages();
+            setMessages([...messages,res.data.message])
+            socketId.emit("sendMessage", {
+              senderId : user._id,
+              receiverId,
+              images : res.data.message.images[0]
+            })
+            updateLastMessageForImage();
+          })
+      
+        }catch(error){
+          toast.error("Error gak bisa");
+        }
+      }
+
+      const updateLastMessageForImage = async () => {
+        await axios.put(`${server}/conversation/update-last-message/${currentChat._id}`,{
+          lastMessage : "Gambar",
+          lastMessageId : user._id
+        })
+      }
+
   return (
     <div className="w-full">
         <Header />
@@ -188,6 +239,16 @@ const UserInboxPage = () => {
                   setTest3 = {setTest3}
                   online = {onlineCheck(item)}
                   setActiveStatus = {setActiveStatus}
+                  newMessage = {newMessage}
+                  setNewMessage = {setNewMessage}
+                  sendMessageHandler = {sendMessageHandler}
+                  messages = {messages}
+                  userId = {user?.id}
+                 
+                  open = {open}
+                  scrollRef = {scrollRef}
+                  
+
                 
                 />
               })
@@ -200,7 +261,7 @@ const UserInboxPage = () => {
         }
         {
           open && (
-            <SellerInbox setOpen={setOpen} newMessage={newMessage} setNewMessage={setNewMessage} sendMessageHandler={sendMessageHandler} messages={messages} userId={user?._id} userinfo={test3} activeStatus = {activeStatus} scrollRef={scrollRef} test3={test3}/>
+            <SellerInbox setOpen={setOpen} newMessage={newMessage} setNewMessage={setNewMessage} sendMessageHandler={sendMessageHandler} messages={messages} userId={user?._id} userinfo={test3} activeStatus = {activeStatus} scrollRef={scrollRef} test3={test3} handleImageUpload = {handleImageUpload} />
           )
         }
         
@@ -209,7 +270,7 @@ const UserInboxPage = () => {
 }
 
 
-const MessageList = ({data,key,index,setOpen, setCurrentChat, me,test2,setTest2,online, setTest3, setActiveStatus}) => {
+const MessageList = ({data,key,index,setOpen, setCurrentChat, me,test2,setTest2,online, setTest3, setActiveStatus, open, newMessage, setNewMessage, sendMessageHandler, messages, userId, userInfo, scrollRef}) => {
     const [active,setActive] = useState(0);
     const navigate = useNavigate()
     const [test,setTest] = useState(null)
@@ -217,7 +278,7 @@ const MessageList = ({data,key,index,setOpen, setCurrentChat, me,test2,setTest2,
    useEffect(() => {
       console.log("isi data", data);
       const shopId = data.members.find((user) => user !== me)
-      console.log("online ? ", online)
+      console.log(`Message ${index} : `, online)
 
       const getShop = async() =>{
         try{
@@ -299,7 +360,7 @@ const MessageList = ({data,key,index,setOpen, setCurrentChat, me,test2,setTest2,
 export default UserInboxPage
 
 
-const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,messages, userId,userinfo, activeStatus, scrollRef, test3 }) => {
+const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,messages, userId,userinfo, activeStatus, scrollRef, test3, online, handleImageUpload }) => {
 
 
   /* const [test,setTest] = useState(null)
@@ -331,20 +392,21 @@ const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,mes
     e.preventDefault();
   
   } 
-  console.log("ini userinfo : ", test3)
+ 
   console.log("online ",activeStatus)
+
     return (
       <div className="w-full min-h-full flex flex-col justify-between">
-        <div className="w-full flex p-3 items-center justify-between border-b-4">
-         <div className="flex">
-         <img src={`${backend_url}/${userinfo?.avatar}`} alt="" className="w-[60px] h-[60px] rounded-full border"/>
-          <div className="pl-3">
+        <div className="w-full flex p-3 justify-between items-center border-b-4 ">
+            <div className="flex items-center">
+            <img src={`${backend_url}/${userinfo?.avatar}`} alt="" className="w-[60px] h-[60px] rounded-full border"/>
+            <div className="pl-3">
           <h1 className="text-[18px] font-[600]">
           {userinfo?.name}
          </h1>
-          {
-            activeStatus ? "Online" : "Offline"
-          }
+         <h1>
+          {activeStatus ? "Sedang Aktif" : "Tidak Aktif"}
+         </h1>
           </div>
          </div>
         <FaArrowLeft size={30} onClick={() => setOpen(false)}/>
@@ -359,7 +421,22 @@ const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,mes
               <div className={`flex w-full items-center my-2 ${item.sender === userId ? "justify-end" : "justify-start"}`} ref={scrollRef}>
               <img src={`${backend_url}/${userinfo?.avatar}`} alt="" className={`w-[60px] h-[60px] rounded-full mr-3 ${item.sender === userId ? "hidden" : ""}`}  />
               <div className={`w-max  h-min rounded p-2 ${item.sender === userId ? "bg-gray-500" : "bg-green-500"}`} onClick={handleSumbit}>
-                <p className="text-white">{item.text}</p>
+                {/* <p className="text-white">{item.text}</p> */}
+                { /* pesan */}
+                {
+                  item.images[0] ?  (
+                    <img 
+                      src={`${backend_url}/${item.images[0]}`} 
+                      className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
+                      onClick={() => console.log(item.images[0])}
+                      />
+                  ) : (null)
+                }
+                {
+                  item.text !== "" && (
+                    <p className="text-white">{item.text}</p>
+                  )
+                }
               </div>
               </div>
             
@@ -372,9 +449,18 @@ const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,mes
 
         {
             <form onSubmit={sendMessageHandler} aria-required={true} className="p-3 w-full flex justify-between items-center">
-            <div className="w-[2%]">
-              <TfiGallery size={20}/>
-            </div>
+            <div className="w-[30px]">
+            <input
+              type="file"
+              name=""
+              id="image"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+            <label htmlFor="image">
+              <TfiGallery className="cursor-pointer" size={20} />
+            </label>
+        </div>
            <div className="w-[97%] relative">
             <input type="text" required value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder='Coba Tanyakan ke Penjual' className={`${styles.input} `} />
               <input type="submit" value="Kirimkan" className="hidden" id="send"/>

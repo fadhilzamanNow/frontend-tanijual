@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from "react";
 import {ShopHomePage} from "./ShopRoutes.js" 
-import { ShopDashboardPage, ShopCreateProduct , ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupons,ShopPreviewPage, ShopAllOrders,ShopOrderDetails, ShopAllRefunds,ShopInboxPage } from "./routes/ShopRoutes.js";
+import { ShopDashboardPage, ShopCreateProduct , ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupons,ShopPreviewPage, ShopAllOrders,ShopOrderDetails, ShopAllRefunds,ShopInboxPage,ShopSettingsPage,ShopWithdrawMoneyPage } from "./routes/ShopRoutes.js";
 import Store from "./redux/store";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import ProtectedRoute from "./routes/ProtectedRoute.js";
@@ -144,6 +144,23 @@ export default function App() {
                   <ShopAllCoupons />
                 </SellerProtectedRoute>
               } />
+              <Route
+              path="/settings"
+              element={
+                <SellerProtectedRoute>
+                  <ShopSettingsPage />
+                </SellerProtectedRoute>
+              }
+            />
+            <Route
+            path="/dashboard-withdraw-money"
+            element={
+              <SellerProtectedRoute>
+                <ShopWithdrawMoneyPage />
+              </SellerProtectedRoute>
+            }
+          />
+            
               
             </Routes>
             <ToastContainer
