@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import {Button} from "@material-ui/core"
 import { DataGrid } from "@material-ui/data-grid";
 import { MdOutlineTrackChanges } from 'react-icons/md';
-import { deleteUserAdddress, updateUserAddress, updateUserInformation } from '../../redux/actions/user';
+import { deleteUserAdddress, loadUser, updateUserAddress, updateUserInformation } from '../../redux/actions/user';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { RxCross1 } from 'react-icons/rx';
@@ -41,10 +41,24 @@ const ProfileContent = ({active}) => {
       const file = e.target.files[0];
       setAvatar(file);
 
-      const formData = new FormData();
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = () => {
+        if(reader.readyState === 2){
+          setAvatar(reader.result);
+          axios.put(`${server}/user/update-avatar`, {avatar : reader.result}, {withCredentials : true}).then((res) => {
+            dispatch(loadUser());
+            toast.success("Foto Profil Telah Berhasil Diganti")
+          }).catch((err) => {
+            toast.error("Profil tidak berhasil diganti");
+          })
+        }
+      }
 
-      formData.append("image", e.target.files[0])
-      await axios.put(`${server}/user/update-avatar`, formData, {
+      //const formData = new FormData();
+
+      //formData.append("image", e.target.files[0])
+      /* await axios.put(`${server}/user/update-avatar`, formData, {
         headers : {
           "Content-Type" : "multipart/form-data",
         },
@@ -56,7 +70,7 @@ const ProfileContent = ({active}) => {
         },1000)
       }).catch((error) => {
         toast.error(error)
-      })
+      }) */
     }
 
   return (
@@ -66,7 +80,7 @@ const ProfileContent = ({active}) => {
        
         <div className="flex justify-center w-full">
                 <div className="relative">
-                    <img src={`${backend_url}/${user?.avatar}`} alt="" className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-green-100" />
+                    <img src={`${user?.avatar?.url}`} alt="" className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-green-100" />
                     <div className="w-[30px] h-[30px] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[10px]">
                         <input type="file" id="image" className='hidden' onChange={handleImage} />
                         <label htmlFor="image">

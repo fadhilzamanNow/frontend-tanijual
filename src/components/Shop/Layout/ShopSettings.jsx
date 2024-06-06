@@ -22,24 +22,22 @@ const ShopSettings = () => {
 
   const handleImage = async (e) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    setAvatar(file);
-
-    const formData = new FormData();
-
-    formData.append("image", e.target.files[0]);
+  
+   
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0])
+    reader.onload = () => {
+      if(reader.readyState === 2){
+        setAvatar(reader.result)
+        axios.put(`${server}/shop/update-shop-avatar`, {avatar : reader.result}, {withCredentials : true}).then((res) => {
+          dispatch(loadSeller())
+          toast.success("Foto Toko Berhasil di-update");
+        }).catch((err) => {
+          toast.error("Foto Toko Gagal Untuk di Update");
+        })
+      }
+    }
     
-    await axios.put(`${server}/shop/update-shop-avatar`, formData,{
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-    }).then((res) => {
-        dispatch(loadSeller());
-        toast.success("Foto Profil telah berhasil di-update")
-    }).catch((error) => {
-        toast.error(error.response.data.message);
-    })
 
   };
 
@@ -69,7 +67,7 @@ const ShopSettings = () => {
           <div className="relative">
             <img
               src={
-                avatar ? URL.createObjectURL(avatar) : `${backend_url}/${seller.avatar}`
+                avatar ? `${avatar}` : `${seller?.avatar?.url}`
               }
               alt=""
               className="w-[500px] h-[500px] rounded-full cursor-pointer border-4"

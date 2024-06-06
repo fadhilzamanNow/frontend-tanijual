@@ -74,7 +74,7 @@ const OrderDetails = () => {
             data && data?.cart.map((item,index) => {
               return (
                 <div className="w-full flex items-start mb-5">
-                  <img src={`${backend_url}/${item?.images[0]}`} alt="" 
+                  <img src={`${item?.images[0]?.url}`} alt="" 
                     className='w-[80px] h-[80px]'
                   />
                   <div className="w-full">
@@ -123,7 +123,7 @@ const OrderDetails = () => {
                 </h4>
                 <h4 className='pt-3 text-[20px]'>
                   Status Pembayaran : {
-                      data?.paymentInfo?.status === "succeeded"? "Sukses" : "Gagal" 
+                      data?.paymentInfo?.status === "Dibayar"? "Sukses" : "Belum Selesai Dibayar" 
                   }
                 </h4>
               </div>

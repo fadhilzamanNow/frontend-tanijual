@@ -32,10 +32,10 @@ const UserOrderDetails = () => {
   console.log("status option :" , status);
 
   useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id))
+    dispatch(getAllOrdersOfUser(user?._id))
 },[dispatch])
 
-  const data = orders && orders.find((item) => item._id === id);
+  const data = orders && orders.find((item) => item?._id === id);
 
 
   const orderUpdateHandler = async (e) => {
@@ -55,7 +55,7 @@ const UserOrderDetails = () => {
     }, {withCredentials : true}).then((res) => {
       toast.success(`${res.data.message}`);
       setComment("");
-      dispatch(getAllOrdersOfUser(user._id))
+      dispatch(getAllOrdersOfUser(user?._id))
       setRating(null);
       setOpen(false);
     }).catch((error) => {
@@ -71,7 +71,7 @@ const UserOrderDetails = () => {
       status : "Memproses Pembatalan"
     }).then((res) => {
       toast.success(`${res.data.message}`)
-      dispatch(getAllOrdersOfUser(user._id))
+      dispatch(getAllOrdersOfUser(user?._id))
     }).catch((err) => {
       toast.error(`${err.response.data.message}`)
     })
@@ -103,7 +103,7 @@ const UserOrderDetails = () => {
             data && data?.cart.map((item,index) => {
               return (
                 <div className="w-full flex items-start mb-5">
-                  <img src={`${backend_url}/${item?.images[0]}`} alt="" 
+                  <img src={`${item.images[0].url}`} alt="" 
                     className='w-[80px] h-[80px]'
                   />
                   <div className="w-full">
@@ -140,7 +140,7 @@ const UserOrderDetails = () => {
                       </h2>
                       <br />
                       <div className="w-full flex">
-                        <img src={`${backend_url}/${selectedItem?.images[0]}`} alt="" className='w-[80px] h-[80px] ml-3'/>
+                        <img src={`${selectedItem?.images[0].url}`} alt="" className='w-[80px] h-[80px] ml-3'/>
                       </div>
                       <div>
                         <div className="pl-3 text-[20px]">
@@ -222,13 +222,9 @@ const UserOrderDetails = () => {
                 <h4 className='pt-3 text-[20px]'>
                   Informasi Pembayaran :
                 </h4>
-                <h4 className='pt-3 text-[20px]'>
-                  Status Pembayaran : {
-                      data?.paymentInfo?.status === "Succeeded"? "Sukses" : "Belum Dibayar" 
-                  }
-                </h4>
+           
                 {
-                  data.status === "Diterima" ? (
+                  data?.status === "Diterima" ? (
                     <div className={`${styles.button} text-white p-5 text-center`}
                       onClick={refundHandler}
                     >
@@ -241,7 +237,8 @@ const UserOrderDetails = () => {
           <br />
           <br />
           <h4 className="pt-3 text-[20px] font-[600]">Status Pemesanan : </h4>
-          <select name="" id="" value={status} onChange={(e) => setStatus(e.target.value)} className='w-[200px] mt-2 border -[35px] rounded-[5px] '>
+          <h1>{data?.status}</h1>
+          {/* <select name="" id="" value={status} onChange={(e) => setStatus(e.target.value)} className='w-[200px] mt-2 border -[35px] rounded-[5px] '>
             {
               [
                 "Dalam Proses Pembayaran",
@@ -271,7 +268,7 @@ const UserOrderDetails = () => {
           <div styles={`${styles.button} text-white`}>
               Kirim Pesan
           </div>
-          </Link>
+          </Link> */}
           
     </div>
   )

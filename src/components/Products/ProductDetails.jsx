@@ -34,7 +34,7 @@ const ProductDetails = ({data}) => {
         setIsLoading(true)
         console.log("data : ", data?.shopId)
         axios.get(`${server}/product/get-all-products-shop/${data?.shopId}`).then((res) => {
-            setProducts(res.data.products)
+            setProducts(res?.data?.products)
         }).catch((err) => {
             console.log(err)
         })
@@ -64,7 +64,7 @@ const ProductDetails = ({data}) => {
         if(isItemExists){
             toast.error("Produk sudah ditambahkan ke dalam keranjang !")
         }else{
-            if(data.stock < count){
+            if(data?.stock < count){
                 toast.error("Jumlah yang masukkan melebihi stok")
             } else{
                 const cartData = {...data, qty : count}
@@ -88,13 +88,13 @@ const ProductDetails = ({data}) => {
     console.log("data adalah : ", data)
     const handleMessageSubmit = async(e) => {
         if(isAuthenticated){
-            const groupTitle = data._id + user._id
+            const groupTitle = data?.shopId + user._id
             const userId = user._id 
             const sellerId = data?.shopId
             await axios.post(`${server}/conversation/create-new-conversation`,{
                 groupTitle,userId,sellerId
             }).then((res) => {
-                navigate(`/ conversation/${res.data.conversation._id}`)
+                navigate(`/inbox?${res.data.conversation._id}`)
             }).catch((err) => {
                 toast.error(`${err.response.data.message}`)
             })
@@ -124,17 +124,17 @@ const ProductDetails = ({data}) => {
                         <div className="block w-full 800px:flex pt-5">
                             <div className="w-full flex-col items-center 800px:w-[50%] 800px:flex-col 800px:items-center">
                                 <div>
-                                <img src={`${backend_url}/${data?.images[select]}`} alt="" className="w-[80%]"/>
+                                <img src={`${data?.images[select]?.url}`} alt="" className="w-[80%]"/>
                                 </div>
                                 <div className="w-full flex">
                                     <div className={`${select === 0 ? "border" : "null"} cursor-pointer`}>
-                                            <img src={`${backend_url}/${data?.images[0]}`} alt="" 
+                                            <img src={`${backend_url}/${data?.images[0]?.url}`} alt="" 
                                                 className="h-[200px]"
                                                 onClick={() => setSelect(0)}
                                             />
                                     </div>
                                     <div className={`${select === 1 ? "border" : "null"} cursor-pointer self-center`}>
-                                            <img src={`${backend_url}/${data?.images[1]}`} alt="" 
+                                            <img src={`${backend_url}/${data?.images[1]?.url}`} alt="" 
                                                 className="h-[200px]"
                                                 onClick={() => setSelect(1)}
                                             />
@@ -143,16 +143,16 @@ const ProductDetails = ({data}) => {
                             </div>
                             <div className="w-full 800px:w-[50%]">
                                 <h1 className={`${styles.productTitle}`}>
-                                 {data.name}
+                                 {data?.name}
                                 </h1>
                                 <p className="text-justify">
-                                    {data.description}
+                                    {data?.description}
                                 </p>
                                 <h4 className={`${styles.productDiscountPrice}`}>
-                                    Rp. {data.discountPrice}
+                                    Rp. {data?.discountPrice}
                                 </h4>
                                 <h3 className={`${styles.price}`}>
-                                    {data.originalPrice ? "Rp. " + data.originalPrice : null}
+                                    {data?.originalPrice ? "Rp. " + data?.originalPrice : null}
                                 </h3>
                                 <div className="flex items-center mt-12 justify-between pr-3">
                                 <div>
@@ -191,7 +191,7 @@ const ProductDetails = ({data}) => {
                             
                         </div> 
 
-                        <div className={`rounded-xl mt-6 h-11 flex items-center w-[250px] bg-black text-white justify-between`} onClick={() => addToCartHandler(data._id)}>
+                        <div className={`rounded-xl mt-6 h-11 flex items-center w-[250px] bg-black text-white justify-between`} onClick={() => addToCartHandler(data?._id)}>
                             <div className="ml-4">
                                 Tambahkan ke Keranjang
                             </div>
@@ -200,19 +200,19 @@ const ProductDetails = ({data}) => {
                             </div>
                         </div> 
                         <div className="flex items-center pt-8">
-                            <Link to={`/shop/preview/${data.shop._id}`}>
-                            <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" 
+                            <Link to={`/shop/preview/${data?.shop._id}`}>
+                            <img src={`${data?.shop?.avatar?.url}`} alt="" 
                                 className="w-[50px] h-[50px] rounded-full mr-2"
                             />
                             </Link>
                             <div>
                             <Link to={`/shop/preview/${data.shop._id}`}>
                             <h3 className={styles.shop_name}>
-                                    {data.shop.name}
+                                    {data?.shop?.name}
                                 </h3>
                             </Link>
                                 <h5 className="pb-3 text-[15px]">
-                                    {averageRating}/5 Rating
+                                    {averageRating} / 5 Rating
                                 </h5>
                             </div>
                             <div className="bg-green-400 w-[250px] p-4 rounded-xl items-center flex flex-col ml-3" onClick={handleMessageSubmit}>
@@ -300,11 +300,11 @@ const ProductDetailsInfo = ({data,products, totalReviewsLength,averageRating}) =
                     active === 2 ? (
                        <div className = "w-full mt-3 min-h-[40vh] flex flex-col items-center overflow-y-scroll ">
                         {
-                            data && data.reviews.map((item,index) => {
+                            data && data?.reviews.map((item,index) => {
                                
                                 return (
                                     <div className="w-full flex my-2 items-center">
-                                        <img src={`${backend_url}/${item.user.avatar}`} alt="" className="w-[50px] h-[50px] rounded-full" />
+                                        <img src={`${item?.user?.avatar?.url}`} alt="" className="w-[50px] h-[50px] rounded-full" />
                                         <div>
                                             <h1 className="pl-3 font-[600]">{item?.user?.name}</h1>
                                             <p className="pl-3">
@@ -319,7 +319,7 @@ const ProductDetailsInfo = ({data,products, totalReviewsLength,averageRating}) =
                             })
                         }
                         {
-                            data && data.reviews.length === 0 && (
+                            data && data?.reviews.length === 0 && (
                                 <h5>Belum ada review untuk produk ini   </h5>
                             )
                         }
@@ -331,12 +331,12 @@ const ProductDetailsInfo = ({data,products, totalReviewsLength,averageRating}) =
                         <>
                        <div className="w-full block 800px:flex p-5 h-[40vh]">
                             <div className="w-full 800px:w-[50%] h-[50vh]">
-                                <Link to={`/shop/preview/${data.shop._id}`}>
+                                <Link to={`/shop/preview/${data?.shop._id}`}>
                                 <div className="flex items-center pl-3">                
-                                    <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" className="w-[50px] h-[50px] rounded-full object-cover" />
+                                    <img src={`${data?.shop?.avatar?.url}`} alt="" className="w-[50px] h-[50px] rounded-full object-cover" />
                                     <div>
                                         <h3 className={`${styles.shop_name}`}>
-                                            {data.shop.name}
+                                            {data?.shop?.name}
                                         </h3>
                                         <h5 className='pb-3 text-[15px]'>
                                             {averageRating}/5 Rating

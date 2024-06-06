@@ -43,24 +43,41 @@ const CreateEvent = () => {
             newForm.append("images",image);
         })
 
-        newForm.append("name",name)
-        newForm.append("description",description)
-        newForm.append("category",category)
-        newForm.append("tags",tags)
-        newForm.append("originalPrice",originalPrice)
-        newForm.append("discountPrice",discountPrice)
-        newForm.append("stock",stock)
-        newForm.append("shopId", seller._id)
-        newForm.append("start_Date", startDate.toISOString())
-        newForm.append("Finish_Date", endDate.toISOString())
-        dispatch(createevent(newForm))
+        const data = {
+            name,
+            description,
+            category,
+            tags,
+            originalPrice,
+            discountPrice,
+            stock,
+            images,
+            shopId: seller._id,
+            start_Date: startDate?.toISOString(),
+            Finish_Date: endDate?.toISOString(),
+          };
+
+    
+        dispatch(createevent(data))
     }
 
     const handleImageChange = (e) => {
         e.preventDefault()
+        const files = Array.from(e.target.files);
+        setImages([]);
 
-        let files = Array.from(e.target.files);
-        setImages((prevImages) => [...prevImages,...files])
+       files.forEach((file) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                if(reader.readyState === 2){
+                    setImages((lama) => [...lama,reader.result])
+                }
+            }
+       })
+
+        /* let files = Array.from(e.target.files);
+        setImages((prevImages) => [...prevImages,...files]) */
     }
 
     const handleStartDateChange = (e) => {
@@ -183,9 +200,9 @@ const CreateEvent = () => {
                             color="#555"
                         />
                     </label>
-                    {
+                    {   
                         images && images.map((i) => (
-                            <img src={URL.createObjectURL(i)} key={i} alt="" className="h-[50px] w-[50px] object-cover m-2 rounded-full" />
+                            <img src={i} key={i} alt="" className="h-[50px] w-[50px] object-cover m-2 rounded-full" />
                         ))
                     }
                 </div>

@@ -77,7 +77,7 @@ const ProductCard = ({data}) => {
 
             
             
-                <img src={`${backend_url}/${data?.images[0]}`} 
+                <img src={`${data?.images[0].url}`} 
                     alt = ""
                     className='w-[170px] h-[170px] object-cover items-center justify-center rounded-md shadow-sm'
                     onClick={() => handleClick()}

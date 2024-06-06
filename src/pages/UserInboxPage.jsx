@@ -39,14 +39,24 @@ const UserInboxPage = () => {
     const scrollRef = useRef(null);
     const [images,setImages] = useState();
 
+    console.log("arrivalMessage", arrivalMessage)
+
     useEffect(() => {
         socketId.on("getMessage", (data) => { 
-          setArrivalMessage({
-            sender : data.senderId,
-            text : data.text,
-            createdAt : Date.now(),
-            images : [data.images],
-          })
+
+          /* data.images = data.images === null ? [data.images] : null */
+         
+          
+            setArrivalMessage({
+              sender : data.senderId,
+              text : data.text,
+              createdAt : Date.now(),
+              images : {
+                url : data.images
+              }
+            })
+          
+         
         })
       },[])
     
@@ -167,43 +177,51 @@ const UserInboxPage = () => {
 
 
       const handleImageUpload = async(e) => {
-        const file = e.target.files[0];
-        setImages(file);
-        imageSendingHandler(file);
+        
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0])
+        reader.onload = () => {
+          if(reader.readyState === 2){
+            setImages(reader.result)
+            imageSendingHandler(reader.result)
+          }
+        }
+        
       }
 
       const imageSendingHandler = async(e) => {
         const formData = new FormData();
-        console.log("imagesending ", e.name)
+        /* console.log("imagesending ", e.name)
         formData.append("images", e)
         formData.append("sender", user._id)
         formData.append("text", newMessage)
         formData.append("conversationId", currentChat._id)
-
+ */
 
         const receiverId = currentChat.members.find((member) => member != user._id)
 
         
 
         try{
-          await axios.post(`${server}/message/create-new-message`, formData, {
-            headers : {
-              "Content-Type" : "multipart/form-data"
-            },
-
+          await axios.post(`${server}/message/create-new-message`, {
+            images : e,
+            sender : user._id,
+            text : newMessage,
+            conversationId : currentChat._id
           }).then((res) => {
             setImages();
             setMessages([...messages,res.data.message])
             socketId.emit("sendMessage", {
               senderId : user._id,
               receiverId,
-              images : res.data.message.images[0]
+              images : res.data.message.images.url
             })
             updateLastMessageForImage();
           })
       
         }catch(error){
-          toast.error("Error gak bisa");
+          console.log("error" , error)
+          toast.error(`${error}`);
         }
       }
 
@@ -325,13 +343,18 @@ const MessageList = ({data,key,index,setOpen, setCurrentChat, me,test2,setTest2,
 
     console.log("isi : " ,test2)
 
+    useEffect(() => {
+      console.log("id last :", data?.lastMessageId)
+      console.log("test id : ", test?._id)
+    },[data])
+
     return (
         <div className={`w-full flex p-2 px-3  bg-[#1111111a] items-center ${active === index ? 'bg-[#00000010]' : 'bg-transparent'} cursor-pointer`}
         /* onClick={(e) => console.log(test2)} */
         onClick={(e) => setActive(index) || handleClick(data._id) || setCurrentChat(data) || handleInfo(data)}
       >
           <div className="relative">
-          <img src={`${backend_url}/${test?.avatar}`} alt="" className="w-[80px] h-[80px] rounded-full" />
+          <img src={`${test?.avatar?.url}`} alt="" className="w-[80px] h-[80px] rounded-full" />
           {
               online ? (<div className="w-[15px] h-[15px] bg-green-400 rounded-full absolute top-1 right-2">
               </div>)   : (
@@ -349,8 +372,8 @@ const MessageList = ({data,key,index,setOpen, setCurrentChat, me,test2,setTest2,
           </h1>
           <p className="text-[16px] text-black">
           {
-            data?.lastMessageId !== test?.id ? "Anda : " : test?.name.split(" ")[0] + " :"
-          } {data?.lastMessage}
+              data?.lastMessageId !== test?._id ? "Anda : ": ""
+            } {data?.lastMessage}
           </p>
           </div>
   </div>
@@ -399,7 +422,7 @@ const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,mes
       <div className="w-full min-h-full flex flex-col justify-between">
         <div className="w-full flex p-3 justify-between items-center border-b-4 ">
             <div className="flex items-center">
-            <img src={`${backend_url}/${userinfo?.avatar}`} alt="" className="w-[60px] h-[60px] rounded-full border"/>
+            <img src={`${userinfo?.avatar?.url}`} alt="" className="w-[60px] h-[60px] rounded-full border"/>
             <div className="pl-3">
           <h1 className="text-[18px] font-[600]">
           {userinfo?.name}
@@ -419,16 +442,16 @@ const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,mes
           messages && messages.map((item,index) => (
             
               <div className={`flex w-full items-center my-2 ${item.sender === userId ? "justify-end" : "justify-start"}`} ref={scrollRef}>
-              <img src={`${backend_url}/${userinfo?.avatar}`} alt="" className={`w-[60px] h-[60px] rounded-full mr-3 ${item.sender === userId ? "hidden" : ""}`}  />
+              <img src={`${userinfo?.avatar?.url}`} alt="" className={`w-[60px] h-[60px] rounded-full mr-3 ${item.sender === userId ? "hidden" : ""}`}  />
               <div className={`w-max  h-min rounded p-2 ${item.sender === userId ? "bg-gray-500" : "bg-green-500"}`} onClick={handleSumbit}>
                 {/* <p className="text-white">{item.text}</p> */}
                 { /* pesan */}
                 {
-                  item.images[0] ?  (
+                  item?.images?.url ? (
                     <img 
-                      src={`${backend_url}/${item.images[0]}`} 
+                      src={`${item.images?.url}`} 
                       className="w-[300px] h-[300px] object-cover rounded-[10px] ml-2 mb-2"
-                      onClick={() => console.log(item.images[0])}
+                      onClick={() => console.log(item?.images?.url)}
                       />
                   ) : (null)
                 }

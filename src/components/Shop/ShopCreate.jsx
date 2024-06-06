@@ -22,16 +22,19 @@ const ShopCreate = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const config = {headers : {"Content-Type" : "multipart/form-data"}};
-        const newForm = new FormData();
 
-        newForm.append("file",avatar)
+        
+
+        /* newForm.append("file",avatar)
         newForm.append("name", name);
         newForm.append("email",email);
         newForm.append("password",password)
         newForm.append("address",adress)
         newForm.append("zipCode", zipCode);
-        newForm.append("phoneNumber", phoneNumber)
-        axios.post(`${server}/shop/create-shop`, newForm, config).then((res) => {
+        newForm.append("phoneNumber", phoneNumber) */
+        axios.post(`${server}/shop/create-shop`, {
+           name, email, password,avatar, zipCode, adress, phoneNumber
+        }).then((res) => {
             toast.success(res.data.message)
             setEmail("");
             setName("");
@@ -47,8 +50,14 @@ const ShopCreate = () => {
     }
 
     const handleFileInputChange = (e) => {
-        const file = e.target.files[0];
-        setAvatar(file);
+        const reader = new FileReader();
+
+        reader.readAsDataURL(e.target.files[0])
+        reader.onload = () => {
+          if(reader.readyState === 2) {
+            setAvatar(reader.result)
+          }
+        }
     }
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8  top-0">
@@ -205,7 +214,7 @@ const ShopCreate = () => {
                     <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
                        {
                         avatar ? (
-                            <img src={URL.createObjectURL(avatar)} alt="avatar" className="h-full w-full object-hover rounded-full"/>
+                            <img src={avatar} alt="avatar" className="h-full w-full object-hover rounded-full"/>
                         ) : (
                             <RxAvatar className="h-8 w-8" />
                         )

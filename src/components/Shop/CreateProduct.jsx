@@ -5,6 +5,7 @@ import { categoriesData } from '../../static/data'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { createProduct } from '../../redux/actions/product'
 import { toast } from 'react-toastify'
+import { FaOldRepublic } from 'react-icons/fa'
 
 const CreateProduct = () => {
     const {seller} = useSelector((state) => state.seller)
@@ -50,14 +51,29 @@ const CreateProduct = () => {
         newForm.append("discountPrice",discountPrice)
         newForm.append("stock",stock)
         newForm.append("shopId", seller._id)
-        dispatch(createProduct(newForm))
+        dispatch(createProduct({name,description,category,tags,originalPrice,discountPrice,stock,shopId : seller._id, images }))
     }
 
     const handleImageChange = (e) => {
         e.preventDefault()
+        const files = Array.from(e.target.files);
+        setImages([]);
 
-        let files = Array.from(e.target.files);
-        setImages((prevImages) => [...prevImages,...files])
+        files.forEach((file) => {
+            const reader = new FileReader();
+
+            reader.readAsDataURL(file) 
+
+            reader.onload = () => {
+                if(reader.readyState === 2) {
+                    setImages((lama) => [...lama, reader.result])
+                }
+            }
+        })
+        /* const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0])
+
+        setImages((prevImages) => [...prevImages,...files]) */
     }
   return (
     <div className="800px:w-[75%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
@@ -151,7 +167,7 @@ const CreateProduct = () => {
                     </label>
                     {
                         images && images.map((i) => (
-                            <img src={URL.createObjectURL(i)} key={i} alt="" className="h-[50px] w-[50px] object-cover m-2 rounded-full" />
+                            <img src={i} key={i} alt="" className="h-[50px] w-[50px] object-cover m-2 rounded-full" />
                         ))
                     }
                 </div>
