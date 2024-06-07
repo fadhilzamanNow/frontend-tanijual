@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { LoginPage, SignUpPage,ActivationPage, HomePage, ProductsPage, BestSellingPage, EventsPage, FAQPage, ProductDetailsPage, CheckoutPage, PaymentPage,OrderSuccessPage, ProfilePage, ShopCreatePage,SellerActivationPage, ShopLoginPage, OrderDetailsPage, TrackOrderPage,UserInbox } from "./routes/Routes.js"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {ShopHomePage} from "./ShopRoutes.js" 
 import { ShopDashboardPage, ShopCreateProduct , ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupons,ShopPreviewPage, ShopAllOrders,ShopOrderDetails, ShopAllRefunds,ShopInboxPage,ShopSettingsPage,ShopWithdrawMoneyPage } from "./routes/ShopRoutes.js";
 import Store from "./redux/store";
@@ -13,46 +13,38 @@ import ProtectedRoute from "./routes/ProtectedRoute.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.js";
 import { getAllProducts } from "./redux/actions/product.js";
 import { getAllEvents } from "./redux/actions/event.js";
-import axios from "axios";
-import { server } from "./server.js";
-import {Elements} from "@stripe/react-stripe-js"
-import {loadStripe} from "@stripe/stripe-js"
+
 export default function App() {
-  const [stripeApiKey,setStripeApiKey] = useState("");
+ /*  const [stripeApiKey,setStripeApiKey] = useState("");
 
   async function getStripeApikey(){
     const {data} = await axios.get(`${server}/payment/stripeapikey`)
     setStripeApiKey(data.stripeApikey);
   }
-  
+   */
 
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
-    getStripeApikey();
-    
+/*     getStripeApikey();
+ */    
   },[])
 
-  console.log(stripeApiKey);
+/*   console.log(stripeApiKey); */
 
   return (
   
       
           <BrowserRouter>
-          {
-            stripeApiKey && (
-              <Elements stripe={loadStripe(stripeApiKey)}>
+         
                 <Routes>
                 <Route path="/payment" element={
                 <ProtectedRoute>
                     <PaymentPage />
                 </ProtectedRoute>} />
                 </Routes>
-              </Elements>
-            )
-          }
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />

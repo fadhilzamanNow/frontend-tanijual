@@ -5,10 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/data-grid": "^4.0.0-alpha.37",
-    "@paypal/react-paypal-js": "^8.3.0",
     "@reduxjs/toolkit": "^1.9.3",
-    "@stripe/react-stripe-js": "^2.1.0",
-    "@stripe/stripe-js": "^3.4.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -28,7 +25,6 @@
     "redux-thunk": "^2.4.2",
     "redux-toolkit": "^1.1.2",
     "socket.io-client": "^4.7.5",
-    "timeagojs": "^1.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
