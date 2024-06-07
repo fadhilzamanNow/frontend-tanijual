@@ -41,7 +41,7 @@ const ProductDetailsCard = ({data,setOpen}) => {
         if(isItemExists){
             toast.error("Produk sudah ditambahkan ke dalam keranjang !")
         }else{
-            if(data.stock < count){
+            if(data?.stock < count){
                 toast.error("Jumlah yang masukkan melebihi stok")
             } else{
                 const cartData = {...data, qty : count}
@@ -74,13 +74,13 @@ const ProductDetailsCard = ({data,setOpen}) => {
                         <RxCross1 size={30} className="absolute right-3 top-3 z-50" onClick={() => setOpen(false)} />
                         <div className="block w-full 800px:flex ">
                             <div className="w-full 800px:w-[50%]  ">
-                                <img src={`${backend_url}/${data?.images[0]}`} alt="" className="h-[300px] w-[300px] object-cover ml-20 mt-10" />
+                                <img src={`${data?.images[0]?.url}`} alt="" className="h-[300px] w-[300px] object-cover ml-20 mt-10" />
                                 <div className="flex items-center ml-5">
                                     <Link to={`/shop/preview/${data.shop._id} `}>
-                                    <img src={`${backend_url}/${data?.shop?.avatar}`} alt="" className='w-[50px] h-[50px] rounded-full object-cover ml-[65px]'/>
+                                    <img src={`${data?.shop?.avatar.url}`} alt="" className='w-[50px] h-[50px] rounded-full object-cover ml-[65px]'/>
                                     <div>
                                         <h3 className={`${styles.shop_name}`}>
-                                            {data.shop.name}
+                                            {data?.shop?.name}
                                         </h3>
                                         <h5 className='pb-3 text-[15px]'>
                                             
@@ -99,17 +99,17 @@ const ProductDetailsCard = ({data,setOpen}) => {
                             </div>
                             <div className="w-full 800px:w-[50%] pt-5 pl-[px] pr-[5px]">
                                 <h1 className={`${styles.productTitle}} text-[20px]`}>
-                                    {data.name}
+                                    {data?.name}
                                 </h1>
                                 <p className="text-justify">
-                                    {data.description}
+                                    {data?.description}
                                 </p>
                                 <div className="flex pt-3">
                                 <h4 className={`${styles.productDiscountPrice}}`}>
-                                    Rp. {data.discountPrice}    
+                                    Rp. {data?.discountPrice}    
                                 </h4> 
                                 <h3 className={`${styles.price}`}>
-                                    {data.originalPrice ? "Rp. " + data.originalPrice : null}
+                                    {data?.originalPrice ? "Rp. " + data?.originalPrice : null}
                                 </h3>
                              </div>
                              <div className="flex items-center mt-12 justify-between pr-3">
@@ -144,7 +144,7 @@ const ProductDetailsCard = ({data,setOpen}) => {
                                 />
                             )}
                             </div>
-                            <div className={`${styles.button} text-white mt-6 rounded h-11 flex items-center w-auto`} onClick={() => addToCartHandler(data._id)} >
+                            <div className={`${styles.button} text-white mt-6 rounded h-11 flex items-center w-auto`} onClick={() => addToCartHandler(data?._id)} >
                                 <span className="text-white flex items-center">
                                     Tambahkan ke keranjang <AiOutlineShoppingCart className="ml-1" />
                                 </span>

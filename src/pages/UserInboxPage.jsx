@@ -15,7 +15,7 @@ import { IoSendSharp } from 'react-icons/io5'
 
 
 
-const ENDPOINT = "http://localhost:4000"
+const ENDPOINT = "https://sockettanijual-production.up.railway.app/"
 const socketId = socketIO(ENDPOINT, {transports : ["websocket"]})
 
 
@@ -96,7 +96,7 @@ const UserInboxPage = () => {
     
       const onlineCheck = (chat) => {
         const chatMembers = chat.members.find((member) => member !== user?._id);
-        const online = onlineUsers.find((user) => user.userId === chatMembers);
+        const online = onlineUsers?.find((user) => user?.userId === chatMembers);
     
         return online ? true : false;
       };

@@ -22,9 +22,9 @@ const Login = () => {
       },{ withCredentials: true }).then((res) => {
         toast.success("Login Berhasil")
         navigate("/")
-        window.location.reload(true);
+        window.location.reload(true)
         
-        window.location.reload()
+        
       }).catch((err) => {
         toast.error(err.response.data.message)
       })

@@ -15,7 +15,7 @@ import socketIO from "socket.io-client"
 
 
 
-const ENDPOINT = "http://localhost:4000"
+const ENDPOINT = "https://sockettanijual-production.up.railway.app/"
 const socketId = socketIO(ENDPOINT, {transports : ["websocket"]})
 
 const DashboardMessages = () => {
@@ -89,7 +89,7 @@ const DashboardMessages = () => {
 
   const onlineCheck = (chat) => {
     const chatMembers = chat.members.find((member) => member !== seller._id)
-    const online = onlineUsers.find((user) => user.userId ===  chatMembers)
+    const online = onlineUsers?.find((user) => user?.userId ===  chatMembers)
     return online ? true : false
   }
 
@@ -223,7 +223,7 @@ const DashboardMessages = () => {
   const updateLastMessageForImage = async () => {
     await axios.put(`${server}/conversation/update-last-message/${currentChat._id}`,{
       lastMessage : "Gambar",
-      lastMessageId : seller._id
+      lastMessageId : seller?._id
     })
   }
 
