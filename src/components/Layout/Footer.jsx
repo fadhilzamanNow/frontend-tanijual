@@ -58,7 +58,7 @@ const Footer = () => {
             </div>
             <div className='text-white flex flex-col justify-center'>
                
-                <a href={require("../../Assests/Home/JualTani.apk")} download="JualTani.apk">
+                <a href={"https://drive.usercontent.google.com/download?id=1YsgKTDIZ7E1m1VVQOyCNHN_m9iiewrhi&export=download&authuser=0"} >
 
                 
                 <div className="flex items-center">
