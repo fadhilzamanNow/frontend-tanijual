@@ -125,7 +125,7 @@ const CartSingle = ({data,removeFromCartHandler,quantityChangeHandler}) => {
                         </div>
                 </div>
                 <div>
-                    <img src={`${backend_url}/${data?.images[0]}`} alt="" className="w-[100px] h-[80px] ml-2 rounded-md object-cover shadow-2xl" />
+                    <img src={`${data?.images[0]?.url}`} alt="" className="w-[100px] h-[80px] ml-2 rounded-md object-cover shadow-2xl" />
                 </div>
                 <div className="ml-5 justify-between items-center w-full">
                     <h1>{data.name}</h1>

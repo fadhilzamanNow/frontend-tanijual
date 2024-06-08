@@ -16,10 +16,10 @@ const CountDown = ({data}) => {
 
     if (difference > 0) {
       timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
+        hari: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        jam: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        menit: Math.floor((difference / 1000 / 60) % 60),
+        detik: Math.floor((difference / 1000) % 60),
       };
     }
 

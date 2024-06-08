@@ -103,12 +103,12 @@ const Header = ({activeHeading}) => {
                 </div>
             ) : (null)}
           </div>
-            <div className="flex flex-row  h-[45px] w-[200px] bg-green-500 items-center justify-center rounded-md">
+            <div className={`flex flex-row  h-[45px] w-[200px] ${isSeller ? ("bg-black") : ("bg-green-500")} items-center justify-center rounded-md`}>
                 {
                     isSeller ? (
                         <Link to="/dashboard" className="flex flex-1 flex-row items-center justify-evenly">
                     <h1 className="text-white">
-                   Dashboard Penjual
+                   Cek Dashboard Penjual
                     </h1>
                     <IoIosArrowForward className="text-green-100 mt-1" size={16}/>
                 </Link>
@@ -240,9 +240,10 @@ const Header = ({activeHeading}) => {
                     </Link>
                     </div>
                     <div className="flex">
-                        <div className="relative mr-[20px]">
+                        <div className="relative mr-[20px]" onClick ={() => setOpenCart(true) || console.log('ddipencet')}>
                             <AiOutlineShoppingCart 
                                 size={30}
+                                
                             />
                               <span className="absolute right-0 top-0 rounded-full bg-blue-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                                 {cart && cart.length}
@@ -251,7 +252,7 @@ const Header = ({activeHeading}) => {
                         <div className="relative cursor-pointer mr-[15px]">
                         {isAuthenticated ? (
                                  <Link to={`/profile`}>
-                                    <img src={`${backend_url}/${user.avatar}`} alt="" className="w-[30px] h-[30px] rounded-full" />
+                                    <img src={`${user?.avatar?.url}`} alt="" className="w-[30px] h-[30px] rounded-full" />
                                  </Link>
                             ) : (
                                 <Link to="/login">

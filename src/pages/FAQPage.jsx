@@ -36,7 +36,7 @@ const Faq = () => {
 
 
     return (
-        <div className={`${styles.section} my-8 h-[50vh]`}>
+        <div className={`${styles.section} my-8 h-screen`}>
             <h2 className="text-3xl font-boldd text-gray-900 mb-8">FAQ</h2>
                 <div className="mx-auto space-y-4">
                     <div className="border-b border-gray-200 pb-4">
@@ -130,6 +130,63 @@ const Faq = () => {
                                     <div className="mt-4">
                                         <p className="text-base text-gray-500">
                                             JualTani berperan sebagai pasar yang dapat digunakan oleh petani untuk menjual hasil pertanian mereka tanpa campur tangan tengkulak
+                                        </p>
+                                    </div>
+                                )
+                        }
+                    </div>
+                    <div className="border-b border-gray-200 pb-4">
+                        <button className="flex items-center justify-between w-full" onClick={() => toggleTab(3)}>
+                            <span className="text-lg font-medium text-gray-900">
+                                    Siapa sih membuat Web JualTani
+                            </span>
+                            {
+                                activeTab === 2 ? (
+                                    <svg 
+                                        className="h-6 w-6 text-gray-500"
+                                        fill='none'
+                                        viewBox='0 0 24 24'
+                                        stroke="currentColor"
+                                    >
+                                        <path 
+                                            strokeLinecap='round'
+                                            strokeLinejoin='round'
+                                            strokeWidth={2}
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
+                                    </svg>
+                                ) : (
+                                    <svg
+                                            className="h-6 w-6 text-gray-500"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M9 5l7 7-7 7"
+                                            />
+                                        </svg>
+                                )
+                            }
+                           
+                        </button>
+                        {
+                                activeTab === 3 && (
+                                    <div className="mt-4">
+                                        <p className="text-base text-gray-500">                         
+                                            JualTani dibuat oleh Tim Capstone D Kelompok 4 Mahasiswa Teknik Elektro Angkatan 2021 Universitas Jenderal Soedirman
+                                        </p>
+                                        <p className="text-base text-gray-500">                         
+                                            Rudi Tri Setyadi H1A021029
+                                        </p>
+                                        <p className="text-base text-gray-500">                         
+                                            Ferry Amaludin H1A021036
+                                        </p>
+                                        <p className="text-base text-gray-500">                         
+                                            Muhammad Ilham Isfadhillah H1A021066
                                         </p>
                                     </div>
                                 )

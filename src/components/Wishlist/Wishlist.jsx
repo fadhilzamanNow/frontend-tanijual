@@ -105,7 +105,7 @@ const CartSingle = ({data,removeFromWishlistHandler, setOpenWishlist }) => {
                 <div className='flex flex-col gap-y-2'>
                     
                     <div>
-                        <img src={`${backend_url}/${data?.images[0]}`} alt="" className="w-[100px] h-[80px] ml-4 rounded-md object-cover shadow-2xl" />
+                        <img src={`${data?.images[0]?.url}`} alt="" className="w-[100px] h-[80px] ml-4 rounded-md object-cover shadow-2xl" />
                     </div>
                      
                         

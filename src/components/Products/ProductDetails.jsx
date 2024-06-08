@@ -361,11 +361,7 @@ const ProductDetailsInfo = ({data,products, totalReviewsLength,averageRating}) =
                                     <h5 className="font-[600] mt-5 800px:mt-0 800px:flex flex-col items-end">
                                         Total Review <span className="font-[100]">{totalReviewsLength}</span>
                                     </h5>
-                                    <Link to="/">
-                                        <div className={`${styles.button} rounded-[4px] h-[39.5px] mt-3 items-end`}>
-                                            <h4 className="text-white">Cek Toko</h4>
-                                        </div>
-                                    </Link>
+                                    
                                 </div>
                             </div>
                        </div>
