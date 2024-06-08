@@ -123,14 +123,14 @@ const ShopLogin = () => {
             </div>
             <div>
                 <button type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-blue-600"
+                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-700"
                 >
                 Masuk
                 </button>
             </div>
             <div className={`${styles.noramlFlex} text-gray-500`}>
                 <h4>Belum memiliki akun ? </h4>
-                <Link to="/sign-up" className="text-green-500 pl-2">
+                <Link to="/shop-create" className="text-green-500 pl-2">
                     Buat Akun
                 </Link>
             </div>

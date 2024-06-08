@@ -100,15 +100,7 @@ const Login = () => {
             </div>
             <div className={`${styles.noramlFlex} justify-between`}>
                 <div className={`${styles.noramlFlex}`}>
-                    <input type="checkbox" name="remember-me" id="remember-me" 
-                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-green-300 rounded bg-green-500"
-                    />
-                    <label 
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-900"
-                    >
-                        Remember Me ? 
-                    </label>
+                    
                 </div>
                 <div className="text-sm">
                    <a href=".forgot-password"
@@ -120,7 +112,7 @@ const Login = () => {
             </div>
             <div>
                 <button type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-blue-600"
+                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-700"
                 >
                 Masuk
                 </button>
