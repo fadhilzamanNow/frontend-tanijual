@@ -12,6 +12,7 @@ const ShopInfo = ({isOwner}) => {
     const {id} = useParams();
     const [data,setData] = useState({});
     const [isLoading,setIsLoading] = useState(true);
+    const [products,setProducts] = useState([])
     
 
     useEffect(() => {
@@ -25,6 +26,17 @@ const ShopInfo = ({isOwner}) => {
         })
     },[])
 
+    useEffect(() => {
+        setIsLoading(true)
+        console.log("data : ", data?.shopId)
+        axios.get(`${server}/product/get-all-products-shop/${id}`).then((res) => {
+            setProducts(res?.data?.products)
+        }).catch((err) => {
+            console.log(err)
+        })
+        
+    },[])
+
 
     
 
@@ -32,6 +44,21 @@ const ShopInfo = ({isOwner}) => {
         axios.get(`${server}/shop/logout`, {withCredentials : true})
         window.location.reload();
     }
+
+    const totalReviewsLength = products && products?.reduce((acc,product) => {
+        return acc + product.reviews.length
+},0)
+
+    const totalRatings = products && products?.reduce((acc,product) => {
+        return acc + product.reviews.reduce((sum,review) => {
+            return sum + review.rating
+        },0)
+    },0)
+
+    const averageRating = totalRatings / totalReviewsLength || 0;
+    useEffect(() => {
+        console.log("isi :  ", products)
+    },[products])
   return (
     <>
     {
@@ -71,7 +98,7 @@ const ShopInfo = ({isOwner}) => {
                 Total Produk
             </h5>
             <h4 className="text-black">
-                10
+                {products?.length}
             </h4>
         </div>
         <div className="p-3">
@@ -79,7 +106,7 @@ const ShopInfo = ({isOwner}) => {
                 Rating Toko
             </h5>
             <h4 className="text-black">
-                4.51 / 5
+                {averageRating} / 5
             </h4>
         </div>
         <div className="p-3">

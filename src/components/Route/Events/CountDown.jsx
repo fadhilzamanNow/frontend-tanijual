@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CountDown = ({data}) => {
+const CountDown = ({data,toko}) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const CountDown = ({data}) => {
       {timerComponents.length ? (
         timerComponents
       ) : (
-        <span className="text-[red] text-[25px]">Waktu Promo Habis</span>
+        <span className={`text-[red]  ${toko ? ("text=[5px]") : ("text-[20px]")} `}>Waktu Promo Habis</span>
       )}
     </div>
   );

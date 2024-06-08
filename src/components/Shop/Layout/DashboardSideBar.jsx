@@ -62,14 +62,7 @@ const DashboardSideBar = ({active}) => {
                 </h5>
             </Link>
         </div>
-        <div className="w-full flex items-center p-4">
-            <Link to="/dashboard-withdraw-money" className="w-full flex items-center">
-                <CiMoneyBill size={30}  className={`${active === 7 ? "text-red-400" : "grey"} `}/>
-                <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 7 ? "text-red-400" : "grey"} `}>
-                    Tarik Uang
-                </h5>
-            </Link>
-        </div>
+        
         <div className="w-full flex items-center p-4">
             <Link to="/dashboard-messages" className="w-full flex items-center">
                 <BiMessageSquareDetail size={30}  className={`${active === 8 ? "text-red-400" : "grey"} `}/>

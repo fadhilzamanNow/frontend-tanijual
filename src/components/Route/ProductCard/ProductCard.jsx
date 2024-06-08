@@ -9,8 +9,9 @@ import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishli
 import { toast } from 'react-toastify';
 import { addToCart } from '../../../redux/actions/cart.js';
 import Ratings from '../../Products/Ratings.jsx';
+import CountDown from '../Events/CountDown.jsx';
 
-const ProductCard = ({data}) => {
+const ProductCard = ({data,toko}) => {
 
     const [click,setClick] = useState(false);
     const [open,setOpen] = useState(false);
@@ -64,7 +65,7 @@ const ProductCard = ({data}) => {
         navigate(`/product/${data._id}`)
         
     }
-
+    console.log("data disini", data)
   return (
     <>
     {/* <div>
@@ -107,8 +108,13 @@ const ProductCard = ({data}) => {
                     <span className="font-[400] text-[17px] text-green-500">
                             {data.sold_out ? data.sold_out + " terjual" : null }
                         </span>
+                    
                 </div>
+                {
+                    toko ? (<CountDown data={data} toko={true} />) : (null)
+                }
                 </Link>
+                
                 {/* opsi samping */}
 
                 {click ? (

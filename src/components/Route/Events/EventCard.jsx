@@ -5,6 +5,7 @@ import { backend_url } from "../../../server";
 import styles from "../../../styles/styles";
 
 const EventCard = ({active,data}) => {
+  console.log("daleman" , data)
   return (
     <div className={`w-full block bg-white rounded-lg ${active ? "unset" : "mb-12"} lg:flex p-2`}>
       <div className="w-[40%] lg:-w[50%] m-auto">
@@ -29,7 +30,7 @@ const EventCard = ({active,data}) => {
                 </h5>
             </div>
             <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-                120 terjual
+            {data?.sold_out} terjual
             </span>
         </div>
         <CountDown data={data} />

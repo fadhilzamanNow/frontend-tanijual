@@ -9,7 +9,7 @@ import {toast} from "react-toastify"
 import { addToCart } from '../../../redux/actions/cart';
 import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishlist';
 
-const ProductDetailsCard = ({data,setOpen}) => {
+const ProductDetailsCard = ({data,setOpen,event}) => {
     const {cart} = useSelector((state) => state.cart)
     const [count,setCount] = useState(1);
     const [click,setClick] = useState(false);
@@ -125,7 +125,8 @@ const ProductDetailsCard = ({data,setOpen}) => {
                                     >
                                             +
                                     </button>
-                                </div>     
+                                </div> 
+                                    
                                 {click ? (
                                 <AiFillHeart 
                                 size={30}
