@@ -18,12 +18,12 @@ const BestDeals = () => {
         setData(firstFive);
     },[])
 
-    const data2= data.filter((item) => item.discountPrice <= 10000)
+    const data2= data?.filter((item) => item.discountPrice <= 10000)
   return (
     <div>
         <div className={`${styles.section}`}>
             <div className={`${styles.heading}`}>
-                <h1>Produk Murah Di Kantong</h1>
+            <h1>Produk Murah Di Kantong</h1>
             </div>
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[30px] xl:grid-cols-5 xl:gap-[30px]">
                 {

@@ -41,7 +41,7 @@ const BestSellingPage = () => {
     },[allProducts])
 
     console.log("isi data :", data)
-    const data2 = data.filter((i) => i?.sold_out)
+    const data2 = data?.filter((i) => i?.sold_out)
     console.log("isi data2 :" , data2)
   return (
     <div>
