@@ -51,10 +51,10 @@ const AllCoupons = () => {
     }
 
     const columns = [
-        {field : "id", headerName : "Coupon Id", minWidth : 150, flex : 0.7},
+        {field : "id", headerName : "ID Kode Promo", minWidth : 150, flex : 0.7},
         {
             field : "name",
-            headerName : "Nama Kupon Diskon",
+            headerName : "Nama Kode Promo",
             minWidth : 180,
             flex : 1.4
         },
@@ -65,7 +65,7 @@ const AllCoupons = () => {
             flex : 0.6
         },
         {
-            field : "Delete",
+            field : "Hapus",
             flex : 0.8,
             minWidth : 120,
             headerName : "",

@@ -10,7 +10,7 @@ const ShopAllEvents = () => {
             <div className="800px:w-[330px] w-[80px]">
                 <DashboardSideBar active={5}/>
             </div>
-            <div className="w-full justify-center flex">
+            <div className="w-full justify-center flex mx-[20px] bg-white">
                 <AllEvents />
             </div>
         </div>

@@ -99,7 +99,7 @@ const CreateEvent = () => {
   return (
     <div className="800px:w-[75%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
         <h5 className="text-[30px] font-Poppins text-center">
-           Membuat Event 
+           Membuat Promo 
         </h5>
         {/* Form Untuk Membuat Produk */}
         <form action="" onSubmit={handleSubmit}>
@@ -124,7 +124,7 @@ const CreateEvent = () => {
                 value={description}
                 className="mt-2 appearance-none block w-full pt-2 px-3 border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter your product description..."
+                placeholder="Masukkan Deskripsi Dari Produk Promo Ini......"
             ></textarea>
             </div>
             <br />
@@ -175,14 +175,14 @@ const CreateEvent = () => {
             <br />
             <div>
                 <label htmlFor="start-date" className='pb-2'>
-                    Tanggal Mulai Event <span className='text-red-400'>*</span>
+                    Tanggal Mulai Promo <span className='text-red-400'>*</span>
                 </label>
                 <input type="date" name='start-date' id="start-date" value={startDate ? startDate.toISOString().slice(0,10)  : ""} onChange={handleStartDateChange} min={today} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan Stok Produk'/>
             </div>
             <br />
             <div>
                 <label htmlFor="end-date" className='pb-2'>
-                    Tanggal Berakhir Event <span className='text-red-400'>*</span>
+                    Tanggal Berakhir Promo <span className='text-red-400'>*</span>
                 </label>
                 <input type="date" name='end-date' id="end-date" value={endDate ? endDate.toISOString().slice(0,10)  : ""} onChange={handleEndDateChange} min={minEndDate} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan Stok Produk'/>
             </div>
@@ -207,7 +207,7 @@ const CreateEvent = () => {
                     }
                 </div>
                 <br />
-                <input type="submit" value="Buat Produk" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' />
+                <input type="submit" value="Buat Promo" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm bg-green-500 text-white font-[600]' />
             </div>
             
         </form>

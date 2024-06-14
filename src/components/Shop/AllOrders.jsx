@@ -5,8 +5,11 @@ import { Button } from '@material-ui/core';
 import { AiOutlineArrowRight, AiOutlineDelete, AiOutlineEye } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import Loader from '../Layout/Loader';
-import { DataGrid } from '@material-ui/data-grid';
+//import { DataGrid } from '@material-ui/data-grid';
 import { getAllOrdersOfShop } from '../../redux/actions/order';
+import { DataGrid } from '@mui/x-data-grid';
+import NyobaGrid from './NyobaGrid';
+
 
 const AllOrders = () => {
     const {orders, isLoading} = useSelector((state) => state.order);
@@ -31,11 +34,7 @@ const AllOrders = () => {
           headerName: "Status",
           minWidth: 130,
           flex: 0.1,
-          cellClassName: (params) => {
-            return params.getValue(params.id, "status") === "Diterima"
-              ? "greenColor"
-              : "redColor";
-          },
+          
         },
         {
           field: "itemQty",
@@ -99,6 +98,21 @@ const AllOrders = () => {
                 pageSize={10}
                 disableSelectionOnClick
                 autoHeight
+                slots={{
+                  toolbar : NyobaGrid
+                }}
+                slotProps={{
+                  toolbar: {
+                    printOptions:{
+                      pageStyle: '.MuiDataGrid-root .MuiDataGrid-main { color: rgba(0, 0, 0, 0.01); }',
+                      hideFooter : true,
+                      hideToolbar : true
+                      
+                    }
+                  }
+                }}
+                
+                
             />
         )
     }

@@ -23,58 +23,35 @@ const AllEvents = () => {
     }
 
     const columns = [
-        {field : "id", headerName : "Product Id", minWidth : 150, flex : 0.7},
+        {field : "id", headerName : "ID Promo", minWidth : 150, flex : 0.7},
         {
             field : "name",
-            headerName : "Name",
+            headerName : "Nama ",
             minWidth : 180,
-            flex : 1.4
+            flex : 1.4,
+            
         },
         {
             field : "price",
-            headerName : "Price",
-            minWidth : 100,
+            headerName : "Harga Diskon",
+            minWidth : 50,
+            flex : 0.6,
+           
+            
+            
+        },
+        {
+            field : "original",
+            headerName : "Harga Asli",
+            minWidth : 50,
             flex : 0.6
         },
-        {
-            field : "stock",
-            headerName : "Stock",
-            minWidth : 80,
-            flex : 0.5
-        },
-        {
-            field : "sold",
-            headerName : "Sold Out",
-            minWidth : 130,
-            flex : 0.6
-        },
-        {
-            field : "Preview",
-            flex : 0.8,
-            minWidth : 100,
-            headerName : "",
-            type : "number",
-            sortable : false,
-            renderCell : (params) => {
-                const d = params.row.name;
-                const product_name = d.replace(/\s+/g,"-");
-                return (
-                    <>
-                    <Link to={`/product/${product_name}`} >
-                        <Button>
-                            <AiOutlineEye size={20}/>
-                        </Button>
-                    </Link>
-                    </>
-                )
-            }
-
-        },
+        
         {
             field : "Delete",
             flex : 0.8,
             minWidth : 120,
-            headerName : "",
+            headerName : "Hapus",
             type : "number",
             sortable : false,
             renderCell : (params) => {
@@ -87,6 +64,7 @@ const AllEvents = () => {
                     </>
                 )
             }
+            
 
         }
     ];
@@ -96,10 +74,11 @@ const AllEvents = () => {
 
     events && events.forEach((item) => {
         row.push({
-            id : item._id,
-            name : item.name,
-            price: "Rp. " + item.discountPrice,
-            stock : item.stock,
+            id : item?._id,
+            name : item?.name,
+            price: "Rp. " + item?.discountPrice,
+            original : "Rp. " + item?.originalPrice,
+            stock : item?.stock,
             sold : 10
         })
     })
@@ -116,6 +95,7 @@ const AllEvents = () => {
                 pageSize={10}
                 disableSelectionOnClick
                 autoHeight
+                
             />
         )
     }

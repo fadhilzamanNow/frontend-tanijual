@@ -3,14 +3,32 @@ import { AiOutlineFolderAdd, AiOutlineGift } from 'react-icons/ai'
 import { FiPackage, FiShoppingBag } from 'react-icons/fi'
 import { MdOutlineLocalOffer } from 'react-icons/md'
 import { RxDashboard } from 'react-icons/rx'
-import { Link } from 'react-router-dom'
+import { Link, useNavigation } from 'react-router-dom'
 import {VscNewFile} from "react-icons/vsc"
 import {CiMoneyBill, CiSettings} from "react-icons/ci"
 import { BiMessageSquareDetail } from 'react-icons/bi'
 import { HiOutlineReceiptRefund } from 'react-icons/hi'
+import { CiLogout } from "react-icons/ci";
+import axios from 'axios'
+import { server } from '../../../server'
+import { toast } from 'react-toastify'
+
+
+
 
 const DashboardSideBar = ({active}) => {
     console.log("active" , active)
+    
+    const handleLogout = async () => {
+        axios.get(`${server}/shop/logout`,{withCredentials : true}).then((res) =>{
+            toast.success("Anda Telah Keluar")
+            window.location.reload()
+            
+        }
+        ).catch((err) => {
+            toast.error("Terdapat Kesalahan, Gagal Logout")
+        })
+    }
   return (
     <div className="w-full h-[89vh] bg-white shadow-sm sticky top-0 left-0 z-10 border-r-gray-300 border">
         { /* single item */ }
@@ -50,7 +68,7 @@ const DashboardSideBar = ({active}) => {
             <Link to="/dashboard-events" className="w-full flex items-center">
                 <MdOutlineLocalOffer size={30}  className={`${active === 5 ? "text-red-400" : "grey"} `}/>
                 <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 5 ? "text-red-400" : "grey"} `}>
-                    Semua Event
+                    Semua Promo
                 </h5>
             </Link>
         </div>
@@ -58,7 +76,7 @@ const DashboardSideBar = ({active}) => {
             <Link to="/dashboard-create-event" className="w-full flex items-center">
                 <VscNewFile size={30}  className={`${active === 6 ? "text-red-400" : "grey"} `}/>
                 <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 6 ? "text-red-400" : "grey"} `}>
-                    Membuat Event
+                    Membuat Promo
                 </h5>
             </Link>
         </div>
@@ -79,21 +97,29 @@ const DashboardSideBar = ({active}) => {
                 </h5>
             </Link>
         </div>
-        <div className="w-full flex items-center p-4">
+       {/*  <div className="w-full flex items-center p-4">
             <Link to="/dashboard-refunds" className="w-full flex items-center">
                 <HiOutlineReceiptRefund size={30}  className={`${active === 10 ? "text-red-400" : "grey"} `}/>
                 <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 10 ? "text-red-400" : "grey"} `}>
                     Pembatalan
                 </h5>
             </Link>
-        </div>
+        </div> */}
         <div className="w-full flex items-center p-4">
             <Link to="/settings" className="w-full flex items-center">
                 <CiSettings size={30}  className={`${active === 11 ? "text-red-400" : "grey"} `}/>
                 <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 11 ? "text-red-400" : "grey"} `}>
-                    Settings
+                    Pengaturan
                 </h5>
             </Link>
+        </div>
+        <div className="w-full flex items-center p-4 cursor-pointer" onClick={() => handleLogout()}>
+            
+                <CiLogout size={30}  className={`${active === 12 ? "text-red-400" : "grey"} `}/>
+                <h5 className={`800px:block hidden pl-2 text-[18px] font-[400] ${active === 12 ? "text-red-400" : "grey"} `}>
+                    Keluar
+                </h5>
+            
         </div>
     </div>
   )

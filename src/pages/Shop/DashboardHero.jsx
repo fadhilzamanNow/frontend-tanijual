@@ -10,6 +10,8 @@ import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { FiPackage, FiShoppingBag } from 'react-icons/fi'
+import { PieChart } from "@mui/x-charts";
+import { LineChart } from "@mui/x-charts";
 
 
 const DashboardHero = () => {
@@ -33,7 +35,7 @@ const DashboardHero = () => {
   const serviceCharge = 0
   const availableBalance = (totalEarningWithoutTax - serviceCharge).toFixed() || 0;
   
-  const columns = [
+ /*  const columns = [
     { field: "id", headerName: "ID Pesanan", minWidth: 150, flex: 0.7 },
 
     {
@@ -93,7 +95,23 @@ const DashboardHero = () => {
         total: "Rp.  " + item.totalPrice,
         status: item.status,
       });
-  });
+  }); */
+
+  const data2 = []
+  const data3 = []
+  const data4 = []
+
+  products && products.forEach((item) => {
+      data2.push({
+          value : item?.stock,
+          label : item?.name
+      })
+      data3.push({
+          value : item?.sold_out,
+          label : item?.name
+      })
+  })
+
   return (
     <div className="w-full p-8">
       <h3 className="text-[22px] font-Poppins pb-2">Analisis Penjualan</h3>
@@ -150,15 +168,74 @@ const DashboardHero = () => {
         </div>
       </div>
       <br />
-      <h3 className="text-[22px] font-Poppins pb-2">Histori Pesanan</h3>
+      <h3 className="text-[22px] font-Poppins pb-2">Statistik</h3>
       <div className="w-full min-h-[45vh] bg-white rounded">
-      <DataGrid
-        rows={row}
-        columns={columns}
-        pageSize={10}
-        disableSelectionOnClick
-        autoHeight
-      />
+      <div className='flex flex-col w-full lg:flex-row pb-[100px] lg:justify-center'>
+                <div className="flex justify-center h-full">
+                    <div className="mt-10">
+                        <div className="font-[600]">
+                            Statistik Stok Antar Produk
+                        </div>
+                        <PieChart
+                            series={[
+                                {
+                                data: data2,
+                                highlightScope: { faded: 'global', highlighted: 'item' },
+                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' }
+                                },
+                            ]}
+                            width={400}
+                            height={200}
+                            margin={{right : 200}}
+                            slotProps={{ legend: {
+                                direction: 'column',
+                                position: { vertical: 'middle', horizontal: 'right' },
+                                padding : 0,
+                                labelStyle : {
+                                    fontWeight : 600,
+                                    
+                                },
+                                
+
+                            }}}
+                            />
+                    </div>
+
+                </div>
+
+                <div className="flex justify-center h-full">
+                    <div className="mt-10">
+                        <div className="font-[600]">
+                            Statistik Produk Terlaku 
+                        </div>
+                        <PieChart
+                            series={[
+                                {
+                                data: data3,
+                                highlightScope: { faded: 'global', highlighted: 'item' },
+                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' }
+                                },
+                            ]}
+                            width={400}
+                            height={200}
+                            margin={{right : 200}}
+                            slotProps={{ legend: {
+                                direction: 'column',
+                                position: { vertical: 'middle', horizontal: 'right' },
+                                padding : 0,
+                                labelStyle : {
+                                    fontWeight : 600,
+                                    
+                                },
+                                
+
+                            }}}
+                            />
+                    </div>
+
+                </div>
+            </div>
+
       </div>
     </div>
   );
