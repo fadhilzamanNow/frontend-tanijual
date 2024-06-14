@@ -11,7 +11,7 @@ const ShopSettingsPage = () => {
         <div className="w-[80px] 800px:w-[330px] bg-white">
             <DashboardSideBar active={11}/>
         </div>
-        <div className="w-full justify-center flex">
+        <div className="w-full flex justify-center items-center ">
             <ShopSettings />
         </div>
     </div>

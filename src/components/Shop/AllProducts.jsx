@@ -23,36 +23,36 @@ const AllProducts = () => {
     }
 
     const columns = [
-        {field : "id", headerName : "Product Id", minWidth : 150, flex : 0.7},
+        {field : "id", headerName : "ID Produk", minWidth : 150, flex : 0.7},
         {
             field : "name",
-            headerName : "Name",
+            headerName : "Nama",
             minWidth : 180,
             flex : 1.4
         },
         {
             field : "price",
-            headerName : "Price",
+            headerName : "Harga",
             minWidth : 100,
             flex : 0.6
         },
         {
             field : "stock",
-            headerName : "Stock",
+            headerName : "Stok",
             minWidth : 80,
             flex : 0.5
         },
         {
             field : "sold",
-            headerName : "Sold Out",
+            headerName : "Terjual",
             minWidth : 130,
             flex : 0.6
         },
         {
             field : "Preview",
-            flex : 0.8,
-            minWidth : 100,
-            headerName : "Preview",
+            flex : 0.4,
+            minWidth : 50,
+            headerName : "Lihat Barang",
             type : "number",
             sortable : false,
             renderCell : (params) => {
@@ -74,7 +74,7 @@ const AllProducts = () => {
             field : "Delete",
             flex : 0.8,
             minWidth : 120,
-            headerName : "",
+            headerName : "Hapus",
             type : "number",
             sortable : false,
             renderCell : (params) => {
@@ -99,8 +99,8 @@ const AllProducts = () => {
             id : item._id,
             name : item.name,
             price: "Rp. " + item.discountPrice,
-            stock : item.stock,
-            sold : 10
+            stock : item?.stock,
+            sold : item?.sold_out
         })
     })
 
@@ -116,6 +116,7 @@ const AllProducts = () => {
                 pageSize={10}
                 disableSelectionOnClick
                 autoHeight
+                
             />
         )
     }

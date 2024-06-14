@@ -61,18 +61,18 @@ const ShopSettings = () => {
 
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center">
+    <div className="flex flex-col justify-center items-center w-full mt-2 800px:flex-row 800px:al">
   
-        <div className="w-[30%] flex items-center justify-center">
+        <div className="w-[80%] flex items-center justify-center 800px:w-auto 800px:ml-[20px]">
           <div className="relative">
             <img
               src={
                 avatar ? `${avatar}` : `${seller?.avatar?.url}`
               }
               alt=""
-              className="w-[500px] h-[500px] rounded-full cursor-pointer border-4"
+              className="w-[200px] h-[200px] rounded-full cursor-pointer border-4 800px:w-[300px] 800px:h-[300px]"
             />
-            <div className="w-[50px] h-[50px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[75px]">
+            <div className="w-[50px] h-[50px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[10px] 800px:bottom-[15px] 800px:right-[15px]">
               <input
                 type="file"
                 id="image"
@@ -86,29 +86,29 @@ const ShopSettings = () => {
           </div>
           
         </div>
-        <div className="w-[50%] flex items-center ">
+        <div className="w-[60%] flex items-center justify-center ">
         <form
           aria-aria-required={true}
-          className="flex flex-col w-full"
+          className="flex flex-col w-full items-center justify-center"
           onSubmit={updateHandler}
         >
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Nama Toko</label>
+              <label className="block pb-2 font-[500]">Nama Toko</label>
             </div>
             <input
               type="name"
               placeholder={`${seller.name}`}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 !bg-gray-500`}
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 !bg-gray-500 !text-white`}
               required
               readOnly = {true}
             />
           </div>
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Deskripsi Toko</label>
+              <label className="block pb-2 font-[500]">Deskripsi Toko</label>
             </div>
             <input
               type="name"
@@ -124,7 +124,7 @@ const ShopSettings = () => {
           </div>
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Alamat Toko</label>
+              <label className="block pb-2 font-[500]">Alamat Toko</label>
             </div>
             <input
               type="name"
@@ -138,7 +138,7 @@ const ShopSettings = () => {
 
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Nomor Telefon Toko</label>
+              <label className="block pb-2 font-[500]">Nomor Telefon Toko</label>
             </div>
             <input
               type="number"
@@ -152,7 +152,7 @@ const ShopSettings = () => {
 
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <div className="w-full pl-[3%]">
-              <label className="block pb-2">Kode Pos Toko</label>
+              <label className="block pb-2 font-[500]">Kode Pos Toko</label>
             </div>
             <input
               type="number"
@@ -167,8 +167,8 @@ const ShopSettings = () => {
           <div className="w-[100%] flex items-center flex-col 800px:w-[50%] mt-5">
             <input
               type="submit"
-              value="Ubah Profil Toko"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+              value="Simpan Perubahan"
+              className={`${styles.input} !w-[95%] mb-4 800px:mb-0 !bg-green-400 !text-white cursor-pointer`}
               required
               readOnly
             />

@@ -34,7 +34,7 @@ const DashboardHero = () => {
   const availableBalance = (totalEarningWithoutTax - serviceCharge).toFixed() || 0;
   
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    { field: "id", headerName: "ID Pesanan", minWidth: 150, flex: 0.7 },
 
     {
       field: "status",
@@ -42,14 +42,14 @@ const DashboardHero = () => {
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
+        return params.getValue(params.id, "status") === "Diterima"
           ? "greenColor"
           : "redColor";
       },
     },
     {
       field: "itemsQty",
-      headerName: "Kuantitas",
+      headerName: "Jumlah",
       type: "number",
       minWidth: 130,
       flex: 0.7,
@@ -73,7 +73,7 @@ const DashboardHero = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/dashboard/order/${params.id}`}>
+            <Link to={`/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -96,7 +96,7 @@ const DashboardHero = () => {
   });
   return (
     <div className="w-full p-8">
-      <h3 className="text-[22px] font-Poppins pb-2">Ringkasan</h3>
+      <h3 className="text-[22px] font-Poppins pb-2">Analisis Penjualan</h3>
       <div className="w-full block 800px:flex items-center justify-between">
         <div className="w-full mb-4 800px:w-[30%] min-h-[20vh] bg-white shadow rounded px-2 py-5">
           <div className="flex items-center">
@@ -121,12 +121,12 @@ const DashboardHero = () => {
             <h3
               className={`${styles.productTitle} !text-[18px] leading-5 !font-[400] text-[#00000085]`}
             >
-              Jumlah Order 
+              Jumlah Pesanan 
             </h3>
           </div>
           <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{orders && orders.length}</h5>
           <Link to="/dashboard-orders">
-            <h5 className="pt-4 pl-2 text-[#077f9c]">Lihat Semua Order</h5>
+            <h5 className="pt-4 pl-2 text-[#077f9c]">Lihat Semua Pesanan</h5>
           </Link>
         </div>
 
@@ -150,7 +150,7 @@ const DashboardHero = () => {
         </div>
       </div>
       <br />
-      <h3 className="text-[22px] font-Poppins pb-2">Order Terbaru</h3>
+      <h3 className="text-[22px] font-Poppins pb-2">Histori Pesanan</h3>
       <div className="w-full min-h-[45vh] bg-white rounded">
       <DataGrid
         rows={row}

@@ -12,7 +12,7 @@ import { HiOutlineReceiptRefund } from 'react-icons/hi'
 const DashboardSideBar = ({active}) => {
     console.log("active" , active)
   return (
-    <div className="w-full h-[89vh] bg-white shadow-sm overflow-y-scroll sticky top-0 left-0 z-10">
+    <div className="w-full h-[89vh] bg-white shadow-sm sticky top-0 left-0 z-10 border-r-gray-300 border">
         { /* single item */ }
         <div className="w-full flex items-center p-4">
             <Link to="/dashboard" className="w-full flex items-center">

@@ -24,7 +24,7 @@ const AllOrders = () => {
     
 
     const columns = [
-        { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.1 },
+        { field: "id", headerName: "ID Pesanan", minWidth: 150, flex: 0.1 },
     
         {
           field: "status",
@@ -32,7 +32,7 @@ const AllOrders = () => {
           minWidth: 130,
           flex: 0.1,
           cellClassName: (params) => {
-            return params.getValue(params.id, "status") === "Delivered"
+            return params.getValue(params.id, "status") === "Diterima"
               ? "greenColor"
               : "redColor";
           },
