@@ -34,7 +34,7 @@ const AllEvents = () => {
         {
             field : "price",
             headerName : "Harga Diskon",
-            minWidth : 50,
+            minWidth : 250,
             flex : 0.6,
            
             
@@ -43,14 +43,14 @@ const AllEvents = () => {
         {
             field : "original",
             headerName : "Harga Asli",
-            minWidth : 50,
+            minWidth : 250,
             flex : 0.6
         },
         
         {
             field : "Delete",
             flex : 0.8,
-            minWidth : 120,
+            minWidth : 100,
             headerName : "Hapus",
             type : "number",
             sortable : false,
@@ -89,6 +89,11 @@ const AllEvents = () => {
     <>
     {
         isLoading ? (<Loader />) : (
+            <div className="w-full"> 
+            <div className="lg:hidden text-center font-Poppins font-[600] text-[24px] mb-[20px] ">
+                Semua Promo
+            </div>
+            
             <DataGrid 
                 rows={row}
                 columns={columns}
@@ -97,6 +102,7 @@ const AllEvents = () => {
                 autoHeight
                 
             />
+            </div>
         )
     }
     </>

@@ -76,8 +76,8 @@ const CreateProduct = () => {
         setImages((prevImages) => [...prevImages,...files]) */
     }
   return (
-    <div className="800px:w-[75%] w-[90%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
-        <h5 className="text-[30px] font-Poppins text-center">
+    <div className="800px:w-[75%] w-[100%] bg-white shadow h-[100vh] rounded-[4px] px-[10px]">
+        <h5 className="text-[30px] font-Poppins text-center font-[500]">
            Membuat Produk 
         </h5>
         {/* Form Untuk Membuat Produk */}
@@ -85,7 +85,7 @@ const CreateProduct = () => {
             <br />
             <div>
                 <label htmlFor="name" className='pb-2'>
-                    Name <span className='text-red-400'>*</span>
+                    Nama <span className='text-red-400'>*</span>
                 </label>
                 <input type="text" name='name' value={name} onChange={(e)=> setName(e.target.value)} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Nama Produk'/>
             </div>
@@ -172,7 +172,7 @@ const CreateProduct = () => {
                     }
                 </div>
                 <br />
-                <input type="submit" value="Buat Produk" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' />
+                <input type="submit" value="Buat Produk" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm bg-green-500 text-white' />
             </div>
             
         </form>

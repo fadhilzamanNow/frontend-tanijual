@@ -8,6 +8,7 @@ import Loader from '../Layout/Loader';
 import { DataGrid } from '@mui/x-data-grid';
 import NyobaGrid from './NyobaGrid';
 import { PieChart } from '@mui/x-charts/PieChart';
+import {DataGrid as DataGrid2} from "@material-ui/data-grid"
 
 
 const AllProducts = () => {
@@ -36,13 +37,13 @@ const AllProducts = () => {
         {
             field : "price",
             headerName : "Harga",
-            minWidth : 100,
+            minWidth : 120,
             flex : 0.6
         },
         {
             field : "stock",
             headerName : "Stok",
-            minWidth : 80,
+            minWidth : 120,
             flex : 0.5
         },
         {
@@ -54,8 +55,8 @@ const AllProducts = () => {
         {
             field : "Preview",
             flex : 0.4,
-            minWidth : 50,
-            headerName : "Lihat Barang",
+            minWidth : 120,
+            headerName : "Lihat",
             type : "number",
             sortable : false,
             renderCell : (params) => {
@@ -128,10 +129,10 @@ const AllProducts = () => {
     <>
     {
         isLoading ? (<Loader />) : (
-        <div className ="flex flex-col w-full">
+        <div className ="w-full">
 
             
-            <div>
+            <div className="hidden lg:block">
                 <DataGrid 
                     rows={row}
                     columns={columns}
@@ -143,6 +144,20 @@ const AllProducts = () => {
                     }}
                     
                 />
+            </div>
+            <div className="lg:hidden">
+            <div className="text-center mb-[20px] font-Poppins text-[20px] font-[600] ">
+              Semua Produk
+            </div>
+                <DataGrid2
+                        rows={row}
+                        columns={columns}
+                        pageSize={10}
+                        disableSelectionOnClick
+                        autoHeight
+                        
+                        
+                    />
             </div>
             
             </div>

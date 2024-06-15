@@ -61,7 +61,7 @@ const AllCoupons = () => {
         {
             field : "price",
             headerName : "Persentase Diskon",
-            minWidth : 100,
+            minWidth : 200,
             flex : 0.6
         },
         {
@@ -122,7 +122,7 @@ const AllCoupons = () => {
     <>
     {
         isLoading ? (<Loader />) : (
-            <div className="w-full mx-8 pt-1 mt-10 bg-white">
+            <div className="w-full  bg-white lg:mx-1">
                 <div className="w-full flex justify-end mb-5">
                     <div className={`${styles.button} !w-[150px] mr-3`} onClick={() => setOpen(true)}>
                         <span className="text-white">Buat Kode Promo</span>
@@ -148,7 +148,7 @@ const AllCoupons = () => {
                                 <form onSubmit={handleSubmit} aria-required={true}>
                                     <div>
                                         <label htmlFor="name" className='pb-2'>
-                                            Name <span className='text-red-400'>*</span>
+                                            Nama <span className='text-red-400'>*</span>
                                         </label>
                                         <input type="text" name='name'  required value={name} onChange={(e)=> setName(e.target.value)} className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' placeholder='Tuliskan nama kupon'/>
                                     </div>
@@ -192,7 +192,7 @@ const AllCoupons = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <input type="submit" name='name' value="Buat Kode Promo" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm' />
+                                        <input type="submit" name='name' value="Buat Kode Promo" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm bg-green-500 text-white' />
                                     </div>
                                 </form>
                             </div> 

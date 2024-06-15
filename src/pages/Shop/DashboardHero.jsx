@@ -187,12 +187,12 @@ const DashboardHero = () => {
                                   data: data2,
                                   highlightScope: { faded: 'global', highlighted: 'item' },
                                   faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                                  cx : "100%",
+                                  cx : "85%",
                                   cy : "80%"
                                   
                                   },
                               ]}
-                              width={200}
+                              width={250}
                               height={200}
                               margin={{bottom : 60}}
                               slotProps={{
@@ -222,12 +222,12 @@ const DashboardHero = () => {
                                   data: data3,
                                   highlightScope: { faded: 'global', highlighted: 'item' },
                                   faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                                  cx : "100%",
+                                  cx : "85%",
                                   cy : "80%"
                                   
                                   },
                               ]}
-                              width={200}
+                              width={250}
                               height={200}
                               margin={{bottom : 60}}
                               slotProps={{
@@ -268,7 +268,10 @@ const DashboardHero = () => {
                               margin={{bottom : 60}}
                               slotProps={{
                                 legend : {
-                                  hidden : true
+                                  
+                                  position : { horizontal : "middle" , vertical : "bottom"},
+                                  direction : "column",
+                                  padding : {top : "30px"}
                                 }
                                 
                                 
@@ -303,12 +306,14 @@ const DashboardHero = () => {
                               margin={{bottom : 60}}
                               slotProps={{
                                 legend : {
-                                  hidden : true
+                                  
+                                  position : { horizontal : "middle" , vertical : "bottom"},
+                                  direction : "column",
+                                  padding : {top : "30px"}
                                 }
                                 
                                 
-                              }}  
-                              
+                              }}
                               />
                               
                             

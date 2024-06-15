@@ -9,7 +9,7 @@ import Loader from '../Layout/Loader';
 import { getAllOrdersOfShop } from '../../redux/actions/order';
 import { DataGrid } from '@mui/x-data-grid';
 import NyobaGrid from './NyobaGrid';
-
+import { DataGrid as DataGrid2 } from '@material-ui/data-grid';
 
 const AllOrders = () => {
     const {orders, isLoading} = useSelector((state) => state.order);
@@ -27,13 +27,14 @@ const AllOrders = () => {
     
 
     const columns = [
-        { field: "id", headerName: "ID Pesanan", minWidth: 150, flex: 0.1 },
+        { field: "id", headerName: "ID Pesanan", minWidth: 150, flex : 1 },
     
         {
           field: "status",
           headerName: "Status",
           minWidth: 130,
-          flex: 0.1,
+          flex : 1
+          
           
         },
         {
@@ -41,7 +42,7 @@ const AllOrders = () => {
           headerName: "Jumlah",
           type: "number",
           minWidth: 130,
-          flex: 0.1,
+          flex : 0.5
         },
     
         {
@@ -49,17 +50,19 @@ const AllOrders = () => {
           headerName: "Total",
           type: "number",
           minWidth: 130,
-          flex: 0.1,
+          flex : 0.5
+         
         },
     
         {
-          field: " ",
-          flex: 0.1,
-          minWidth: 150,
-          headerName: "",
-          type: "number",
-          sortable: false,
-          renderCell: (params) => {
+          field : "Delete",
+          flex : 0.2,
+          minWidth : 120,
+          headerName : "Lihat",
+          type : "number",
+          sortable : false,
+          renderCell : (params) => {
+              
             return (
               <>
                 <Link to={`/order/${params.id}`}>
@@ -68,9 +71,11 @@ const AllOrders = () => {
                   </Button>
                 </Link>
               </>
-            );
-          },
-        },
+            )
+          }
+          
+
+      }
       ];
 
 
@@ -92,11 +97,15 @@ const AllOrders = () => {
     <>
     {
         isLoading ? (<Loader />) : (
+          <div className='w-full'>
+
+          
+          <div className="hidden lg:block">
             <DataGrid 
                 rows={row}
                 columns={columns}
                 pageSize={10}
-                disableSelectionOnClick
+                
                 autoHeight
                 slots={{
                   toolbar : NyobaGrid
@@ -113,7 +122,24 @@ const AllOrders = () => {
                 }}
                 
                 
+                
             />
+          </div>
+          <div className="lg:hidden"> 
+          <div className="text-center mb-[20px] font-Poppins text-[20px] font-[600] ">
+              Semua Pesanan
+          </div>
+          <DataGrid2
+                rows={row}
+                columns={columns}
+                pageSize={10}
+                disableSelectionOnClick
+                autoHeight
+                
+            />
+          </div>
+          </div>
+            
         )
     }
     </>
