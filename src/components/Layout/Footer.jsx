@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <div className="bg-black text-white">
         <div className="md:flex md:justify-center md:items-center sm:px-12 px-4 bg-green-500 py-7">
-            <h1 className="flex justify-center items-center lg:text-4xl text-3xl md:mb-0 mb-6 lg:leading-normal font-semibold md:w-full">
+            <h1 className="flex justify-center items-center text-[20px] lg:text-4xl text-3xl md:mb-0 mb-6 lg:leading-normal font-semibold md:w-full">
                 <span className="text-white text-center">Ayo, Beli Produk Pertanian Hortikultura Favoritmu Langsung Dari Petaninya </span>
             </h1>
         </div>

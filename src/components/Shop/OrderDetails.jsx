@@ -85,12 +85,12 @@ const OrderDetails = () => {
         <IoMdArrowRoundBack size={30} color='black' className='absolute top-2 left-2' onClick={() => navigate("/dashboard-orders")}/>
         </div>
       </div>
-        <div className='bg-white w-full h-[100vh]'>
+        <div className='bg-white w-full min-h-[50vh]'>
           <div className='flex justify-center flex-1 mb-4 '>
             <Stepper activeStep={selesai} orientation='horizontal' className='mt-[20px]'  alternativeLabel>
                 {step.map((label) => {
                   return (
-                    <Step key={label} 
+                    <Step key={label} className="h-[100px] w-[100px]"
                       sx={{
                         "& .MuiStepLabel-root .Mui-completed": {
                             color: "green"
@@ -102,14 +102,18 @@ const OrderDetails = () => {
                             color: "#a5a8ad"
                         },
                         "& .MuiStepLabel-root .Mui-active": {
-                            color: "gray"
+                            color: "gray",
+                          
+
                         },
                         "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel": {
-                            color: "gray"
+                            color: "gray",
+                            
                         },
                         "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
                             fill: "white"
                         }
+                        
                     }}
                     >
                       <StepLabel>{label}</StepLabel>
@@ -163,13 +167,11 @@ const OrderDetails = () => {
             
         </div>
         <div className='w-full flex flex-col pt-6  pb-4 gap-y-[5px] mx-[25px]'>
-          <h5 className="text-black font-[600] text-[24px]"> 
-            Informasi Order
-          </h5>
+         
           <div className="grid grid-cols-1 md:grid-cols-2 md:items-center md:border-t md:border-t-gray-200 ">
 
           
-            <div className='grid grid-cols-1 md:text-[24px] mb-4 border-b border-b-gray-200 md:border-none pb-4' >    
+            <div className='grid grid-cols-1 md:text-[24px] mb-4 border-b border-b-gray-200 md:border-none pb-4 text-[10px]' >    
               <h5 className="text-black">
                 Order ID : <span className="font-[500]">{data?._id}</span>
               </h5>
@@ -203,10 +205,10 @@ const OrderDetails = () => {
                     className='w-[80px] h-[80px] md:w-[250px] md:h-[250px]'
                   />
                   <div className="w-full">
-                    <h5 className='pl-3 text-[20px] font-[500] md:text-[30px]'>
+                    <h5 className='pl-3 text-[12px] font-[500] md:text-[30px]'>
                       {item?.name}
                     </h5>
-                    <h5 className='pl-3 text-[20px] text-black'>
+                    <h5 className='pl-3 text-[10px] text-black'>
                       Rp. {item?.discountPrice} * {item?.qty}
                     </h5>
                   </div>
