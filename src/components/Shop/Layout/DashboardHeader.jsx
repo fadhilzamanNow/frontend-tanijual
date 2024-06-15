@@ -14,7 +14,7 @@ const DashboardHeader = () => {
     <div className="xs:w-full h-[80px] bg-white sticky top-0 z-[99999999] flex items-center justify-between border border-b-gray-400 ">
         <div className="">
             <Link>
-                <div className="text-[24px] font-[600] text-green-500">Dashboard</div>
+                <div className="text-[24px] font-[600] text-green-500 ml-2">Dashboard</div>
             </Link>
         </div>
         <div className="flex items-center">

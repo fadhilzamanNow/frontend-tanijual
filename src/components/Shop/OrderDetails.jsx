@@ -7,6 +7,12 @@ import { getAllOrdersOfShop } from '../../redux/actions/order';
 import { backend_url, server } from '../../server';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { IoMdArrowRoundBack } from "react-icons/io";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+
+
 
 
 
@@ -19,6 +25,7 @@ const OrderDetails = () => {
   const [status,setStatus] = useState("");
   const [option,setOption] = useState("");
   const navigate = useNavigate();
+  const [selesai,setSelesai] = useState(0);
 
   const {id} = useParams();
   console.log("seller" , seller);
@@ -37,7 +44,7 @@ const OrderDetails = () => {
     console.log("update yang dikirim : ", status);
     await axios.put(`${server}/order/update-order-status/${id}`,{status : status },{ withCredentials : true}).then((res) => {
       toast.success("Order telah berhasil diupdate");
-      navigate("/dashboard-orders");
+      window.location.reload()
       
     }).catch((error) => {
       toast.error(`${error.response.data.message}`);
@@ -47,38 +54,156 @@ const OrderDetails = () => {
   console.log("data status : ", data?.status);
 
   console.log("data status yang baru: ", status);
+
+  const step = [
+    'Dalam proses Pembayaran',
+    'Diserahkan ke kurir',
+    'Sedang dalam Perjalanan',
+    'Diterima',
+  ]
+
+  const stepactive = [
+    {angka : 1, status : 'Dalam proses Pembayaran'},
+    {angka : 2, status : 'Diserahkan ke kurir'},
+    {angka : 3, status : 'Sedang dalam Perjalanan'},
+    {angka : 4, status : 'Diterima'},
+  ]
+  
+
+
+  useEffect(() => {
+    const hasil = stepactive.filter((status) => status.status === data?.status)
+    
+    console.log("hasilnya :", hasil[0]?.angka, hasil[0]?.status)
+    setSelesai(hasil[0]?.angka)
+  },[orders])
   return (
-    <div className={`py-4 min-h-screen ${styles.section}`}>
-        <div className="w-full flex items-center justify-between">
+    <div className={`w-full pt-4 ${styles.section} overflow-hidden`} >
+      <div className="text-center font-[600] text-[30px] font-Poppins relative mb-2 ">
+        Detail Pemesanan
+        <div>
+        <IoMdArrowRoundBack size={30} color='black' className='absolute top-2 left-2' onClick={() => navigate("/dashboard-orders")}/>
+        </div>
+      </div>
+        <div className='bg-white w-full h-[100vh]'>
+          <div className='flex justify-center flex-1 mb-4 '>
+            <Stepper activeStep={selesai} orientation='horizontal' className='mt-[20px]'  alternativeLabel>
+                {step.map((label) => {
+                  return (
+                    <Step key={label} 
+                      sx={{
+                        "& .MuiStepLabel-root .Mui-completed": {
+                            color: "green"
+                        },
+                        "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel": {
+                            color: "#a5a8ad"
+                        },
+                        "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel .MuiStepIcon-text": {
+                            color: "#a5a8ad"
+                        },
+                        "& .MuiStepLabel-root .Mui-active": {
+                            color: "gray"
+                        },
+                        "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel": {
+                            color: "gray"
+                        },
+                        "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                            fill: "white"
+                        }
+                    }}
+                    >
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  )
+                })}
+            </Stepper>
+          </div>
+        <div className="w-full flex flex-col items-center justify-between">
+          <div className='flex items-center justify-center'>
+            {
+                      data?.status !== "Diterima" && 
+                      <div className='flex items-center justify-center gap-x-1'>
+                      <div>
+                        <select name="" id="" value={status} onChange={(e) => setStatus(e.target.value)} className='w-[200px] mt-2 border rounded-[5px] '>
+                  {
+                    [
+                      "Dalam proses Pembayaran",
+                      "Diserahkan ke kurir",
+                      "Sedang dalam Perjalanan",
+                      "Diterima"
+                    ].slice(
+                      [
+                      "Dalam proses Pembayaran",
+                      "Diserahkan ke kurir",
+                      "Sedang dalam Perjalanan",
+                      "Diterima"
+                      ].indexOf(data?.status)
+                    ).map((option,index) => {
+                      return (
+                        <option value={option} key={index} >
+                          {option}
+                        </option>
+                      )
+                    })
+                  }
+                </select>
+                      </div>
+                      <div className={`${styles.button} mt-5 !bg-white !rounded-[4px] text-red-400 font-600 !h-[45px] text-[18px] border border-gray-200 !p-1`} onClick={orderUpdateHandler}>
+                        Update Status
+                    </div>
+                      </div>
+                    }
+              
+          </div>
+        
             <div className="flex items-center">
                 <BsFillBagFill size={30} className='text-green-400' />
                 <h1 className="pl-2 text-[25px]">Detail Order</h1>
             </div>
-            <Link to="/dashboard-orders">
-                <div className={`${styles.button} !bg-green-400 text-white font-[600] !h-[45px] text-[18px]`}>Semua Order</div>
-            </Link>
+            
         </div>
-        <div className='w-full flex items-center justify-between pt-6'>
-          <h5 className="text-black">
-            Order ID : <span className="font-[500]">{data?._id?.slice(0,8)}</span>
+        <div className='w-full flex flex-col pt-6  pb-4 gap-y-[5px] mx-[25px]'>
+          <h5 className="text-black font-[600] text-[24px]"> 
+            Informasi Order
           </h5>
-          <h5 className="text-black">
-            Dibuat : <span className="font-[500]">{data?.createdAt?.slice(0,10)}</span>
-          </h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 md:items-center md:border-t md:border-t-gray-200 ">
+
           
-          
-          </div> 
-          <br />
-          <br />
-          {
+            <div className='grid grid-cols-1 md:text-[24px] mb-4 border-b border-b-gray-200 md:border-none pb-4' >    
+              <h5 className="text-black">
+                Order ID : <span className="font-[500]">{data?._id}</span>
+              </h5>
+              <h5 className="text-black">
+                Pesanan Dibuat : <span className="font-[500]">{data?.createdAt?.slice(0,10)}</span>
+              </h5>
+              <h5>
+                Biaya : <span className='font-[500]'>Rp. {data?.totalPrice}</span>
+              </h5>
+              <h5>
+                Penerima : <span className="font-[500]">{data?.user?.name}</span>
+              </h5>
+              <h5>
+                Alamat 1 :<span className='font-[500]'>{data?.alamat?.address1} </span>
+              </h5>
+              <h5>
+                Alamat 2 :<span className='font-[500]'>{data?.alamat?.address2} </span>
+              </h5>
+              <h5>
+                Metode Pembayaran : <span className="font-[500]">{data?.paymentInfo?.type}</span>
+              </h5>
+              <h5>
+                Nomor Telefon : <span className="font-[500]">{data?.user?.phoneNumber ? ("0" + data?.user?.phoneNumber) : ("-")}</span>
+              </h5>
+            </div>
+            {
             data && data?.cart.map((item,index) => {
               return (
-                <div className="w-full flex items-start mb-5">
+                <div className="w-full flex items-center mb-5 place-self-center">
                   <img src={`${item?.images[0]?.url}`} alt="" 
-                    className='w-[80px] h-[80px]'
+                    className='w-[80px] h-[80px] md:w-[250px] md:h-[250px]'
                   />
                   <div className="w-full">
-                    <h5 className='pl-3 text-[20px]'>
+                    <h5 className='pl-3 text-[20px] font-[500] md:text-[30px]'>
                       {item?.name}
                     </h5>
                     <h5 className='pl-3 text-[20px] text-black'>
@@ -89,77 +214,15 @@ const OrderDetails = () => {
               )
             })
           }
-          <div className="border-t w-full text-right">
-              <h5 className="pt-3 text-[18px]">
-                Total Harga <span className="">Rp. {data?.totalPrice}</span>
-              </h5>
           </div>
+          </div> 
           <br />
           <br />
-          <div className="w=full 800px:flex items-center">
-              <div className="w-full 800px:w-[60%]">
-                <h4 className="pt-3 text-[20px] font-[600]">
-                  Alamat Pengiriman :
-                </h4>
-                <h4 className='pt-3 text-[20px]'>
-                  Alamat 1 : {data?.alamat.address1} 
-                </h4>
-                <h4 className='pt-3 text-[20px]'>
-                  Alamat 2 : {data?.alamat.address2} 
-                </h4>
-                <h4 className="text-[20px]">
-                    {data?.alamat?.country}
-                </h4>
-                <h4 class Name="text-[20px]">
-                    {data?.alamat?.city}
-                </h4>
-                <h4 className="text-[20px]">
-                    0{data?.user?.phoneNumber}
-                </h4>
-              </div>
-              <div className="w-full 800px:w-[40%]">
-                <h4 className='pt-3 text-[20px]'>
-                  Informasi Pembayaran :
-                </h4>
-                <h4 className='pt-3 text-[20px]'>
-                  Status Pembayaran : {
-                      data?.paymentInfo?.status === "Dibayar"? "Sukses" : "Belum Selesai Dibayar" 
-                  }
-                </h4>
-              </div>
-          </div>
-          <br />
-          <br />
-          <h4 className="pt-3 text-[20px] font-[600]">Status Pemesanan : </h4>
-                  {
-                    data?.status !== "Memproses Pembatalan" && <div>
-                       <select name="" id="" value={status} onChange={(e) => setStatus(e.target.value)} className='w-[200px] mt-2 border -[35px] rounded-[5px] '>
-                {
-                  [
-                    "Dalam proses Pembayaran",
-                    "Diserahkan ke kurir",
-                    "Sedang dalam Perjalanan",
-                    "Diterima"
-                  ].slice(
-                    [
-                    "Dalam proses Pembayaran",
-                    "Diserahkan ke kurir",
-                    "Sedang dalam Perjalanan",
-                    "Diterima"
-                    ].indexOf(data?.status)
-                  ).map((option,index) => {
-                    return (
-                      <option value={option} key={index} >
-                        {option}
-                      </option>
-                    )
-                  })
-                }
-              </select>
-                    </div>
-                  }
-          <div className={`${styles.button} mt-5 !bg-white !rounded-[4px] text-red-400 font-600 !h-[45px] text-[18px]`} onClick={orderUpdateHandler}>
-              Update Status
+          
+       
+         
+          
+                 
           </div>
     </div>
   )
