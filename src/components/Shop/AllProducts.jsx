@@ -130,71 +130,7 @@ const AllProducts = () => {
         isLoading ? (<Loader />) : (
         <div className ="flex flex-col w-full">
 
-            <div className='flex flex-col w-full lg:flex-row pb-[100px] lg:justify-center'>
-                <div className="flex justify-center h-full">
-                    <div className="mt-10">
-                        <div className="font-[600]">
-                            Statistik Stok Antar Produk
-                        </div>
-                        <PieChart
-                            series={[
-                                {
-                                data: data2,
-                                highlightScope: { faded: 'global', highlighted: 'item' },
-                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' }
-                                },
-                            ]}
-                            width={400}
-                            height={200}
-                            margin={{right : 200}}
-                            slotProps={{ legend: {
-                                direction: 'column',
-                                position: { vertical: 'middle', horizontal: 'right' },
-                                padding : 0,
-                                labelStyle : {
-                                    fontWeight : 600,
-                                    
-                                },
-                                
-
-                            }}}
-                            />
-                    </div>
-
-                </div>
-
-                <div className="flex justify-center h-full">
-                    <div className="mt-10">
-                        <div className="font-[600]">
-                            Statistik Produk Terlaku 
-                        </div>
-                        <PieChart
-                            series={[
-                                {
-                                data: data3,
-                                highlightScope: { faded: 'global', highlighted: 'item' },
-                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' }
-                                },
-                            ]}
-                            width={400}
-                            height={200}
-                            margin={{right : 200}}
-                            slotProps={{ legend: {
-                                direction: 'column',
-                                position: { vertical: 'middle', horizontal: 'right' },
-                                padding : 0,
-                                labelStyle : {
-                                    fontWeight : 600,
-                                    
-                                },
-                                
-
-                            }}}
-                            />
-                    </div>
-
-                </div>
-            </div>
+            
             <div>
                 <DataGrid 
                     rows={row}

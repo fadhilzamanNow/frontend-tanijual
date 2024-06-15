@@ -12,6 +12,7 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { FiPackage, FiShoppingBag } from 'react-icons/fi'
 import { PieChart } from "@mui/x-charts";
 import { LineChart } from "@mui/x-charts";
+import { Box } from "@mui/material";
 
 
 const DashboardHero = () => {
@@ -111,7 +112,10 @@ const DashboardHero = () => {
           label : item?.name
       })
   })
-
+  useEffect(() => {
+    console.log(window.innerHeight);
+    console.log(window.innerWidth)
+  },[window.innerHeight,window.innerWidth])
   return (
     <div className="w-full p-8">
       <h3 className="text-[22px] font-Poppins pb-2">Analisis Penjualan</h3>
@@ -169,73 +173,147 @@ const DashboardHero = () => {
       </div>
       <br />
       <h3 className="text-[22px] font-Poppins pb-2">Statistik</h3>
-      <div className="w-full min-h-[45vh] bg-white rounded">
-      <div className='flex flex-col w-full lg:flex-row pb-[100px] lg:justify-center'>
-                <div className="flex justify-center h-full">
-                    <div className="mt-10">
-                        <div className="font-[600]">
-                            Statistik Stok Antar Produk
-                        </div>
-                        <PieChart
-                            series={[
+      <div className="md:hidden"> 
+        <div className="w-full min-h-[20vh] bg-white rounded flex  justify-center items-center  ">
+          <Box
+            sx={{textAlign : "center"}}
+          >
+            <h1 className="font-[600]">
+              Statistik Stok Antar Produk
+            </h1>
+          <PieChart
+                              series={[
                                 {
-                                data: data2,
-                                highlightScope: { faded: 'global', highlighted: 'item' },
-                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' }
-                                },
-                            ]}
-                            width={400}
-                            height={200}
-                            margin={{right : 200}}
-                            slotProps={{ legend: {
-                                direction: 'column',
-                                position: { vertical: 'middle', horizontal: 'right' },
-                                padding : 0,
-                                labelStyle : {
-                                    fontWeight : 600,
-                                    
-                                },
+                                  data: data2,
+                                  highlightScope: { faded: 'global', highlighted: 'item' },
+                                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                  cx : "100%",
+                                  cy : "80%"
+                                  
+                                  },
+                              ]}
+                              width={200}
+                              height={200}
+                              margin={{bottom : 60}}
+                              slotProps={{
+                                legend : {
+                                  hidden : true
+                                }
                                 
-
-                            }}}
-                            />
-                    </div>
-
-                </div>
-
-                <div className="flex justify-center h-full">
-                    <div className="mt-10">
-                        <div className="font-[600]">
-                            Statistik Produk Terlaku 
-                        </div>
-                        <PieChart
-                            series={[
+                                
+                              }}
+                              
+                              />
+                              
+                            
+          </Box>
+        </div>
+        <br/>
+        <div className="w-full min-h-[20vh] bg-white rounded flex  justify-center items-center ">
+          <Box
+            sx={{textAlign : "center"}}
+          >
+            <h1 className="font-[600]">
+              Statistik Produk Terlaris
+            </h1>
+          <PieChart
+                              series={[
                                 {
-                                data: data3,
-                                highlightScope: { faded: 'global', highlighted: 'item' },
-                                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' }
-                                },
-                            ]}
-                            width={400}
-                            height={200}
-                            margin={{right : 200}}
-                            slotProps={{ legend: {
-                                direction: 'column',
-                                position: { vertical: 'middle', horizontal: 'right' },
-                                padding : 0,
-                                labelStyle : {
-                                    fontWeight : 600,
-                                    
-                                },
+                                  data: data3,
+                                  highlightScope: { faded: 'global', highlighted: 'item' },
+                                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                  cx : "100%",
+                                  cy : "80%"
+                                  
+                                  },
+                              ]}
+                              width={200}
+                              height={200}
+                              margin={{bottom : 60}}
+                              slotProps={{
+                                legend : {
+                                  hidden : true
+                                }
                                 
-
-                            }}}
-                            />
-                    </div>
-
-                </div>
-            </div>
-
+                                
+                              }}  
+                              
+                              />
+                              
+                            
+          </Box>
+        </div>
+      </div>
+      <div className="hidden md:flex"> 
+        <div className="w-full min-h-[20vh] bg-white rounded flex  justify-center items-center  ">
+          <Box
+            sx={{textAlign : "center"}}
+          >
+            <h1 className="font-[600]">
+              Statistik Stok Antar Produk
+            </h1>
+          <PieChart
+                              series={[
+                                {
+                                  data: data2,
+                                  highlightScope: { faded: 'global', highlighted: 'item' },
+                                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                  cx : "75%",
+                                  cy : "60%"
+                                  
+                                  },
+                              ]}
+                              width={300}
+                              height={300}
+                              margin={{bottom : 60}}
+                              slotProps={{
+                                legend : {
+                                  hidden : true
+                                }
+                                
+                                
+                              }}
+                              
+                              />
+                              
+                            
+          </Box>
+        </div>
+        <br/>
+        <div className="w-full min-h-[20vh] bg-white rounded flex  justify-center items-center ">
+          <Box
+            sx={{textAlign : "center"}}
+          >
+            <h1 className="font-[600]">
+              Statistik Produk Terlaris
+            </h1>
+          <PieChart
+                              series={[
+                                {
+                                  data: data3,
+                                  highlightScope: { faded: 'global', highlighted: 'item' },
+                                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                                  cx : "75%",
+                                  cy : "60%"
+                                  
+                                  },
+                              ]}
+                              width={300}
+                              height={300}
+                              margin={{bottom : 60}}
+                              slotProps={{
+                                legend : {
+                                  hidden : true
+                                }
+                                
+                                
+                              }}  
+                              
+                              />
+                              
+                            
+          </Box>
+        </div>
       </div>
     </div>
   );

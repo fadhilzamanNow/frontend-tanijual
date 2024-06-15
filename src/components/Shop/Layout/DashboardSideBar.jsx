@@ -30,7 +30,7 @@ const DashboardSideBar = ({active}) => {
         })
     }
   return (
-    <div className="w-full h-[89vh] bg-white shadow-sm sticky top-0 left-0 z-10 border-r-gray-300 border">
+    <div className="w-full h-[100vh] bg-white shadow-sm sticky top-0 left-0 z-10 border-r-gray-300 border">
         { /* single item */ }
         <div className="w-full flex items-center p-4">
             <Link to="/dashboard" className="w-full flex items-center">

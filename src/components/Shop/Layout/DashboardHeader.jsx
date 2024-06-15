@@ -11,7 +11,7 @@ const DashboardHeader = () => {
     const {seller} = useSelector((state) => state.seller)
     console.log(seller)
   return (
-    <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
+    <div className="xs:w-full h-[80px] bg-white sticky top-0 z-[99999999] flex items-center justify-between ">
         <div className="">
             <Link>
                 <div className="text-[24px] font-[600] text-green-500">Dashboard</div>
