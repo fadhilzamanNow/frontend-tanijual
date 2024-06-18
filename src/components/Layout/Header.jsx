@@ -57,10 +57,12 @@ const Header = ({activeHeading}) => {
     console.log(searchData)
   }
   return (
-    <>
-         <>
-                 <div className={`${styles.section}`}>
-      <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
+    
+    <div>
+
+   
+                 <div className={``}>
+      <div className="hidden 800px:h-[50px] 800px:py-10 800px:px-10 800px:flex items-center justify-between bg-white">
         <div>
           <Link to="/" className="flex flex-row text-4xl font-extrabold">
             <p className="text-green-500">Jual</p>
@@ -353,8 +355,8 @@ const Header = ({activeHeading}) => {
                 )
             }
       </div>
-            </>
-    </>
+      </div>
+   
   );
 };
 
