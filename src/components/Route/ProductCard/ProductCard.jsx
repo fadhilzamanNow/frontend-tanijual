@@ -10,6 +10,17 @@ import { toast } from 'react-toastify';
 import { addToCart } from '../../../redux/actions/cart.js';
 import Ratings from '../../Products/Ratings.jsx';
 import CountDown from '../Events/CountDown.jsx';
+import { RiStarSFill } from "react-icons/ri";
+import { RiStarSLine } from "react-icons/ri";
+import { GoDotFill } from "react-icons/go";
+import { FaSearch } from "react-icons/fa";
+import { CiSearch } from "react-icons/ci";
+import { IoSearchOutline } from "react-icons/io5";
+
+
+
+
+
 
 const ProductCard = ({data,toko}) => {
 
@@ -72,80 +83,98 @@ const ProductCard = ({data,toko}) => {
         
         <img src={`${backend_url}/${data?.images[0]}`} alt="" className="w-[100px] h-[100px] rounded-full object-contain" />
     </div> */}
-    <div className="w-full h-[370px] bg-white rounded-lg  p-3 relative cursor-pointer shadow-2xl">
+    <div className="w-full h-[320px] bg-white rounded-lg   relative cursor-pointer shadow-2xl mb-12">
         <div className="">
             <div className='w-full  flex items-center justify-center'>
 
             
             
-                <img src={`${data?.images[0].url}`} 
+                <img src={`${data?.images[0]?.url}`} 
                     alt = ""
-                    className='w-[170px] h-[170px] object-cover items-center justify-center rounded-md shadow-sm'
+                    className='w-full h-[170px] object-cover items-center justify-center rounded-md shadow-sm'
                     onClick={() => handleClick()}
                 />
             
-            </div>  
-            <Link to={`/shop/preview/${data.shopId}`}>
-                <h5 className={`${styles.shop_name} text-[20px]`}>{data.shop.name}</h5>
-            </Link>
-            <Link to={`/product/${data._id}`}>
-                <h4 className="pb-3 font-[500] text-justify ">
+            </div>
+            <div className="ml-2 py-2 flex flex-col gap-y-2">
+            
+                <h4 className=" font-[500] text-justify text-[16px] ">
                     {data.name.length > 49 ? data.name.slice(0, 40) + "..." : data.name }
                 </h4>
-                <div className= "flex self-end text-yellow-400">
-                <Ratings rating={data?.ratings}/>
-                </div>
-                <div className="py-2 flex items-center justify-between">
+                <div className=" flex items-center justify-between">
                     <div className="flex">
                         <h5 className={`${styles.productDiscountPrice}`}>
                            Rp. {data.discountPrice}
                         </h5>
-                        <h4 className={`${styles.price}`}>
+                        <h4 className={`${styles.price} !text-gray-400`}>
                             Rp. {data.originalPrice}
                         </h4>
                         
                     </div>
-                    <span className="font-[400] text-[17px] text-green-500">
-                            {data.sold_out ? data.sold_out + " terjual" : null }
-                        </span>
-                    
                 </div>
+            <div className="flex items-center justify-start gap-x-1">
+                {data?.ratings ? (
+                    <div className="flex items-center">
+                    <RiStarSFill className='text-yellow-400' size={20}/>
+                    <span>{data?.ratings}</span>
+                    </div>
+                    
+                ) : (<>
+                    <RiStarSLine size={20} className="text-yellow-400"/>
+                    </>
+               )}
+                <div> 
+                <GoDotFill className="text-black" size={10}/>
+                </div>
+                    <div className="font-[400] text-[12px] text-gray-500 ">
+                            {data.sold_out ? data.sold_out + " terjual" : null }
+                        </div>
+                </div>
+            <Link to={`/shop/preview/${data.shopId}`}>
+            <div className="flex items-center">
+                <img src={`${data?.shop?.avatar?.url}`} alt="" className="h-[20px] w-[20px] rounded-[9999px]"/>
+                <h5 className={`text-[14px] !text-gray-500`}>{data.shop.name}</h5>
+            </div>
+            </Link>
+            <Link to={`/product/${data._id}`}>
+                
+                
                 {
                     toko ? (<CountDown data={data} toko={true} />) : (null)
                 }
                 </Link>
-                
+                </div>  
                 {/* opsi samping */}
 
                 {click ? (
                     <AiFillHeart 
                     size={22}
-                    className="cursor-pointer absolute right-2 top-5" 
+                    className ={`cursor-pointer absolute right-2 top-5 ${click ? "text-red-500" : "text-white"} hover:text-red-400`}
                     onClick={() => deleteFromWishlistHandler(data)}
-                    color={click ? "red" : "gray"}
+                    
                     title='Remove dari Wishlist'
                     />
                 ) : (
                     <AiOutlineHeart 
-                    className="cursor-pointer absolute right-2 top-5" 
+                    className="cursor-pointer absolute right-2 top-5  text-white hover:text-red-400" 
                     onClick={() => addToWishlistHandler(data)}
-                    color={click ? "red" : "gray"}
+                    
                     title='Tambahkan ke Wishlist'
                     />
                 )}
                 
-                <AiOutlineEye 
-                size={22}
-                className="cursor-pointer absolute right-2 top-14" 
+                <IoSearchOutline 
+                size={18}
+                className="cursor-pointer absolute right-2 top-14  text-white hover:text-red-400" 
                 onClick={() => setOpen(!open)}
-                color="gray"
+                
                 title="Melihat Detail"
                 />
                 
                 <AiOutlineShoppingCart 
-                className="cursor-pointer absolute right-2 top-24" 
+                className="cursor-pointer absolute right-2 top-24 text-white hover:text-red-400" 
                 onClick={() => addToCartHandler(data._id)}
-                color="gray"
+                
                 title='Tambahkan ke Keranjang'
                 />
                

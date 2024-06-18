@@ -7,17 +7,17 @@ import styles from "../../../styles/styles";
 const EventCard = ({active,data}) => {
   console.log("daleman" , data)
   return (
-    <div className={`w-full block bg-white rounded-lg ${active ? "unset" : "mb-12"} lg:flex p-2`}>
-      <div className="w-[40%] lg:-w[50%] m-auto">
+    <div className={`w-[250px] block bg-white rounded-lg ${active ? "unset" : "mb-12"} lg:flex p-2`}>
+      <div className="w-[100%] lg:-w[50%] m-auto">
         <img 
          src={`${data?.images[0]?.url}`}
         alt=""
-        className="rounded" />
+        className="rounded h-[200px] w-full bg-cover bg-center" />
          
       </div>
-      <div className="w-[50%] lg:[w-30%] flex flex-col justify-center">
+      <div className="w-full lg:[w-30%] flex flex-col justify-center">
         <h2 className={`${styles.productTitle}`}>{data?.name}</h2>
-        <p>
+        <p className="text-justify">
           {data?.description}
         </p>
         <div className="flex py-2 justify-between">

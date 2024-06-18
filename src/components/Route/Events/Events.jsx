@@ -18,7 +18,7 @@ const Events = () => {
           </div>
           
           <div className="w-full grid">
-              <EventCard data={allEvents && allEvents[0]}/>
+            {/* <EventCard data={allEvents && allEvents[0]}/> */}
           </div>
         </div>
         )
