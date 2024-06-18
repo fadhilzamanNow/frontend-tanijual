@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import axios from "axios"
 import { server } from "../../server";
 import { useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
 const Login = () => {
 
     const [email,setEmail] = useState("")
@@ -36,14 +38,18 @@ const Login = () => {
         </h2>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border-green-200 border">
-            <div className="text-center mb-5 text-3xl font-semibold text-green-400 flex flex-row justify-center">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border-green-200 border ">
+            <div className="text-center mb-5 text-3xl font-semibold text-green-400 flex flex-row justify-center font-Poppins text-[30px] relative" >
                 <div>
                   Jual
                 </div>
                 <div className="text-green-200 ">
                   Tani
                 </div>
+                <Link to="/"> 
+                <IoMdArrowRoundBack size={25} color="black" className="absolute top-1 left-0"/>
+                </Link>
+
             </div>
             
           <form className="space-y-6" onSubmit={handleSubmit} >
@@ -59,7 +65,7 @@ const Login = () => {
                   type="email"
                   name="email"
                   autoComplete="email"
-                  required
+                  
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -78,7 +84,7 @@ const Login = () => {
                   type={visible ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
-                  required
+                  
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm "
@@ -103,11 +109,7 @@ const Login = () => {
                     
                 </div>
                 <div className="text-sm">
-                   <a href=".forgot-password"
-                    className="text-green-500 underline"
-                   >
-                    Lupa Passwordmu ?
-                   </a>
+                   
                 </div>
             </div>
             <div>

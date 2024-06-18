@@ -113,9 +113,9 @@ const Header = ({activeHeading}) => {
                     <IoIosArrowForward className="text-green-100 mt-1" size={16}/>
                 </Link>
                     ) : (
-                    <Link to="/shop-create" className="flex flex-1 flex-row items-center justify-evenly">
+                    <Link to="/shop-login" className="flex flex-1 flex-row items-center justify-evenly">
                     <h1 className="text-white">
-                   Daftar Sebagai Penjual 
+                   Masuk Sebagai Penjual 
                     </h1>
                     <IoIosArrowForward className="text-green-100 mt-1" size={16}/>
                 </Link>)

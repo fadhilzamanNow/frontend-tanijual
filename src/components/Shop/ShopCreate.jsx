@@ -67,10 +67,10 @@ const ShopCreate = () => {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[35rem]">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border-green-200 border">
-            <div className="text-center text-[24px] font-[600]">
-                Daftar Sebagai Penjual Yuk
+            <div className="text-center text-[24px] font-[600] font-Poppins">
+                <span className="text-green-500">Daftar</span><span className="text-green-500"> Sebagai Penjual</span>
             </div>
-            <div className="text-center mb-5 text-3xl font-semibold text-green-400 flex flex-row justify-center">
+            <div className="text-center mb-5 text-3xl font-semibold text-green-300 flex flex-row justify-center font-Poppins">
                 <div>
                   Jual
                 </div>
@@ -92,7 +92,7 @@ const ShopCreate = () => {
                   type="text"
                   name="name"
                   autoComplete="name"
-                  required
+                  placeholder = "Contoh : Toko Pak Koco"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -111,7 +111,7 @@ const ShopCreate = () => {
                   type="number"
                   name="phone-number"
                   autoComplete="phone-number"
-                  required
+                  placeholder = "Contoh : 089503908821"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -127,10 +127,10 @@ const ShopCreate = () => {
               </label>
               <div className="mt-1">
                 <input
-                  type="email"
+                  type="text"
                   name="email"
                   autoComplete="email"
-                  required
+                  placeholder = "Contoh : rusdifart@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -149,7 +149,7 @@ const ShopCreate = () => {
                   type="adress"
                   name="adress"
                   autoComplete="adress"
-                  required
+                  placeholder = "Contoh : Desa Blater No.25, Purbalingga"
                   value={adress}
                   onChange={(e) => setAdress(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -168,7 +168,7 @@ const ShopCreate = () => {
                   type="number"
                   name="zipcode"
                   autoComplete="zipcode"
-                  required
+                  placeholder = "Contoh : 14210"
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
@@ -187,7 +187,7 @@ const ShopCreate = () => {
                   type={visible ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
-                  required
+                  placeholder = "Kata Sandi Rahasiamu"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-green-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm "

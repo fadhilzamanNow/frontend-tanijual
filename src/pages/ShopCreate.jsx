@@ -13,7 +13,12 @@ const ShopCreatePage = () => {
         }
     },[])
   return (
-    <div>
+    <div style={{
+      backgroundImage : `url(${require(`../Assests/Login/sayur-dan-buah.jpg`)})`,
+      backgroundPosition : "center",
+      backgroundSize : "cover",
+      backgroundRepeat : "no-repeat"
+    }}>
         <ShopCreate />
     </div>
   )

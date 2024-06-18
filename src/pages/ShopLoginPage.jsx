@@ -13,7 +13,12 @@ const ShopLoginPage = () => {
         }
     },[isLoading, isSeller])
   return (
-    <div>
+    <div style={{
+      backgroundImage : `url(${require("../Assests/Login/meadow-with-trees-wooden-fence.jpg")})`,
+      backgroundPosition : "center",
+      backgroundRepeat : "no-cover",
+      backgroundSize : "cover"
+    }}>
         <ShopLogin />
     </div>
   )

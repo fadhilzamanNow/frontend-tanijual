@@ -17,11 +17,11 @@ const LoginPage = () => {
     <>
       
       <div className='w-full h-screen relative' style={{  
-  backgroundImage: `url(${sayuranImage})`,
-  backgroundPosition: 'center',
-  backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat'
-}} >
+        backgroundImage: `url(${sayuranImage})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }} >
 {/*       <img src={require('../Assests/Login/sayur-dan-buah.jpg')}  style={{width : "100%", height : "100%" }}/>
  */}      <Login/>
       </div>
