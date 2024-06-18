@@ -32,7 +32,7 @@ const ProductsPage = () => {
         <br />
         <br />
         <div className={`${styles.section}`}>
-            <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12">
+        <div className="grid grid-cols-[repeat(2,200px)]  justify-evenly gap-[20px] md:grid-cols-[repeat(4,200px)] md:gap-[25px] lg:grid-cols-[repeat(6,200px)] lg:gap-[30px] xl:grid-cols-[repeat(10,200px)] xl:gap-[30px]">
                 {
                     data && data.map((i,index) => <ProductCard data={i} key={index} />)
                 }

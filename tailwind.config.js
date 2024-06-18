@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./src/**/*.{html,js,jsx}"],
+
+
+const flowbite = require("flowbite-react/tailwind");
+
+
+module.exports = ({
+  content: ["./src/**/*.{html,js,jsx}", flowbite.content()],
   theme: {
     fontFamily: {
       Roboto: ["Roboto", "sans-serif"],
@@ -14,10 +19,13 @@ module.exports = {
         "1300px": "1300px",
         "400px":"400px",
         "730px" : "730px",
-        "xs" : "475px"
+        "xs" : "475px",
+        "200px" : "200px"
       },
     },
   },
-  plugins: [],
-}
+  plugins: [
+    flowbite.plugin()
+  ],
+})
 

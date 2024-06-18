@@ -65,7 +65,7 @@ const Header = ({activeHeading}) => {
       <div className="hidden 800px:h-[50px] 800px:py-10 800px:px-10 800px:flex items-center justify-between bg-white">
         <div>
           <Link to="/" className="flex flex-row text-4xl font-extrabold">
-            <p className="text-green-500">Jual</p>
+            <p className="text-green-300">Jual</p>
             <p className="text-green-200">Tani</p>
           </Link>
         </div>
