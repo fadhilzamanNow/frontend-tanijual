@@ -25,7 +25,7 @@ const BestDeals = () => {
             <div className={`${styles.heading}`}>
             <h1>Produk Murah Di Kantong</h1>
             </div>
-            <div className="grid grid-cols-[repeat(2,200px)]  justify-evenly gap-[20px] md:grid-cols-[repeat(4,200px)] md:gap-[25px] lg:grid-cols-[repeat(6,200px)] lg:gap-[30px] xl:grid-cols-[repeat(10,200px)] xl:gap-[30px]">
+            <div className="grid grid-cols-[repeat(2,160px)]  justify-evenly gap-[20px] md:grid-cols-[repeat(4,200px)] md:gap-[25px] lg:grid-cols-[repeat(6,200px)] lg:gap-[30px] xl:grid-cols-[repeat(10,200px)] xl:gap-[30px]">
                 {
                     data2 && data2.map((i,index) => {
                         return (

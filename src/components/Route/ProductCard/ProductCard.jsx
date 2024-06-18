@@ -102,11 +102,11 @@ const ProductCard = ({data,toko}) => {
                     {data.name.length > 49 ? data.name.slice(0, 40) + "..." : data.name }
                 </h4>
                 <div className=" flex items-center justify-between">
-                    <div className="flex">
-                        <h5 className={`${styles.productDiscountPrice}`}>
+                    <div className="flex text-[8px]">
+                        <h5 className={`${styles.productDiscountPrice} !text-[12px] !sm:text-[18px`}>
                            Rp. {data.discountPrice}
                         </h5>
-                        <h4 className={`${styles.price} !text-gray-400`}>
+                        <h4 className={`${styles.price} !text-gray-400 !text-[12px] !sm:text-[18px`}>
                             Rp. {data.originalPrice}
                         </h4>
                         
@@ -114,8 +114,8 @@ const ProductCard = ({data,toko}) => {
                 </div>
             <div className="flex items-center justify-start gap-x-1">
                 {data?.ratings ? (
-                    <div className="flex items-center">
-                    <RiStarSFill className='text-yellow-400' size={20}/>
+                    <div className="flex items-center  !text-[12px]">
+                    <RiStarSFill className='text-yellow-400' size={15}/>
                     <span>{data?.ratings}</span>
                     </div>
                     
@@ -126,14 +126,14 @@ const ProductCard = ({data,toko}) => {
                 <div> 
                 <GoDotFill className="text-black" size={10}/>
                 </div>
-                    <div className="font-[400] text-[12px] text-gray-500 ">
+                    <div className="font-[400] text-[12px] sm:text-[18px text-gray-500 ">
                             {data.sold_out ? data.sold_out + " terjual" : null }
                         </div>
                 </div>
             <Link to={`/shop/preview/${data.shopId}`}>
             <div className="flex items-center">
                 <img src={`${data?.shop?.avatar?.url}`} alt="" className="h-[20px] w-[20px] rounded-[9999px]"/>
-                <h5 className={`text-[14px] !text-gray-500`}>{data.shop.name}</h5>
+                <h5 className={`text-[12px] sm:text-[18px] !text-gray-500 `}>{data.shop.name}</h5>
             </div>
             </Link>
             <Link to={`/product/${data._id}`}>
