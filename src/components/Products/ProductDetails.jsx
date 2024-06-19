@@ -10,6 +10,13 @@ import { toast } from 'react-toastify';
 import { addToWishlist, removeFromWishlist } from '../../redux/actions/wishlist';
 import { addToCart } from '../../redux/actions/cart';
 import Ratings from './Ratings';
+import { Carousel } from 'flowbite-react';
+import { MdStar } from "react-icons/md";
+import { FaRegStar } from "react-icons/fa6";
+import { HiOutlineChatAlt2 } from "react-icons/hi";
+
+
+
 
 
 const ProductDetails = ({data}) => {
@@ -116,44 +123,114 @@ const ProductDetails = ({data}) => {
 
     const averageRating = totalRatings / totalReviewsLength || 0;
   return (
-    <div className="bg-white">
+    <div className="">
         {
             data ? (
-                <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
+                <div className={`${styles.section} w-[100%] 800px:w-[80%] rounded relative`}>
                     <div className="w-full py-5">
                         <div className="block w-full 800px:flex pt-5">
-                            <div className="w-full flex-col items-center 800px:w-[50%] 800px:flex-col 800px:items-center">
-                                <div>
-                                <img src={`${data?.images[select]?.url}`} alt="" className="w-[80%]"/>
-                                </div>
-                                <div className="w-full flex">
-                                    <div className={`${select === 0 ? "border" : "null"} cursor-pointer`}>
-                                            <img src={`${backend_url}/${data?.images[0]?.url}`} alt="" 
-                                                className="h-[200px]"
-                                                onClick={() => setSelect(0)}
-                                            />
-                                    </div>
-                                    <div className={`${select === 1 ? "border" : "null"} cursor-pointer self-center`}>
-                                            <img src={`${backend_url}/${data?.images[1]?.url}`} alt="" 
-                                                className="h-[200px]"
-                                                onClick={() => setSelect(1)}
-                                            />
-                                    </div>
-                                </div>
+                            <div className="bg-white rounded p-2">
+
+                            
+                            <div className="200px:h-48 w-full ">
+                                <Carousel>
+                                    {data?.images?.map((gambar) => {
+                                        return (
+                                            <img src={gambar?.url} className="w-full h-full"/>
+                                        )
+                                    })}
+                                </Carousel>
                             </div>
-                            <div className="w-full 800px:w-[50%]">
-                                <h1 className={`${styles.productTitle}`}>
-                                 {data?.name}
-                                </h1>
-                                <p className="text-justify">
+                            <div>
+                              
+                                <div className="flex items-center">
+                                    <h4 className={`${styles.productDiscountPrice}`}>
+                                        Rp. {data?.discountPrice}
+                                    </h4>
+                                    <h3 className={`${styles.price} !text-gray-500 !text-[12px]`}>
+                                        {data?.originalPrice ? "Rp. " + data?.originalPrice : null}
+                                    </h3>
+                                </div>
+                                <div className='flex justify-between items-center '>
+                                    <h1 className={``}>
+                                    {data?.name}
+                                    </h1>
+                                    <div>
+                                        {click ? (
+                                        <AiFillHeart
+                                        size={18}
+                                        className="cursor-pointer " 
+                                        onClick={() => deleteFromWishlistHandler(data)}
+                                        color={click ? "red" : "gray"}
+                                        title='Remove dari Wishlist'
+                                        />
+                                    ) : (
+                                        <AiOutlineHeart 
+                                        className="cursor-pointer " 
+                                        size={18}
+                                        onClick={() => addToWishlistHandler(data)}
+                                        color={click ? "red" : "gray"}
+                                        title='Tambahkan ke Wishlist'
+                                        />
+                                    )}
+                                </div>
+                                </div>
+                                
+                                <div className="flex items-center w-[35%] justify-between">
+                                    <div className="text-[12px]">
+                                        {data?.sold_out ? (`Terjual ${data?.sold_out}`) : ("Belum terjual")}
+                                    </div>
+                                    <div>
+                                    {data?.ratings ? (
+                                        <div className="flex items-center border border-gray-500 rounded p-[2px] ">
+                                            <MdStar className="text-yellow-300"/>
+                                            <div className="text-[12px]">
+                                                {data?.ratings}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center">
+                                            <FaRegStar className="text-yellow-300"/>
+                                            <div>
+                                                Belum ada rating
+                                            </div>
+                                        </div>
+                                    )}
+                                    </div>
+                                    <div className="text-[12px] text-black flex items-center border border-gray-500 p-[2px] rounded">
+                                        <HiOutlineChatAlt2 /> 
+                                        <div>
+                                            {data?.reviews?.length > 0 ? (data?.reviews?.length) : ("0")}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            </div>
+                            <div className="mt-2 bg-white flex items-center rounded gap-x-[10px]">
+                                    <div className="">
+                                        <img src={data?.shop?.avatar?.url} alt="" className="h-[40px] w-[40px]"/>
+                                    </div>
+                                    <div className="block">
+                                        <div className="font-[500]">
+                                            {data?.shop?.name.toUpperCase()}
+                                        </div>
+                                        <div className="text-[12px]">
+                                            {data?.shop?.address?.slice(0,20)}
+                                        </div>
+                                    </div>
+                                </div>
+                            <div className="flex flex-col gap-y-2 mt-2 bg-white rounded">
+                                <div className="font-[600] mx-2">
+                                    DESKRIPSI PRODUK
+                                </div>
+                                <p className="text-justify mx-2">
                                     {data?.description}
                                 </p>
-                                <h4 className={`${styles.productDiscountPrice}`}>
-                                    Rp. {data?.discountPrice}
-                                </h4>
-                                <h3 className={`${styles.price}`}>
-                                    {data?.originalPrice ? "Rp. " + data?.originalPrice : null}
-                                </h3>
+                            </div>
+                           {/*  <div className="w-full 800px:w-[50%]">
+                              
+                                
+                                
                                 <div className="flex items-center mt-12 justify-between pr-3">
                                 <div>
 
@@ -170,23 +247,7 @@ const ProductDetails = ({data}) => {
                                         +
                                 </button>
                                 </div>
-                            {click ? (
-                            <AiFillHeart
-                            size={30}
-                            className="cursor-pointer " 
-                            onClick={() => deleteFromWishlistHandler(data)}
-                            color={click ? "red" : "gray"}
-                            title='Remove dari Wishlist'
-                            />
-                        ) : (
-                            <AiOutlineHeart 
-                            className="cursor-pointer " 
-                            size={30}
-                            onClick={() => addToWishlistHandler(data)}
-                            color={click ? "red" : "gray"}
-                            title='Tambahkan ke Wishlist'
-                            />
-                        )}
+                            
 
                             
                         </div> 
@@ -222,7 +283,7 @@ const ProductDetails = ({data}) => {
                             </div>
                         </div>
                             
-                            </div>
+                            </div> */}
 
                            
                             
@@ -233,10 +294,12 @@ const ProductDetails = ({data}) => {
                     <br />
                     <br />
                     <ProductDetailsInfo data={data} products = {products} totalReviewsLength = {totalReviewsLength} averageRating = {averageRating} />
+                    
                 </div>
             ) : 
             (null)
         }
+       
     </div>
   )
 }
