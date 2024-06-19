@@ -24,7 +24,7 @@ const Events = () => {
 
             
             <div className=" 200px:h-80 sm:h-84 sm:h-80 w-full">
-              <Carousel pauseOnHover={false} slide={false}>
+              <Carousel >
                 
                 <div className='bg-green-400 w-full h-full flex justify-between items-center font-Poppins' onClick={() => navigate("/events")}>
                     <div className="text-[40px] sm:text-[68px] md:text-[84px] lg:text-[102px] xl:text-[110px] xl:w-[50%] 2xl:text-[140px] 2xl:w-[50%] xl:mt-0 font-[600]  text-white w-[50%] text-center">

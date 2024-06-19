@@ -10,7 +10,7 @@ const ProfilePage = () => {
   return (
     <div>
         <Header />
-        <div className={`${styles.section} flex bg-white py-10`}>
+        <div className={`${styles.section} flex bg-white py-10  !mt-20 sm:!mt-0`}>
             <div className="800px:w-[335px] w-[50px] mt-2">
                 <ProfileSideBar active={active} setActive={setActive} />
             </div>

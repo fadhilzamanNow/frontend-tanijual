@@ -2,18 +2,27 @@ import React, {useEffect, useState} from 'react'
 import { RxCross1 } from 'react-icons/rx';
 import styles from '../../../styles/styles';
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineShoppingCart } from 'react-icons/ai';
-import { backend_url } from '../../../server';
-import { Link } from 'react-router-dom';
+import { backend_url, server } from '../../../server';
+import { Link, useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux"
 import {toast} from "react-toastify"
 import { addToCart } from '../../../redux/actions/cart';
 import { addToWishlist, removeFromWishlist } from '../../../redux/actions/wishlist';
+import { RiStarSFill, RiStarSLine } from 'react-icons/ri';
+import { GoDotFill } from 'react-icons/go';
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { Carousel } from 'flowbite-react';
+import axios from 'axios';
+
 
 const ProductDetailsCard = ({data,setOpen,event}) => {
+
+    const navigate = useNavigate()
     const {cart} = useSelector((state) => state.cart)
     const [count,setCount] = useState(1);
     const [click,setClick] = useState(false);
     const {wishlist} = useSelector((state) => state.wishlist)
+    const {user,isAuthenticated} = useSelector((state) => state.user)
 
     useEffect(() => {
         if(wishlist && wishlist.find((i) => i._id === data._id)){
@@ -24,9 +33,23 @@ const ProductDetailsCard = ({data,setOpen,event}) => {
     })
 
     const dispatch = useDispatch()
-    const handleMessageSubmit = () => {
-
+    const handleMessageSubmit = async(e) => {
+        if(isAuthenticated){
+            const groupTitle = data?.shopId + user._id
+            const userId = user._id 
+            const sellerId = data?.shopId
+            await axios.post(`${server}/conversation/create-new-conversation`,{
+                groupTitle,userId,sellerId
+            }).then((res) => {
+                navigate(`/inbox?${res.data.conversation._id}`)
+            }).catch((err) => {
+                toast.error(`${err.response.data.message}`)
+            })
+        }else{
+            toast.error("Untuk memulai pembicaran, login terlebih dahulu")
+        }
     }
+
 
      const incrementCount = () => {
         setCount(count => count + 1)
@@ -63,97 +86,138 @@ const ProductDetailsCard = ({data,setOpen,event}) => {
 
     }
 
-
-
+    
   return (
     <div className="bg-white">
         {
             data ? (
-                <div className="fixed w-full h-screen top-0 left-0 bg-[#34dd251c] z-40 flex items-center justify-center">
-                    <div className="w-[90%] 800px:w-[60%] h-[90vh] overflow-y-scroll 800px:h-[75vh] bg-white rounded-md shadow-sm relative p-4">
-                        <RxCross1 size={30} className="absolute right-3 top-3 z-50" onClick={() => setOpen(false)} />
-                        <div className="block w-full 800px:flex ">
+                <div className="fixed w-full h-screen top-0 left-0 bg-[#34dd251c] z-[99999999] flex flex-flow items-center justify-center">
+                    <div className="w-[89%] 800px:w-[90%] h-[75vh] overflow-y-scroll 800px:h-[60vh] bg-white rounded-md shadow-sm relative ">
+                        <RxCross1 size={20} className="absolute right-3 top-3 z-[999999999999999] text-white hover:text-gray-500 sm:text-black " onClick={() => setOpen(false)} />
+                        <div className="block w-full 800px:flex items-center items 800px:mx-4 800px:justify-center">
                             <div className="w-full 800px:w-[50%]  ">
-                                <img src={`${data?.images[0]?.url}`} alt="" className="h-[300px] w-[300px] object-cover ml-20 mt-10" />
-                                <div className="flex items-center ml-5">
-                                    <Link to={`/shop/preview/${data.shop._id} `}>
-                                    <img src={`${data?.shop?.avatar.url}`} alt="" className='w-[50px] h-[50px] rounded-full object-cover ml-[65px]'/>
-                                    <div>
-                                        <h3 className={`${styles.shop_name}`}>
-                                            {data?.shop?.name}
-                                        </h3>
-                                        <h5 className='pb-3 text-[15px]'>
-                                            
-                                        </h5>
-                                    </div>
-                                    </Link>
-                                </div>
-                                <div className={`${styles.button} bg-black mt-4 rounded-[4px] h-11 ml-20`} onClick={handleMessageSubmit}>
-                                        <span className="text- white flex items-center">
-                                            Kirimkan Pesan <AiOutlineMessage className="ml-1 "/>
-                                        </span>
-                                    </div>
-                                    <h5 className="text-[16px] text-red-600 mt-5 ml-20">
-                                        X Terjual
-                                    </h5>
+                                
+                                        <div className="200px:h-[200px] sm:h-80 w-full md:w-[100%] xl:h-[400px] 2xl:h-[420px]">
+                                            <Carousel>
+                                            {data?.images?.map((gambar) => {
+                                            console.log(gambar?.url)
+                                        return  (
+                                                <img src={`${gambar?.url}`} alt="" className="h-[200px] sm:h-[300px] xl:h-[380px] 2xl:h-[560px] w-full object-cover md:w-[100%]" />
+                                                )
+                                        })}
+                                            </Carousel>
+                                        </div>
+                                   
                             </div>
-                            <div className="w-full 800px:w-[50%] pt-5 pl-[px] pr-[5px]">
-                                <h1 className={`${styles.productTitle}} text-[20px]`}>
-                                    {data?.name}
-                                </h1>
-                                <p className="text-justify">
-                                    {data?.description}
-                                </p>
-                                <div className="flex pt-3">
-                                <h4 className={`${styles.productDiscountPrice}}`}>
-                                    Rp. {data?.discountPrice}    
-                                </h4> 
-                                <h3 className={`${styles.price}`}>
-                                    {data?.originalPrice ? "Rp. " + data?.originalPrice : null}
-                                </h3>
-                             </div>
-                             <div className="flex items-center mt-12 justify-between pr-3">
-                                <div>
-                                    <button className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                            <div className="flex flex-col mx-[20px] gap-y-1 !text-[12px] h-[100%]  800px:justify-evenly 800px:w-[40%] " >
+                                <div className="flex pt-1">
+                                    <h4 className={`${styles.productDiscountPrice}  `}>
+                                        Rp. {data?.discountPrice}    
+                                    </h4> 
+                                    <h3 className={`${styles.price} !text-gray-500`}>
+                                        {data?.originalPrice ? "Rp. " + data?.originalPrice : null}
+                                    </h3>
+                                   {/*  <div>
+                                    <button className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-2 py-1 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
                                         onClick ={() => decrementCount()}
                                     >
                                            -
                                     </button>
-                                    <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">{count}</span>
-                                    <button className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                                    <span className="bg-gray-200 text-gray-800 font-medium px-2 py-1">{count}</span>
+                                    <button className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-2 py-1 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
                                         onClick = {() => incrementCount()}
                                     >
                                             +
                                     </button>
-                                </div> 
+                                </div>  */}
                                     
-                                {click ? (
-                                <AiFillHeart 
-                                size={30}
-                                className="cursor-pointer "   
-                                onClick={() => deleteFromWishlistHandler(data)}
-                                color={click ? "red" : "gray"}
-                                title='Remove dari Wishlist'
-                                />
-                            ) : (
-                                <AiOutlineHeart 
-                                className="cursor-pointer " 
-                                size={30}
-                                onClick={() => addToWishlistHandler(data)}
-                                color={click ? "red" : "gray"}
-                                title='Tambahkan ke Wishlist'
-                                />
-                            )}
-                            </div>
-                            <div className={`${styles.button} text-white mt-6 rounded h-11 flex items-center w-auto`} onClick={() => addToCartHandler(data?._id)} >
+                                </div>
+                                <h1 className={`${styles.productTitle}} !text-[16px]`}>
+                                    {data?.name}
+                                </h1>
+                                <p className="text-justify !text-[12px]">
+                                    {data?.description}
+                                </p>
+                                <div className="flex items-center justify-start gap-x-1">
+                                    {data?.ratings ? (
+                                        <div className="flex items-center  !text-[12px]">
+                                        <RiStarSFill className='text-yellow-400' size={15}/>
+                                        <span>{data?.ratings}</span>
+                                        </div>
+                                        
+                                    ) : (<>
+                                        <RiStarSLine size={20} className="text-yellow-400"/>
+                                        </>
+                                )}
+                                    <div> 
+                                    <GoDotFill className="text-black" size={10}/>
+                                    </div>
+                    <div className="font-[400] text-[12px] sm:text-[12px] text-gray-500 ">
+                            {data.sold_out ? data.sold_out + " terjual" : null }
+                        </div>
+                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <div className="">
+                                            <img src={data?.shop?.avatar?.url} alt="" className='h-[30px] w-[30px] rounded'/>
+                                        </div>
+                                        <div className="text-center !text-[12px]">
+                                            {data?.shop?.name}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-x-2 font-[600] hover:text-gray-500"  onClick={handleMessageSubmit}>
+                                        Tanya Penjual <IoChatbubbleEllipsesOutline className='text-black text-[12px]' />
+ 
+                                    </div>
+                                </div>
+                                <div className='block 800px:hidden'>
+                                <div className={`${styles.button} text-white rounded !h-[40px] flex items-center w-auto`} onClick={() => addToCartHandler(data?._id)} >
                                 <span className="text-white flex items-center">
                                     Tambahkan ke keranjang <AiOutlineShoppingCart className="ml-1" />
                                 </span>
                             </div>
+                            {
+                                click ? (<div className={`${styles.button} !bg-white !text-green-500  rounded !h-[40px] flex items-center w-auto border border-green-500 !p-2`} onClick={() => deleteFromWishlistHandler(data)} >
+                                <span className=" flex items-center">
+                                    Hapus dari Wishlist <AiOutlineHeart className="ml-1" />
+                                </span>
+                            </div>) : (
+                                <div className={`${styles.button} !bg-white !text-green-500  rounded !h-[40px] flex items-center w-auto border border-green-500 `} onClick={() => addToWishlistHandler(data)} >
+                                <span className=" flex items-center">
+                                    Tambahkan ke Wishlist <AiOutlineHeart className="ml-1" />
+                                </span>
+                            </div>
+                            )
+                            }
+                                </div>
+                                
+                            
+                               
                             </div>
                            
                            
+                           
                         </div>
+                        <div className='200px:hidden 800px:block 800px:mx-4'>
+                                <div className={`${styles.button} text-white rounded !h-[40px] flex items-center w-auto`} onClick={() => addToCartHandler(data?._id)} >
+                                <span className="text-white flex items-center">
+                                    Tambahkan ke keranjang <AiOutlineShoppingCart className="ml-1" />
+                                </span>
+                            </div>
+                            {
+                                click ? (<div className={`${styles.button} !bg-white !text-green-500  rounded !h-[40px] flex items-center w-auto border border-green-500 !p-2`} onClick={() => deleteFromWishlistHandler(data)} >
+                                <span className=" flex items-center">
+                                    Hapus dari Wishlist <AiOutlineHeart className="ml-1" />
+                                </span>
+                            </div>) : (
+                                <div className={`${styles.button} !bg-white !text-green-500  rounded !h-[40px] flex items-center w-auto border border-green-500 `} onClick={() => addToWishlistHandler(data)} >
+                                <span className=" flex items-center">
+                                    Tambahkan ke Wishlist <AiOutlineHeart className="ml-1" />
+                                </span>
+                            </div>
+                            )
+                            }
+                                </div>
                         
                     </div>
                 </div>

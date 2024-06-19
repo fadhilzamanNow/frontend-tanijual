@@ -36,7 +36,7 @@ const Faq = () => {
 
 
     return (
-        <div className={`${styles.section} my-8 h-screen`}>
+        <div className={`${styles.section} my-8 h-screen mt-20 sm:mt-2`}>
             <h2 className="text-3xl font-boldd text-gray-900 mb-8">FAQ</h2>
                 <div className="mx-auto space-y-4">
                     <div className="border-b border-gray-200 pb-4">

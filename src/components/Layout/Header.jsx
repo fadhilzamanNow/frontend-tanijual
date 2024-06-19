@@ -336,7 +336,7 @@ const Header = ({activeHeading}) => {
                                 isAuthenticated === true ? (
                                     <div className="flex-col items-center justify-center">
                                     <Link to={`/profile`}>
-                                    <img src={`${backend_url}/${user.avatar}`} alt="" className="w-[75px] h-[75px] rounded-full object-cover border" />
+                                    <img src={`${user?.avatar?.url}`} alt="" className="w-[75px] h-[75px] rounded-full object-cover border" />
                                     </Link>
                                     
                                    </div>

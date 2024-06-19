@@ -48,7 +48,7 @@ const BestSellingPage = () => {
         <Header activeHeading={2}/>
         <br />
         <br />
-        <div className={`${styles.section}`}>
+        <div className={`${styles.section}  !mt-10 sm:!mt-0`}>
             
           { 
             isLoading ? (<Loader />) : (

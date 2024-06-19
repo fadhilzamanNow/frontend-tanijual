@@ -237,7 +237,7 @@ const UserInboxPage = () => {
         <Header />
         {
           !open && (
-           <>
+           <div className=" !mt-20 sm:!mt-0">
             <h1 className="text-center text-[30px] font-Poppins">Semua Pesan</h1>
 
             {
@@ -271,7 +271,7 @@ const UserInboxPage = () => {
                 />
               })
             }
-           </>
+           </div>
 
            
            
@@ -419,7 +419,7 @@ const SellerInbox = ({setOpen, newMessage, setNewMessage, sendMessageHandler,mes
   console.log("online ",activeStatus)
 
     return (
-      <div className="w-full min-h-full flex flex-col justify-between">
+      <div className="w-full min-h-full flex flex-col justify-between  !mt-20 sm:!mt-0">
         <div className="w-full flex p-3 justify-between items-center border-b-4 ">
             <div className="flex items-center">
             <img src={`${userinfo?.avatar?.url}`} alt="" className="w-[60px] h-[60px] rounded-full border"/>

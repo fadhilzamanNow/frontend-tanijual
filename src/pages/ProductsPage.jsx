@@ -29,9 +29,8 @@ const ProductsPage = () => {
   return (
     <div>
         <Header activeHeading={3}/>
-        <br />
-        <br />
-        <div className={`${styles.section}`}>
+        
+        <div className={`${styles.section} !mt-20 sm:!mt-0`}>
         <div className="grid grid-cols-[repeat(2,160px)]  justify-evenly gap-[10px] md:grid-cols-[repeat(4,200px)] md:gap-[25px] lg:grid-cols-[repeat(6,200px)] lg:gap-[30px] xl:grid-cols-[repeat(10,200px)] xl:gap-[30px]">
         {
                     data && data.map((i,index) => <ProductCard data={i} key={index} />)
