@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../styles/styles'
 import { BsFillBagFill } from 'react-icons/bs'
-import {Link, useParams} from "react-router-dom"
+import {Link, useNavigate, useParams} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux";
 import { getAllOrdersOfShop, getAllOrdersOfUser } from '../redux/actions/order';
 import { backend_url, server} from '../server';
@@ -9,13 +9,17 @@ import { RxCross1 } from 'react-icons/rx';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 
 
 
 const UserOrderDetails = () => {
 
   const {orders, isLoading} = useSelector((state) => state.order);
-
+  const navigate = useNavigate()
   const {user} = useSelector((state) => state.user)
   const dispatch = useDispatch();
   const [status,setStatus] = useState("");
@@ -24,6 +28,7 @@ const UserOrderDetails = () => {
   const [open,setOpen] = useState(false);
   const [rating,setRating] = useState("");
   const [comment,setComment] = useState("");
+  const [selesai,setSelesai] = useState(0);
 
   const {id} = useParams();
   console.log("user" , user);
@@ -76,44 +81,81 @@ const UserOrderDetails = () => {
       toast.error(`${err.response.data.message}`)
     })
   }
+
+  const step = [
+    'Dalam proses Pembayaran',
+    'Diserahkan ke kurir',
+    'Sedang dalam Perjalanan',
+    'Diterima',
+  ]
+
+  const stepactive = [
+    {angka : 1, status : 'Dalam proses Pembayaran'},
+    {angka : 2, status : 'Diserahkan ke kurir'},
+    {angka : 3, status : 'Sedang dalam Perjalanan'},
+    {angka : 4, status : 'Diterima'},
+  ]
+  
+
+
+  useEffect(() => {
+    const hasil = stepactive.filter((status) => status.status === data?.status)
+    
+    console.log("hasilnya :", hasil[0]?.angka, hasil[0]?.status)
+    setSelesai(hasil[0]?.angka)
+  },[orders])
+
+
   return (
-    <div className={`py-4 min-h-screen ${styles.section}`}>
-        <div className="w-full flex items-center justify-between">
-            <div className="flex items-center">
-                <BsFillBagFill size={30} className='text-green-400' />
-                <h1 className="pl-2 text-[25px]">Detail Order</h1>
-            </div>
-            <Link to="/profile">
-                <div className={`${styles.button} !bg-green-400 text-white font-[600] !h-[45px] text-[18px]`}>Semua Order</div>
-            </Link>
+    <div className={`py-4 min-h-screen ${styles.section} !mt-12 sm:!mt-0`}>
+        <div className="text-center font-[600] text-[30px] font-Poppins relative mb-2 ">
+        Detail Pemesanan
+        <div>
+        <IoMdArrowRoundBack size={30} color='black' className='absolute top-2 left-2' onClick={() => navigate("/profile")}/>
         </div>
-        <div className='w-full flex items-center justify-between pt-6'>
-          <h5 className="text-black">
-            Order ID : <span className="font-[500]">{data?._id?.slice(0,8)}</span>
-          </h5>
-          <h5 className="text-black">
-            Dibuat : <span className="font-[500]">{data?.createdAt?.slice(0,10)}</span>
-          </h5>
-          
-          
-          </div> 
-          <br />
-          <br />
+      </div>
+      <div className='bg-white w-full min-h-[50vh] flex flex-col items-center'>
+          <div className='flex justify-center flex-1 mb-4 '>
+            <Stepper activeStep={selesai} orientation='horizontal' className='mt-[20px]'  alternativeLabel>
+                {step.map((label) => {
+                  return (
+                    <Step key={label} className="h-[100px] w-[100px]"
+                      sx={{
+                        "& .MuiStepLabel-root .Mui-completed": {
+                            color: "green"
+                        },
+                        "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel": {
+                            color: "#a5a8ad"
+                        },
+                        "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel .MuiStepIcon-text": {
+                            color: "#a5a8ad"
+                        },
+                        "& .MuiStepLabel-root .Mui-active": {
+                            color: "gray",
+                          
+
+                        },
+                        "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel": {
+                            color: "gray",
+                            
+                        },
+                        "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                            fill: "white"
+                        }
+                        
+                    }}
+                    >
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  )
+                })}
+            </Stepper>
+          </div>
+          <div className="flex justify-center">
           {
             data && data?.cart.map((item,index) => {
               return (
                 <div className="w-full flex items-start mb-5">
-                  <img src={`${item.images[0].url}`} alt="" 
-                    className='w-[80px] h-[80px]'
-                  />
-                  <div className="w-full">
-                    <h5 className='pl-3 text-[20px]'>
-                      {item?.name}
-                    </h5>
-                    <h5 className='pl-3 text-[20px] text-black'>
-                      Rp. {item?.discountPrice} * {item?.qty}
-                    </h5>
-                  </div>
                   {
                    item?.isReviewed  ? (
                         <div>Terima kasih atas Ulasannya</div>
@@ -127,6 +169,81 @@ const UserOrderDetails = () => {
               )
             })
           }
+          </div>
+        <div className="w-full flex flex-col items-center justify-between">
+          
+        
+            
+            
+        </div>
+        <div className='w-full flex flex-col pt-6  pb-4 gap-y-[5px] mx-[25px]'>
+         
+          <div className="flex  justify-center items-center w-full gap-x-5">
+
+          
+            <div className='grid grid-cols-1 md:text-[24px] mb-4 border-b border-b-gray-200 md:border-none pb-4 text-[14px]' >    
+              <h5 className="text-black text-[16px]">
+                Order ID : <span className="font-[500]">{data?._id}</span>
+              </h5>
+              <h5 className="text-black text-[16px]">
+                Pesanan Dibuat : <span className="font-[500]">{data?.createdAt?.slice(0,10)}</span>
+              </h5>
+              <h5 className="text-black text-[16px]">
+                Biaya : <span className='font-[500]'>Rp. {data?.totalPrice}</span>
+              </h5>
+              <h5 className="text-[16px]">
+                Penerima : <span className="font-[500]">{data?.user?.name}</span>
+              </h5>
+              <h5 className="text-[16px]">
+                Alamat 1 :<span className='font-[500]'>{data?.alamat?.address1} </span>
+              </h5>
+              <h5 className="text-[16px]">
+                Alamat 2 :<span className='font-[500]'>{data?.alamat?.address2} </span>
+              </h5>
+              <h5 className="text-[16px]">
+                Metode Pembayaran : <span className="font-[500]">{data?.paymentInfo?.type}</span>
+              </h5>
+              <h5 className="text-[16px]">
+                Nomor Telefon : <span className="font-[500]">{data?.user?.phoneNumber ? ("0" + data?.user?.phoneNumber) : ("-")}</span>
+              </h5>
+            </div>
+            <div>
+              {
+              data && data?.cart.map((item,index) => {
+                return (
+              
+                  <div className="w-full flex items-center mb-5 justify-center">
+                    <img src={`${item?.images[0]?.url}`} alt="" 
+                      className='w-[80px] h-[80px] md:w-[150px] md:h-[150px] object-cover'
+                    />
+                    <div className="w-full">
+                      <h5 className='pl-3 text-[16px] font-[500] md:text-[30px]'>
+                        {item?.name}
+                      </h5>
+                      <h5 className='pl-3 text-[14px] text-black'>
+                        Rp. {item?.discountPrice} * {item?.qty}
+                      </h5>
+                    </div>
+                  </div>
+                
+                )
+              })
+              }
+            </div>
+          </div>
+          </div> 
+          <br />
+          <br />
+          
+       
+         
+          
+                 
+          </div>
+       
+          <br />
+          <br />
+          
 
           {
             open && (
@@ -190,54 +307,10 @@ const UserOrderDetails = () => {
               </div>
             )
           }
-          <div className="border-t w-full text-right">
-              <h5 className="pt-3 text-[18px]">
-                Total Harga <span className="">Rp. {data?.totalPrice}</span>
-              </h5>
-          </div>
+          
           <br />
           <br />
-          <div className="w=full 800px:flex items-center">
-              <div className="w-full 800px:w-[60%]">
-                <h4 className="pt-3 text-[20px] font-[600]">
-                  Alamat Pengiriman :
-                </h4>
-                <h4 className='pt-3 text-[20px]'>
-                  Alamat 1 : {data?.alamat.address1} 
-                </h4>
-                <h4 className='pt-3 text-[20px]'>
-                  Alamat 2 : {data?.alamat.address2} 
-                </h4>
-                <h4 className="text-[20px]">
-                    {data?.alamat?.country}
-                </h4>
-                <h4 className="text-[20px]">
-                    {data?.alamat?.city}
-                </h4>
-                <h4 className="text-[20px]">
-                    0{data?.user?.phoneNumber}
-                </h4>
-              </div>
-              <div className="w-full 800px:w-[40%]">
-                <h4 className='pt-3 text-[20px]'>
-                  Informasi Pembayaran :
-                </h4>
-           
-                {
-                  data?.status === "Diterima" ? (
-                    <div className={`${styles.button} text-white p-5 text-center`}
-                      onClick={refundHandler}
-                    >
-                        Minta Pengembalian
-                    </div>
-                  ) : (null)
-                }
-              </div>
-          </div>
-          <br />
-          <br />
-          <h4 className="pt-3 text-[20px] font-[600]">Status Pemesanan : </h4>
-          <h1>{data?.status}</h1>
+         
           {/* <select name="" id="" value={status} onChange={(e) => setStatus(e.target.value)} className='w-[200px] mt-2 border -[35px] rounded-[5px] '>
             {
               [

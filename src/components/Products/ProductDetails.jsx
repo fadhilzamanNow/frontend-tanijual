@@ -99,7 +99,7 @@ const ProductDetails = ({data}) => {
     console.log("data adalah : ", data)
     const handleMessageSubmit = async(e) => {
         if(isAuthenticated){
-            const groupTitle = data?.shopId + user._id
+            const groupTitle = data?.shopId + user._id 
             const userId = user._id 
             const sellerId = data?.shopId
             await axios.post(`${server}/conversation/create-new-conversation`,{
@@ -127,7 +127,9 @@ const ProductDetails = ({data}) => {
 
     const averageRating = totalRatings / totalReviewsLength || 0;
 
-    const potongan = data?.originalPrice / data?.discountPrice
+    const potongan = (100 * data?.discountPrice / data?.originalPrice).toFixed(0)
+
+    
   return (
     <div className="">
         {
@@ -263,7 +265,7 @@ const ProductDetails = ({data}) => {
                                             -{potongan}%
                                         </div>
                                         <div className={` !mt-0 !text-gray-500 line-through text-[20px] font-[200]`}>
-                                                Rp. {data?.originalPrice}
+                                                Rp. {data?.originalPrice} 
                                         </div>
                                     </div>
                                     
@@ -275,8 +277,13 @@ const ProductDetails = ({data}) => {
                                             </div>
                                         </div>
                                         <div className={`relative ${active === 2 ? ("text-green-500") : ("text-gray-500")} cursor-pointer `} onClick={() => setActive(2)}>
-                                            Informasi Toko
+                                            Informasi Toko 
                                             <div className={`${styles.active_indicator} !bg-green-500 h-[10px] ${active === 2 ? (null) : ("hidden") } `}>
+                                            </div>
+                                        </div>
+                                        <div className={`relative ${active === 3 ? ("text-green-500") : ("text-gray-500")} cursor-pointer `} onClick={() => setActive(3)}>
+                                            Review 
+                                            <div className={`${styles.active_indicator} !bg-green-500 h-[10px] ${active === 3 ? (null) : ("hidden") } `}>
                                             </div>
                                         </div>
                                     </div>
@@ -320,9 +327,9 @@ const ProductDetails = ({data}) => {
                                         {
                                             active === 2 ? (
                                                 <div>
-                                                    <div className="flex mt-2 items-center border-b border-b-gray-500">
+                                                    <div className="flex mt-2 items-center ">
                                                     <div>
-                                                        <img src={data?.shop?.avatar?.url} alt="" className="h-[75px] w-[75px] rounded" />
+                                                        <img src={data?.shop?.avatar?.url} alt="" className="h-[75px] w-[75px] rounded-full" />
                                                     </div>
                                                     <div>
                                                         <div className="font-[600] flex">
@@ -352,6 +359,41 @@ const ProductDetails = ({data}) => {
                                                         Tolta Review :  <span className="font-[200]">{totalReviewsLength}</span>
                                                     </div>
                                                 </div>
+                                                </div>
+                                            ) : (null)
+                                        }
+                                        {
+                                            active === 3 ? (
+                                                <div>
+                                                    {
+                            data && data?.reviews.map((item,index) => {
+                               
+                                return (
+                                    <div className="w-full flex my-2 justify-center   ">
+                                        <div className="w-full flex  items-center">
+                                            <div>
+                                                <FotoProfil user={item?.user?._id}  />    
+                                            </div>
+                                            <div>
+                                                <h1 className="pl-3 font-[600] text-[14px] xl:text-[16px]">{item?.user?.name}</h1>
+                                                <p className="pl-3 text-[12px]">
+                                                {item?.comment}
+                                                </p>
+                
+                                                <Ratings rating = {item?.rating}/>
+                                            </div>
+                                        </div>
+                                       
+                                       
+                                    </div>
+                                )
+                            })
+                        }
+                        {
+                            data && data?.reviews.length === 0 && (
+                                <h5>Belum ada review untuk produk ini   </h5>
+                            )
+                        }
                                                 </div>
                                             ) : (null)
                                         }
@@ -388,10 +430,10 @@ const ProductDetails = ({data}) => {
                                             Rp. {(data?.discountPrice * count)}
                                         </div>
                                     </div>
-                                    <div className="bg-green-500 text-white p-2 rounded text-center font-[600]">
+                                    <div className="bg-green-500 text-white p-2 rounded text-center font-[600] cursor-pointer" onClick={() => addToCartHandler(data._id)}>
                                         + Keranjang
                                     </div>
-                                    <div className="flex justify-evenly items-center text-gray-500 text-[14px]">
+                                    <div className="flex justify-evenly items-center text-gray-500 text-[14px] cursor-pointer">
                                         <div className="flex items-center gap-x-2" onClick={() => handleMessageSubmit()}>
                                             <IoChatboxEllipsesOutline size={12}/>
                                             <div>
@@ -435,7 +477,7 @@ const ProductDetails = ({data}) => {
                             </div>
                             <div className="mt-2 bg-white flex items-center rounded gap-x-[10px] xl:hidden">
                                     <div className="">
-                                        <img src={data?.shop?.avatar?.url} alt="" className="h-[40px] w-[40px]"/>
+                                      <img src={data?.shop?.avatar?.url} alt="" className="h-[40px] w-[40px]"/>   
                                     </div>
                                     <div className="block">
                                         <div className="font-[500]">
@@ -516,6 +558,7 @@ const ProductDetails = ({data}) => {
                             
                         </div>
                     </div>
+                    
                     
                     <ProductDetailsInfo data={data} products = {products} totalReviewsLength = {totalReviewsLength} averageRating = {averageRating} />
                     
@@ -670,4 +713,23 @@ const ProductDetailsInfo = ({data,products, totalReviewsLength,averageRating}) =
     )
 }
 
+
+const FotoProfil = ({user}) => {
+    const [gambar,setGambar] = useState();
+    console.log("id user", user);
+
+    useEffect(() => {
+        axios.get(`${server}/user/user-info/${user}`).then((res) => {
+            console.log("hasil :" ,res?.data?.user?.avatar?.url)
+            setGambar(res?.data?.user?.avatar?.url)
+        }).catch((err) => {
+            console.log("error :", err )
+        })
+    },[])
+    return (
+        <div>
+            <img src={`${gambar}`} alt="" className="xl:w-[50px] xl:h-[50px] rounded-full" />
+        </div>
+    )
+}
 export default ProductDetails

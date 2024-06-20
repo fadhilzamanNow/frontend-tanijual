@@ -13,7 +13,7 @@ const FeaturedProduct = () => {
             <div className={`${styles.heading}`}>
              <h1>Saran Produk</h1>
             </div>
-            <div className="grid grid-cols-[repeat(2,160px)]  justify-evenly gap-[10px] md:grid-cols-[repeat(4,200px)] md:gap-[25px] lg:grid-cols-[repeat(6,200px)] lg:gap-[30px] xl:grid-cols-[repeat(10,200px)] xl:gap-[30px]">
+            <div className="grid grid-cols-[repeat(2,160px)]  justify-evenly gap-[10px] md:grid-cols-[repeat(4,200px)] md:gap-[25px] lg:grid-cols-[repeat(5,160px)] lg:gap-[30px] xl:grid-cols-[repeat(6,180px)] xl:gap-[10px] 2xl:grid-cols-[repeat(7,190px)] 2xl:gap-[10px]">
                 {
                     allProducts && allProducts.map((i,index) => {
                         return (

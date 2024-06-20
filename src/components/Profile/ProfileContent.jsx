@@ -273,6 +273,9 @@ const AllOrders = () => {
 
       return(
         <div className="pl-8 pt-1">
+          <div className="800px:hidden text-center font-[900]">
+            Pesanan
+          </div>
             <DataGrid 
             rows={row}
             columns = {columns}
@@ -366,6 +369,9 @@ const AllRefundOrders = () => {
 
       return(
         <div className="pl-8 pt-1">
+          <div className="800px:hidden text-center font-[900]">
+            Pesanan Batal
+          </div>
             <DataGrid 
             rows={row}
             columns = {columns}
@@ -454,6 +460,9 @@ const TrackOrder = () => {
     return (
         <div>
             <div className="pl-8 pt-1">
+            <div className="800px:hidden text-center font-[900]">
+            Lacak Barang
+          </div>
                 <DataGrid 
                     rows={row}
                     columns={columns}
@@ -689,11 +698,11 @@ const Adress = () => {
               </div>
             )
           }
-            <div className="flex w-full items-center justify-between">
-                <h1 className="text-[25px] font-[600] text-black pb-2">
+            <div className="sm:flex w-full items-center justify-between">
+                <h1 className="text-[20px] sm:text-[25px] font-[600] text-black pb-2">
                     Alamat
                 </h1>
-                <div className={`bg-black rounded-md h-[50px] w-[150px] text-center text-white p-4`} onClick={() => setOpen(true)}> 
+                <div className={`text-[14px] flex justify-center items-center h-[20px] w-max bg-black text-white font-[600] rounded p-4`} onClick={() => setOpen(true)}> 
                     Tambah Alamat
                 </div>
             </div>
@@ -701,19 +710,44 @@ const Adress = () => {
             {
               user && user.addresses.map((item,index) => {
                 return (
-                  <div className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow-md justify-between pr-10 mb-10" key={index} >
+                  <div className="w-full bg-white h-auto rounded-[4px] flex flex-col sm:flex-row sm:items-center px-3 shadow-md justify-between mb-10 relative" key={index} >
                   <div className="flex items-center">
                   
-                  <h5 className="pl-5 font-[600]">{item.addressType}</h5>
+                  <div className="pl-0 sm:pl-5 font-[700] flex items-center justify-between w-full text-[20px] ">
+                    <div>
+                      {item.addressType?.toUpperCase()}
+                    </div>
+                    <div className="min-w-[10%]  items-center justify-between pl-8 sm:hidden" >
+                        <AiOutlineDelete 
+                            size={12}
+                            className="cursor-pointer"
+                            onClick={() => handleDelete(item._id)}
+                        />
+                    </div>
+                    </div>
                   </div>
-                  <div className="pl-8 flex-col items-center">
-                      <h6>Alamat 1 : {item.address1} </h6>
-                      <h6>Alamat 2 : {item.address2} </h6>
+                  <div className="pl-0 sm:pl-8 flexflex-col items-center">
+                      <div>
+                        <div className="font-[500]">
+                          Alamat 1 : 
+                        </div>
+                        <div>
+                          {item.address1} 
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-[500]">
+                          Alamat 2 : 
+                        </div>
+                        <div>
+                          {item.address2} 
+                        </div>
+                      </div>
                   </div>
                   <div className="pl-8 flex items-center">
                       <h6>{user?.phoneNumber}</h6>
                   </div>
-                  <div className="min-w-[10%] flex items-center justify-between pl-8" >
+                  <div className="min-w-[10%] sm:flex items-center justify-between pl-8 hidden" >
                       <AiOutlineDelete 
                           size={25}
                           className="cursor-pointer"

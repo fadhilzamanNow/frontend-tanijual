@@ -40,10 +40,10 @@ const ProfileSideBar = ({active,setActive}) => {
             <AiOutlineMessage size={20} color={active === 4 ? "red" : ""} />
             <span className={`pl-3 ${active === 4 ? "text-red-400" : ""} 800px:block hidden`}>Inbox</span>
         </div>
-        <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(5)}>
+       {/*  <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(5)}>
             <MdOutlineTrackChanges size={20} color={active === 5 ? "red" : ""} />
             <span className={`pl-3 ${active === 5 ? "text-red-400" : ""} 800px:block hidden`}>Lacak Barang</span>
-        </div>
+        </div> */}
         <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(6)}>
             <AiOutlineCreditCard size={20} color={active === 6 ? "red" : ""} />
             <span className={`pl-3 ${active === 6 ? "text-red-400" : ""} 800px:block hidden`}>Ganti Password</span>

@@ -153,7 +153,7 @@ const ProductDetailsCard = ({data,setOpen,event}) => {
                                     <GoDotFill className="text-black" size={10}/>
                                     </div>
                     <div className="font-[400] text-[12px] sm:text-[12px] text-gray-500 ">
-                            {data.sold_out ? data.sold_out + " terjual" : null }
+                            {data.sold_out ? data.sold_out + " terjual" : " 0 terjual" }
                         </div>
                 </div>
                                 <div className="flex items-center justify-between">

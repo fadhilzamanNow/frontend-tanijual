@@ -10,6 +10,7 @@ import { FaArrowLeft } from 'react-icons/fa'
 import { TfiGallery } from 'react-icons/tfi'
 import styles from '../styles/styles'
 import { IoSendSharp } from 'react-icons/io5'
+import { IoMdArrowRoundBack } from 'react-icons/io'
 
 
 
@@ -38,6 +39,8 @@ const UserInboxPage = () => {
     const [cariInfo,setCariInfo] = useState();
     const scrollRef = useRef(null);
     const [images,setImages] = useState();
+
+    const navigate = useNavigate()
 
     console.log("arrivalMessage", arrivalMessage)
 
@@ -238,7 +241,14 @@ const UserInboxPage = () => {
         {
           !open && (
            <div className=" !mt-20 sm:!mt-0">
+            <div className="relative">
             <h1 className="text-center text-[30px] font-Poppins">Semua Pesan</h1>
+            <div>
+              <IoMdArrowRoundBack size={30} color='black' className='absolute top-2 left-2' onClick={() => navigate("/profile")}/>
+            </div>
+            </div>
+            
+           
 
             {
               conversations && conversations.map((item,index) => {

@@ -87,7 +87,7 @@ const ProductDetailsPage = () => {
              
           </div>
           <div className="bg-green-500 text-white font-[600] text-center rounded p-2 w-[45%]" onClick={() => addToCartHandler(data._id)}>
-                + Keranjang
+                + Keranjang 
           </div>
         </div>
     </div>
