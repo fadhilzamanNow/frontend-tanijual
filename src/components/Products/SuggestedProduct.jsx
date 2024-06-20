@@ -15,11 +15,11 @@ const SuggestedProduct = ({data}) => {
 
     
   return (
-    <div>
+    <div className="bg-white mt-10 min-h-[20vh] mb-2 rounded-lg xl:mx-80">
         {
             data ? (
             <div className={`${styles.section}`}>
-                <h2 className={`${styles.heading}`}>Produk Terkait</h2>
+                <h2 className={`${styles.heading} xl:!text-center`}>Produk Terkait</h2>
                 <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12">
                     {
                         products && products.map((i,index) => {
@@ -29,6 +29,13 @@ const SuggestedProduct = ({data}) => {
                         })
                     }
                 </div>
+                {
+                    products?.length === 0 ? (
+                        <div className="text-center">
+                            Tidak ada produk yang sesuai
+                        </div>
+                    ) : (null)
+                }
             </div>) : (null)
         }
     </div>

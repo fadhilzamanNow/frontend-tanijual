@@ -29,7 +29,7 @@ export default function App() {
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
 /*     getStripeApikey();
- */    
+ */     
   },[])
 
 /*   console.log(stripeApiKey); */
@@ -72,7 +72,7 @@ export default function App() {
                   <UserInbox />
               </ProtectedRoute>} />
               <Route path="/user/order/:id" element={
-              <ProtectedRoute >
+            <ProtectedRoute >
                   <OrderDetailsPage />
               </ProtectedRoute>} />
               <Route path="/user/track/order/:id" element={

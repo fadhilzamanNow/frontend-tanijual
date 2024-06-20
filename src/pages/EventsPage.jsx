@@ -13,7 +13,7 @@ const EventsPage = () => {
         ) : (
           <div>
             <Header activeHeading={4} />
-            <div className="!mt-20 sm:!mt-0">
+            <div className="!mt-20 sm:!mt-2">
             <EventCard active={true} data={allEvents && allEvents[0]} />
             </div>
           </div>
