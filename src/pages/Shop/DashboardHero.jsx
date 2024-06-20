@@ -271,7 +271,8 @@ const DashboardHero = () => {
                                   
                                   position : { horizontal : "middle" , vertical : "bottom"},
                                   direction : "column",
-                                  padding : {top : "30px"}
+                                  padding : {top : "30px"},
+                                  hidden : true
                                 }
                                 
                                 
@@ -309,7 +310,8 @@ const DashboardHero = () => {
                                   
                                   position : { horizontal : "middle" , vertical : "bottom"},
                                   direction : "column",
-                                  padding : {top : "30px"}
+                                  padding : {top : "30px"},
+                                  hidden : true
                                 }
                                 
                                 

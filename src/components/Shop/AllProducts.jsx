@@ -21,9 +21,12 @@ const AllProducts = () => {
         dispatch(getAllProductsShop(seller._id))
     },[dispatch])
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         dispatch(deleteProduct(id))
-        window.location.reload()
+        
+        setTimeout(() => {
+            window.location.reload()
+        },3000)
     }
 
     const columns = [

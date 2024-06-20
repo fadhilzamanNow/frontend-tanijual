@@ -97,7 +97,7 @@ const CreateEvent = () => {
 
     const minEndDate = startDate ? new Date(startDate.getTime() + 3*24*60*60*1000).toISOString().slice(0,10) : today
   return (
-    <div className="800px:w-[75%] w-[100%] bg-white shadow h-[100vh] rounded-[4px] p-3 ">
+    <div className="800px:w-[75%] w-[100%] bg-white shadow  rounded-[4px] p-3 ">
         <h5 className="text-[30px] font-Poppins text-center">
            Membuat Promo 
         </h5>
@@ -207,7 +207,9 @@ const CreateEvent = () => {
                     }
                 </div>
                 <br />
+                <div className="pb-8">
                 <input type="submit" value="Buat Promo" className='mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:ring-green-400 focus:border-green-400 sm:text-sm bg-green-500 text-white font-[600]' />
+                </div>
             </div>
             
         </form>

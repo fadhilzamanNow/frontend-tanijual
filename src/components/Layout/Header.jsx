@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { categoriesData, productData } from "../../static/data";
@@ -8,14 +8,16 @@ import {BiMenuAltLeft} from "react-icons/bi"
 import DropDown from "./Dropdown"
 import Navbar from "./Navbar"
 import {CgProfile} from "react-icons/cg"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { backend_url, server } from "../../server";
 import Cart from "../cart/Cart"
 import { RxCross1 } from "react-icons/rx";
 import Wishlist from "../Wishlist/Wishlist"
+import { getAllProducts } from "../../redux/actions/product";
 const Header = ({activeHeading}) => {
   const {isAuthenticated, user} = useSelector((state) => state.user);
   const {cart} = useSelector ((state) => state.cart)
+  const {allProducts,isLoading} = useSelector((state) => state.products)
   const {wishlist} = useSelector((state) => state.wishlist);
   const {isSeller} = useSelector((state) => state.seller); 
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,14 +29,21 @@ const Header = ({activeHeading}) => {
   const [openCart,setOpenCart] = useState(false);
   const [openWishlist,setOpenWishlist] = useState(false);
   const [open,setOpen] = useState(false)
+  const [product,setProduct] = useState([])
+  const dispatch = useDispatch()
 
+
+  useEffect(() => {
+    dispatch(getAllProducts())
+    console.log("semua products: ", allProducts)
+  }, [])
   const handleSearchChange = (e) => {
     inputChange.current = e.target.value;
     setSearchTerm(inputChange.current);
 
     const filteredProducts =
-     ( productData &&
-      productData.filter((product) => {
+     ( allProducts &&
+      allProducts.filter((product) => {
         return product.name.toLowerCase().includes(searchTerm.toLowerCase());
       }) )
     setSearchData(filteredProducts);
@@ -56,6 +65,8 @@ const Header = ({activeHeading}) => {
     console.log("hapus")
     console.log(searchData)
   }
+
+
   return (
     
     <div>
@@ -84,15 +95,15 @@ const Header = ({activeHeading}) => {
               onClick={handleSubmit}
             />
             { searchData && searchData.length !==0 ? (
-                <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+                <div className="absolute h-[50vh] overflow-y-scroll bg-slate-50 shadow-sm-2 z-[9] p-4 w-full">
                     {searchData && searchData.map((i, index) => {
                         const d = i.name;
 
                         const Product_name = d.replace(/\s+/g,"-");
                         return (
-                            <Link to={`/product/${Product_name}}`}>
+                            <Link to={`/product/${d}}`}>
                                 <div className="w-full flex items-start py-3" key={index}>
-                                    <img src={i.image_Url[0].url} alt="" 
+                                    <img src={i?.images[0]?.url} alt="" 
                                         className="w-[40px] h-[40px] mr-[10px]"
                                     />
                                     <div>
@@ -304,17 +315,17 @@ const Header = ({activeHeading}) => {
                                         placeholder="Mencari buah dan sayuran ...."
                                 />
                                 { searchData && searchData.length !==0 ? (
-                                    <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+                                    <div className="absolute w-full bg-slate-50 shadow-sm-2 z-[9] p-4 h-[40vh] overflow-y-scroll">
                                     {searchData && searchData.map((i, index) => {
                                         const d = i.name;
 
                                         const Product_name = d.replace(/\s+/g,"-");
                                         return (
                                             <Link to={`/product/${Product_name}`}>
-                                                <div className="w-full flex items-start py-3" key={index}>
-                                                    <img src={i.image_Url[0].url} alt="" 
-                                                        className="w-[40px] h-[40px] mr-[10px]"
-                                                    />
+                                                <div className="w-full flex items-start py-3 " key={index}>
+                                                <img src={i?.images[0]?.url} alt="" 
+                                                    className="w-[40px] h-[40px] mr-[10px]"
+                                                />
                                                     <div>
                                                         {i.name}
                                                     </div>

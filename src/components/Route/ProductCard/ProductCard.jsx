@@ -133,7 +133,7 @@ const ProductCard = ({data,toko}) => {
             <Link to={`/shop/preview/${data.shopId}`}>
             <div className="flex items-center">
                 <img src={`${data?.shop?.avatar?.url}`} alt="" className="h-[20px] w-[20px] rounded-[9999px]"/>
-                <h5 className={`text-[12px] sm:text-[18px] !text-gray-500 `}>{data.shop.name}</h5>
+                <h5 className={`text-[12px] sm:text-[14px] !text-gray-500 `}>{data.shop.name}</h5>
             </div>
             </Link>
             <Link to={`/product/${data._id}`}>
