@@ -107,7 +107,7 @@ const UserOrderDetails = () => {
 
 
   return (
-    <div className={`py-4 min-h-screen ${styles.section} !mt-12 sm:!mt-0`}>
+    <div className={`py-4 min-h-screen ${styles.section} !mt-12 sm:!mt-0 !mx-0 !w-full`}>
         <div className="text-center font-[600] text-[30px] font-Poppins relative mb-2 ">
         Detail Pemesanan
         <div>
@@ -119,7 +119,7 @@ const UserOrderDetails = () => {
             <Stepper activeStep={selesai} orientation='horizontal' className='mt-[20px]'  alternativeLabel>
                 {step.map((label) => {
                   return (
-                    <Step key={label} className="h-[100px] w-[100px]"
+                    <Step key={label} className="h-[90px] w-[90px] md:w-[120px] lg:w-[150px] xl:w-[200px]"
                       sx={{
                         "& .MuiStepLabel-root .Mui-completed": {
                             color: "green"
@@ -178,9 +178,31 @@ const UserOrderDetails = () => {
         </div>
         <div className='w-full flex flex-col pt-6  pb-4 gap-y-[5px] mx-[25px]'>
          
-          <div className="flex  justify-center items-center w-full gap-x-5">
+          <div className="flex flex-col sm:flex-row  justify-center items-center w-full gap-x-5">
 
-          
+          <div>
+              {
+              data && data?.cart.map((item,index) => {
+                return (
+              
+                  <div className="w-full flex items-center mb-5 justify-center">
+                    <img src={`${item?.images[0]?.url}`} alt="" 
+                      className='w-[80px] h-[80px] md:w-[150px] md:h-[150px] object-cover'
+                    />
+                    <div className="w-full">
+                      <h5 className='pl-3 text-[16px] font-[500] md:text-[30px]'>
+                        {item?.name}
+                      </h5>
+                      <h5 className='pl-3 text-[14px] text-black'>
+                        Rp. {item?.discountPrice} * {item?.qty}
+                      </h5>
+                    </div>
+                  </div>
+                
+                )
+              })
+              }
+            </div>
             <div className='grid grid-cols-1 md:text-[24px] mb-4 border-b border-b-gray-200 md:border-none pb-4 text-[14px]' >    
               <h5 className="text-black text-[16px]">
                 Order ID : <span className="font-[500]">{data?._id}</span>
@@ -207,29 +229,7 @@ const UserOrderDetails = () => {
                 Nomor Telefon : <span className="font-[500]">{data?.user?.phoneNumber ? ("0" + data?.user?.phoneNumber) : ("-")}</span>
               </h5>
             </div>
-            <div>
-              {
-              data && data?.cart.map((item,index) => {
-                return (
-              
-                  <div className="w-full flex items-center mb-5 justify-center">
-                    <img src={`${item?.images[0]?.url}`} alt="" 
-                      className='w-[80px] h-[80px] md:w-[150px] md:h-[150px] object-cover'
-                    />
-                    <div className="w-full">
-                      <h5 className='pl-3 text-[16px] font-[500] md:text-[30px]'>
-                        {item?.name}
-                      </h5>
-                      <h5 className='pl-3 text-[14px] text-black'>
-                        Rp. {item?.discountPrice} * {item?.qty}
-                      </h5>
-                    </div>
-                  </div>
-                
-                )
-              })
-              }
-            </div>
+            
           </div>
           </div> 
           <br />

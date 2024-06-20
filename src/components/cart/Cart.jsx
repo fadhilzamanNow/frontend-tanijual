@@ -29,7 +29,7 @@ const Cart = ({setOpenCart}) => {
     const totalPrice = cart.reduce((acc,item) => acc + item.qty * item.discountPrice, 0)
   return (
     <div className="fixed top-0 left-0 w-full bg-[#fafafa00] h-screen z-10">
-        <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow-sm">
+        <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow-sm overflow-y-scroll">
             {
                 cart && cart.length === 0 ?  (
                     <div className="w-full h-screen flex items-center justify-center">
@@ -43,7 +43,7 @@ const Cart = ({setOpenCart}) => {
                     <h5>Keranjangmu masih Kosong</h5>
                   </div> 
                 ) : (
-                    <div>
+                    <div className='bg-white '>
 
             
                         <div className="flex w-full justify-end pt-5 pr-5  z-20">
@@ -67,6 +67,7 @@ const Cart = ({setOpenCart}) => {
                         </div>
     
                         { /* detail barang keranjang */}
+                        <div className="overflow-y-scroll h-[80vh]">                        
                         {
                             cart && cart.map((i,index) => {
                                 return (
@@ -74,6 +75,7 @@ const Cart = ({setOpenCart}) => {
                                 )
                             })
                         }
+                        </div>
                     </div>
                 )
             }
