@@ -6,13 +6,21 @@ import axios from 'axios'
 import { getAllProductsShop } from '../../redux/actions/product'
 import { useParams } from 'react-router-dom'
 import Loader from '../Layout/Loader'
+import { FaChevronRight } from "react-icons/fa";
 
-const ShopInfo = ({isOwner}) => {
+
+const ShopInfo = ({isOwner, isOpen, setIsOpen}) => {
     
     const {id} = useParams();
     const [data,setData] = useState({});
     const [isLoading,setIsLoading] = useState(true);
     const [products,setProducts] = useState([])
+
+    const [hasil,setHasil] = useState();
+
+    useEffect(() => {
+        console.log("hasil : ", hasil)
+    },[hasil])
     
 
     useEffect(() => {
@@ -59,17 +67,28 @@ const ShopInfo = ({isOwner}) => {
     useEffect(() => {
         console.log("isi :  ", products)
     },[products])
+
+    
   return (
     <>
     {
         isLoading ? (<Loader />) : (
             <div>
          <div className="w-full py-5">
-            <div className="w-full flex item-center justify-center">
-                <img src={`${data?.avatar?.url}`} alt="" 
-                    className="w-[150px] h-[150px] object-cover rounded-full"
+            <div className="w-full item-center justify-center flex sm:hidden" onClick={() => setIsOpen(true)}>
+            <FaChevronRight 
+                className="text-[12px]"
+            />
+            </div>
+            <div className="w-full item-center justify-center hidden sm:flex" onClick={() => setIsOpen(true)}>
+            <img src={`${data?.avatar?.url}`} alt="" 
+                    className=" w-[80px] h-[80px] sm:w-[150px] sm:h-[150px] object-cover rounded-full" 
                 />
             </div>
+            <div className="hidden sm:block">
+
+            
+            <div className="">
             <h3 className="text-center py-2 text-[20px]">
                 {data?.name}
             </h3>
@@ -133,6 +152,8 @@ const ShopInfo = ({isOwner}) => {
                 </div>
             )
         }
+            </div>
+    </div>
     </div>
         )
     }

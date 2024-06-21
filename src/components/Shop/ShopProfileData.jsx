@@ -8,6 +8,8 @@ import Loader from '../Layout/Loader';
 import { getAllProductsShop } from '../../redux/actions/product';
 import { getAllEventsShop } from '../../redux/actions/event';
 import Ratings from '../Products/Ratings';
+import axios from 'axios';
+import { server } from '../../server';
 
 const ShopProfileData = ({isOwner}) => {
 
@@ -35,21 +37,21 @@ const ShopProfileData = ({isOwner}) => {
                 <div className="flex w-full items-center justify-between ">
                     <div className="w-full flex">
                         <div className="flex items-center">
-                            <h5 className={`font-[600] text-[20px] ${active === 1 ? "text-red-500" : "text-black"} cursor-pointer pr-[20px]`}
+                            <h5 className={`font-[600] text-[12px] sm:text-[20px] ${active === 1 ? "text-red-500" : "text-black"} cursor-pointer pr-[20px] `}
                                 onClick={() => setActive(1)}
                                 >
                                 Produk Toko
                             </h5>
                         </div>
                         <div className="flex items-center">
-                            <h5 className={`font-[600] text-[20px] ${active === 2 ? "text-red-500" : "text-black"} cursor-pointer pr-[20px]`}
+                            <h5 className={`font-[600] text-[12px] sm:text-[20px] ${active === 2 ? "text-red-500" : "text-black"} cursor-pointer pr-[20px] `}
                             onClick={() => setActive(2)} 
                             >
                                 Event Sedang Berjalan
                             </h5>
                         </div>
                         <div className="flex items-center">
-                            <h5 className={`font-[600] text-[20px] ${active === 3 ? "text-red-500" : "text-black"} cursor-pointer pr-[20px]`}
+                            <h5 className={`font-[600] text-[12px] sm:text-[20px] ${active === 3 ? "text-red-500" : "text-black"} cursor-pointer pr-[20px] `}
                             onClick={() => setActive(3)}
                             >
                                 Review Toko
@@ -107,11 +109,9 @@ const ShopProfileData = ({isOwner}) => {
           {allReviews &&
             allReviews.map((item, index) => (
               <div className="w-full flex my-4">
-                <img
-                  src={`${item?.user?.avatar?.url}`}
-                  className="w-[50px] h-[50px] rounded-full"
-                  alt=""
-                />
+                <div>
+                  <FotoProfil user={item?.user?._id}  />    
+                </div>  
                 <div className="pl-2">
                   <div className="flex w-full items-center">
                     <h1 className="font-[600] pr-2">{item?.user?.name}</h1>
@@ -128,8 +128,7 @@ const ShopProfileData = ({isOwner}) => {
             </h5>
           )}
         </div>
-      )}
-                
+      )}               
             </div>
         )
     }
@@ -138,3 +137,22 @@ const ShopProfileData = ({isOwner}) => {
 }
 
 export default ShopProfileData
+
+const FotoProfil = ({user}) => {
+    const [gambar,setGambar] = useState();
+    console.log("id user", user);
+
+    useEffect(() => {
+        axios.get(`${server}/user/user-info/${user}`).then((res) => {
+            console.log("hasil :" ,res?.data?.user?.avatar?.url)
+            setGambar(res?.data?.user?.avatar?.url)
+        }).catch((err) => {
+            console.log("error :", err )
+        })
+    },[])
+    return (
+        <div>
+            <img src={`${gambar}`} alt="" className="xl:w-[50px] xl:h-[50px] h-[30px] w-[30px]  rounded-full" />
+        </div>
+    )
+}
