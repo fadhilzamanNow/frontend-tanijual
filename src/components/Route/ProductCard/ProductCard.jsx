@@ -92,7 +92,7 @@ const ProductCard = ({data,toko, isEvent}) => {
                 <img src={`${data?.images[0]?.url}`} 
                     alt = ""
                     className='w-full h-[170px] object-cover items-center justify-center rounded-md shadow-sm'
-                    onClick={() => handleClick()}
+                    onClick={isEvent ? (null) : (() => handleClick())}
                 />
             
             </div>
@@ -146,6 +146,8 @@ const ProductCard = ({data,toko, isEvent}) => {
                 </div>  
                 {/* opsi samping */}
 
+                {isEvent ? (null) : ( 
+                <>
                 {click ? (
                     <AiFillHeart 
                     size={22}
@@ -181,6 +183,10 @@ const ProductCard = ({data,toko, isEvent}) => {
                 {open ? <ProductDetailsCard setOpen={setOpen} data={data} />
                  : null
                 }
+            </>
+            )
+
+        }
             
 
 

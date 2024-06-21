@@ -14,7 +14,7 @@ const CreateProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch(); 
 
-    const [images,setImages] = useState([]);
+    const [images,setImages] = useState();
     const [name,setName] = useState("");
     const [description,setDescription] = useState("");
     const [category,setCategory] = useState("");
@@ -39,7 +39,7 @@ const CreateProduct = () => {
 
         const newForm = new FormData();
 
-        images.forEach((image) => {
+       /*  images.forEach((image) => {
             newForm.append("images",image);
         })
 
@@ -51,7 +51,12 @@ const CreateProduct = () => {
         newForm.append("discountPrice",discountPrice)
         newForm.append("stock",stock)
         newForm.append("shopId", seller._id)
-        dispatch(createProduct({name,description,category,tags,originalPrice,discountPrice,stock,shopId : seller._id, images }))
+        console.log("images : ", images) */
+        if(images){
+            dispatch(createProduct({name,description,category,tags,originalPrice,discountPrice,stock,shopId : seller._id, images }))
+        }else{
+            toast.error("Gambar belum dimasukkan")
+        }
     }
 
     const handleImageChange = (e) => {

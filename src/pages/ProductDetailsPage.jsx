@@ -12,6 +12,13 @@ import { BsFillChatLeftTextFill } from "react-icons/bs";
 import { addToCart } from '../redux/actions/cart.js';
 import { toast } from 'react-toastify';
 
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { server } from '../server.js';
+
+
+
+
 
 const ProductDetailsPage = () => {
 
@@ -21,7 +28,10 @@ const ProductDetailsPage = () => {
     const {allProducts, isLoading} = useSelector((state) => state.products)
     const [count,setCount] = useState(1)
     const {cart} = useSelector((state) => state.cart)
+    const {user,isAuthenticated} = useSelector((state) => state.user)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
    
 
     console.log(productName);
@@ -54,6 +64,23 @@ const ProductDetailsPage = () => {
       }
       setCount(1)
   }
+
+  const handleMessageSubmit = async(e) => {
+    if(isAuthenticated){
+        const groupTitle = data?.shopId + user._id 
+        const userId = user._id 
+        const sellerId = data?.shopId
+        await axios.post(`${server}/conversation/create-new-conversation`,{
+            groupTitle,userId,sellerId
+        }).then((res) => {
+            navigate(`/inbox?${res.data.conversation._id}`)
+        }).catch((err) => {
+            toast.error(`${err.response.data.message}`)
+        })
+    }else{
+        toast.error("Untuk memulai pembicaran, login terlebih dahulu")
+    }
+}
     
   return (
     <div className="relative">
@@ -71,7 +98,7 @@ const ProductDetailsPage = () => {
         
         <div className="sticky h-[50px] w-full bottom-0  bg-white z-[99999999999999] rounded flex justify-around items-center xl:hidden">
         
-          <div className="text-[12px] text-gray-500 p-2 rounded border border-gray-500 h-[80%] flex items-center !px-3">
+          <div className="text-[12px] text-gray-500 p-2 rounded border border-gray-500 h-[80%] flex items-center !px-3" onClick={() => handleMessageSubmit()}>
             <BsFillChatLeftTextFill/>
           </div>
           <div className="flex  items-center border border-green-500 bg-white p-2 rounded text-[12px] h-[80%] text-green-500 w-[40%] justify-between">

@@ -279,7 +279,7 @@ const Header = ({activeHeading}) => {
                                 <Link to="/login">
                                  <CgProfile
                                      size={30}
-                                     className="text-white"
+                                     className="text-black"
                                  />
                                  </Link>
                             )
@@ -358,11 +358,23 @@ const Header = ({activeHeading}) => {
                                     
                                    </div>
                                 ) : (
-                                    <>
-                                    <Link to="/login">Masuk</Link>
-                                    / 
-                                    <Link to="/sign-up">Daftar</Link>
-                                    </>
+                                null
+                                )
+                            }
+                            {
+                                isSeller === true ? (
+                                    <Link to="/dashboard">
+                                        <div className="bg-black text-white p-2 w-[80%] text-center  text-[12px] font-[600] rounded-xl">
+                                            Dashboard Penjual
+                                        </div>
+                                    </Link>
+                                    
+                                ) : (
+                                    <Link to="/shop-login">
+                                    <div className="bg-black text-white p-2 w-[80%] text-center  text-[12px] font-[600] rounded-xl" >
+                                        Masuk Sebagai Penjual
+                                    </div>
+                                    </Link>
                                 )
                             }
                             </div>
