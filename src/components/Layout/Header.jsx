@@ -14,6 +14,8 @@ import Cart from "../cart/Cart"
 import { RxCross1 } from "react-icons/rx";
 import Wishlist from "../Wishlist/Wishlist"
 import { getAllProducts } from "../../redux/actions/product";
+import { Drawer } from "flowbite-react";
+
 const Header = ({activeHeading}) => {
   const {isAuthenticated, user} = useSelector((state) => state.user);
   const {cart} = useSelector ((state) => state.cart)
@@ -228,17 +230,7 @@ const Header = ({activeHeading}) => {
 
                     {/* keranjang */}
 
-                    {
-                        openCart ? (
-                            <Cart setOpenCart={setOpenCart} />
-                        ) : (null)
-                    }
                     
-
-                    { /* wishlist */}
-                    {
-                        openWishlist ? (<Wishlist setOpenWishlist={setOpenWishlist} />) : (null)
-                    }
                 </div>
       </div>
       </div>
@@ -300,6 +292,7 @@ const Header = ({activeHeading}) => {
                                         <AiOutlineHeart 
                                             size={30}
                                             className="mt-5 ml-3 relative" 
+                                            onClick={() => setOpenWishlist(true)}
                                         />
                                         <span className="absolute right-0 top-0 rounded-full bg-green-500 w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                                         {wishlist && wishlist.length}
@@ -377,12 +370,27 @@ const Header = ({activeHeading}) => {
                                     </Link>
                                 )
                             }
+
+
                             </div>
                         </div>
                     </div>
                 )
             }
       </div>
+
+      {
+                        openCart ? (
+                            <Cart setOpenCart={setOpenCart} />
+                        ) : (null)
+                    }
+                    
+
+                    { /* wishlist */}
+                    
+                    {
+                        openWishlist ? (<Wishlist setOpenWishlist={setOpenWishlist} />) || console.log("Wishlist") : (null)
+                    }
       </div>
    
   );

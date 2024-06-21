@@ -28,8 +28,8 @@ const Cart = ({setOpenCart}) => {
 
     const totalPrice = cart.reduce((acc,item) => acc + item.qty * item.discountPrice, 0)
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#fafafa00] h-screen z-10">
-        <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow-sm overflow-y-scroll">
+    <div className="fixed top-0 left-0 w-full bg-[#fafafa00] h-screen z-[1000000000000000000000]">
+        <div className="fixed top-0 right-0 min-h-full w-[80%] xl:w-[25%] bg-white flex flex-col justify-between shadow-sm overflow-y-scroll">
             {
                 cart && cart.length === 0 ?  (
                     <div className="w-full h-screen flex items-center justify-center">

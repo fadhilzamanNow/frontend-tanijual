@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { backend_url } from '../../server';
 import { toast } from 'react-toastify';
 import { addToCart } from '../../redux/actions/cart';
+import { Drawer } from "flowbite-react";
+
 
 const Wishlist = ({setOpenWishlist}) => {
 
@@ -23,8 +25,8 @@ const Wishlist = ({setOpenWishlist}) => {
 
     
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#fafafa00] h-screen z-10">
-        <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow">
+    <div className="fixed top-0 left-0 w-full bg-[#fafafa00] h-screen z-[100000000000000000000000] ">
+        <div className="fixed top-0 right-0 min-h-full w-[80%] xl:w-[25%] bg-white flex flex-col justify-between shadow overflow-y-scroll">
            {
             wishlist && wishlist.length === 0  ? (
                 <div className="w-full h-screen flex items-center justify-center">
@@ -56,7 +58,7 @@ const Wishlist = ({setOpenWishlist}) => {
                     <AiOutlineHeart 
                         size={25}
                     />
-                    <h5 className="pl-2 text-[20px] font-[500]">
+                    <h5 className="pl-2 text-[12px] sm:text-[20px] font-[500]">
                          {wishlist && wishlist.length} yang disukai
                     </h5>
                 </div>
