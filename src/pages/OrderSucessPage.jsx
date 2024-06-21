@@ -3,11 +3,15 @@ import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 import Lottie from "react-lottie";
 import animationData from "../Assests/animations/Animation-1716530272526.json";
+import CheckoutSteps from "../components/Checkout/CheckoutSteps";
 
 const OrderSuccessPage = () => {
   return (
     <div>
       <Header />
+      <div className="mt-20 sm:mt-4">
+        <CheckoutSteps active={3}/>
+      </div>
       <Success />
       <Footer />
     </div>

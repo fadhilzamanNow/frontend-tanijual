@@ -10,7 +10,9 @@ const CheckoutPage = () => {
         <Header />
         <br />
         <br />
-        <CheckoutSteps active={1} />
+        <div className="mt-20 sm:mt-0">
+          <CheckoutSteps active={1} />
+        </div>
         <Checkout />
         <br />
         <br />

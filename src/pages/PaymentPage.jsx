@@ -3,6 +3,10 @@ import CheckoutSteps from '../components/Checkout/CheckoutSteps'
 import Footer from '../components/Layout/Footer'
 import Header from '../components/Layout/Header'
 import Payment from "../components/Payment/Payment.jsx";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+
 
 const PaymentPage = () => {
   return (
@@ -10,7 +14,9 @@ const PaymentPage = () => {
        <Header />
        <br />
        <br />
-       <CheckoutSteps active={2} />
+       <div className="mt-20 sm:mt-0">
+          <CheckoutSteps active={2} />
+        </div>
        <Payment />
        <br />
        <br />

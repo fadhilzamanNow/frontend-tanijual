@@ -32,7 +32,7 @@ const CountDown = ({data,toko}) => {
     }
 
     return (
-      <span className="text-[25px] text-[#475ad2]">
+      <span className="text-[12px] text-red-400">
         {timeLeft[interval]} {interval}{" "}
       </span>
     );
@@ -41,9 +41,11 @@ const CountDown = ({data,toko}) => {
   return (
     <div>
       {timerComponents.length ? (
-        timerComponents
+        <div className="text-[12px]">
+          {timerComponents}
+        </div>
       ) : (
-        <span className={`text-[red]  ${toko ? ("text=[5px]") : ("text-[20px]")} `}>Waktu Promo Habis</span>
+        <span className={`text-[red]  ${toko ? ("text-[12px]") : ("text-[16px]")} `}>WAKTU PROMO HABIS</span>
       )}
     </div>
   );

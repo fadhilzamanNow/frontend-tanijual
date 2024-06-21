@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { categoriesData, productData } from "../../static/data";
 import { AiOutlineHeart, AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai";
 import {IoIosArrowDown, IoIosArrowForward} from "react-icons/io"
@@ -25,6 +25,8 @@ const Header = ({activeHeading}) => {
   const [active,setActive] = useState(false);
   const [dropDown,setDropDown] = useState(false)
   const inputChange = useRef(null)
+
+  const navigate = useNavigate()
 
   const [openCart,setOpenCart] = useState(false);
   const [openWishlist,setOpenWishlist] = useState(false);
@@ -67,6 +69,12 @@ const Header = ({activeHeading}) => {
   }
 
 
+  const pindah = (id) => {
+    navigate(`/product/${id}`)
+    window.location.reload()
+    
+  }
+
   return (
     
     <div>
@@ -95,14 +103,14 @@ const Header = ({activeHeading}) => {
               onClick={handleSubmit}
             />
             { searchData && searchData.length !==0 ? (
-                <div className="absolute h-[50vh] overflow-y-scroll bg-slate-50 shadow-sm-2 z-[9] p-4 w-full">
+                <div className="absolute h-[50vh] overflow-y-scroll bg-slate-50 shadow-sm-2 z-[9] p-4 w-full" >
                     {searchData && searchData.map((i, index) => {
                         const d = i.name;
-
+                        const id = i._id
                         const Product_name = d.replace(/\s+/g,"-");
                         return (
-                            <Link to={`/product/${d}}`}>
-                                <div className="w-full flex items-start py-3" key={index}>
+                            
+                                <div className="w-full flex items-start py-3" key={index} onClick={() => pindah(id) }>
                                     <img src={i?.images[0]?.url} alt="" 
                                         className="w-[40px] h-[40px] mr-[10px]"
                                     />
@@ -110,7 +118,7 @@ const Header = ({activeHeading}) => {
                                         {i.name}
                                     </div>
                                 </div>
-                            </Link>
+                            
                         )
                     })}
                 </div>
@@ -318,11 +326,10 @@ const Header = ({activeHeading}) => {
                                     <div className="absolute w-full bg-slate-50 shadow-sm-2 z-[9] p-4 h-[40vh] overflow-y-scroll">
                                     {searchData && searchData.map((i, index) => {
                                         const d = i.name;
-
-                                        const Product_name = d.replace(/\s+/g,"-");
+                                        const id = i._id
                                         return (
-                                            <Link to={`/product/${Product_name}`}>
-                                                <div className="w-full flex items-start py-3 " key={index}>
+                                            
+                                                <div className="w-full flex items-start py-3 " key={index} onClick={() => pindah(id)}>
                                                 <img src={i?.images[0]?.url} alt="" 
                                                     className="w-[40px] h-[40px] mr-[10px]"
                                                 />
@@ -330,7 +337,6 @@ const Header = ({activeHeading}) => {
                                                         {i.name}
                                                     </div>
                                                 </div>
-                                            </Link>
                                         )
                                     })}
                 </div>
@@ -360,7 +366,6 @@ const Header = ({activeHeading}) => {
                                 )
                             }
                             </div>
-
                         </div>
                     </div>
                 )

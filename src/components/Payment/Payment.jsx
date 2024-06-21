@@ -5,6 +5,10 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 
 
 const Payment = () => {
@@ -114,8 +118,15 @@ const Payment = () => {
     })
   }
 
+  const steps = [
+    'Select master blaster campaign settings',
+    'Create an ad group',
+    'Create an ad',
+  ];
+
   return (
     <div className="w-full flex flex-col items-center py-8">
+      
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
         <div className="w-full 800px:w-[65%]">
           <PaymentInfo user={user}  open={open} setOpen={setOpen} onApprove={onApprove} createOrder={createOrder} cashOnDeliveryHandler={cashOnDeliveryHandler} />
@@ -165,8 +176,8 @@ const PaymentInfo = ({open,setOpen,onApprove, createOrder,paymentHandler, cashOn
             <form className="w-full" onSubmit={cashOnDeliveryHandler}>
               <input
                 type="submit"
-                value="Confirm"
-                className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
+                value="Pilih"
+                className={`${styles.button} bg-green-500 text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
               />
             </form>
           </div>
@@ -216,7 +227,7 @@ const CartData = ({orderData}) => {
           </div>
           
          
-        ) : (<div className="bg-red-500 text-center text-white p-3 rounded-md">
+        ) : (<div className="bg-black text-white font-[600] text-center p-3 rounded-md">
           Tidak Menggunakan Kode Kupon
         </div>)}
         

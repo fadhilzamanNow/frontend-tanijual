@@ -32,10 +32,10 @@ const ProfileSideBar = ({active,setActive}) => {
             <HiOutlineShoppingBag size={20} color={active === 2 ? "red" : ""} />
             <span className={`pl-3 ${active === 2 ? "text-red-400" : ""} 800px:block hidden`}>Pesanan</span>
         </div>
-        <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(3)}>
+        {/* <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(3)}>
             <HiOutlineReceiptRefund size={20} color={active === 3 ? "red" : ""} />
             <span className={`pl-3 ${active === 3 ? "text-red-400" : ""} 800px:block hidden`}>Pengembalian</span>
-        </div>
+        </div> */}
         <div className="flex items-center cursor-pointer w-full mb-8" onClick={() => setActive(4) || navigate("/inbox")}>
             <AiOutlineMessage size={20} color={active === 4 ? "red" : ""} />
             <span className={`pl-3 ${active === 4 ? "text-red-400" : ""} 800px:block hidden`}>Inbox</span>

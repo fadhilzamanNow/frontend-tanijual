@@ -35,6 +35,7 @@ const DashboardHero = () => {
 
   const serviceCharge = 0
   const availableBalance = (totalEarningWithoutTax - serviceCharge).toFixed() || 0;
+ 
   
  /*  const columns = [
     { field: "id", headerName: "ID Pesanan", minWidth: 150, flex: 0.7 },
@@ -112,10 +113,22 @@ const DashboardHero = () => {
           label : item?.name
       })
   })
+
+  const cekdata3 = data3.filter((i) => {
+    return i.value !== 0
+  })
+
+  const cekdata2 = data2.filter((i) => {
+    return i.value !== 0
+  })
+
+
   useEffect(() => {
     console.log(window.innerHeight);
     console.log(window.innerWidth)
   },[window.innerHeight,window.innerWidth])
+
+  
   return (
     <div className="w-full p-8">
       <h3 className="text-[22px] font-Poppins pb-2">Analisis Penjualan</h3>
@@ -181,29 +194,37 @@ const DashboardHero = () => {
             <h1 className="font-[600]">
               Statistik Stok Antar Produk
             </h1>
-          <PieChart
-                              series={[
-                                {
-                                  data: data2,
-                                  highlightScope: { faded: 'global', highlighted: 'item' },
-                                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                                  cx : "85%",
-                                  cy : "80%"
-                                  
-                                  },
-                              ]}
-                              width={250}
-                              height={200}
-                              margin={{bottom : 60}}
-                              slotProps={{
-                                legend : {
-                                  hidden : true
-                                }
-                                
-                                
-                              }}
-                              
-                              />
+            {
+              cekdata2?.length === 0 ? (
+                <div>
+                Kamu Belum menjual Produk Apapun
+                </div>
+              ) : (
+                <PieChart
+                series={[
+                  {
+                    data: data2,
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                    cx : "85%",
+                    cy : "80%"
+                    
+                    },
+                ]}
+                width={250}
+                height={200}
+                margin={{bottom : 60}}
+                slotProps={{
+                  legend : {
+                    hidden : true
+                  }
+                  
+                  
+                }}
+                
+                />
+              )
+            }
                               
                             
           </Box>
@@ -216,31 +237,37 @@ const DashboardHero = () => {
             <h1 className="font-[600]">
               Statistik Produk Terlaris
             </h1>
-          <PieChart
-                              series={[
-                                {
-                                  data: data3,
-                                  highlightScope: { faded: 'global', highlighted: 'item' },
-                                  faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                                  cx : "85%",
-                                  cy : "80%"
-                                  
-                                  },
-                              ]}
-                              width={250}
-                              height={200}
-                              margin={{bottom : 60}}
-                              slotProps={{
-                                legend : {
-                                  hidden : true
-                                }
-                                
-                                
-                              }}  
-                              
-                              />
-                              
-                            
+            {
+              cekdata3?.length === 0 ? (
+                <div>
+                Produkmu belum terdapat penjualan
+                </div>
+              ) : (
+                <PieChart
+                series={[
+                  {
+                    data: data3,
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                    cx : "85%",
+                    cy : "80%"
+                    
+                    },
+                ]}
+                width={250}
+                height={200}
+                margin={{bottom : 60}}
+                slotProps={{
+                  legend : {
+                    hidden : true
+                  }
+                  
+                  
+                }}
+                
+                />
+              )
+            }
           </Box>
         </div>
       </div>
@@ -252,7 +279,13 @@ const DashboardHero = () => {
             <h1 className="font-[600]">
               Statistik Stok Antar Produk
             </h1>
-          <PieChart
+            {
+              cekdata2?.length === 0 ? (
+                <div>
+                  Kamu Belum menjual Produk Apapun
+                </div>
+              ) : (
+                <PieChart
                               series={[
                                 {
                                   data: data2,
@@ -279,7 +312,8 @@ const DashboardHero = () => {
                               }}
                               
                               />
-                              
+              )
+            }                    
                             
           </Box>
         </div>
@@ -291,7 +325,13 @@ const DashboardHero = () => {
             <h1 className="font-[600]">
               Statistik Produk Terlaris
             </h1>
-          <PieChart
+            {
+              cekdata3?.length === 0 ? (
+                <div>
+                  Produkmu belum terdapat penjualan
+                </div>
+              ) : (
+                <PieChart
                               series={[
                                 {
                                   data: data3,
@@ -316,8 +356,12 @@ const DashboardHero = () => {
                                 
                                 
                               }}
-                              />
                               
+                              />
+              )
+            }    
+           
+            
                             
           </Box>
         </div>

@@ -22,7 +22,7 @@ import { IoSearchOutline } from "react-icons/io5";
 
 
 
-const ProductCard = ({data,toko}) => {
+const ProductCard = ({data,toko, isEvent}) => {
 
     const [click,setClick] = useState(false);
     const [open,setOpen] = useState(false);
@@ -83,7 +83,7 @@ const ProductCard = ({data,toko}) => {
         
         <img src={`${backend_url}/${data?.images[0]}`} alt="" className="w-[100px] h-[100px] rounded-full object-contain" />
     </div> */}
-    <div className="w-full h-[320px] bg-white rounded-lg   relative cursor-pointer shadow-2xl mb-12">
+    <div className={`w-full ${isEvent ? ("h-auto]") : ("h-[320px]")} bg-white rounded-lg   relative cursor-pointer shadow-2xl mb-12`}>
         <div className="">
             <div className='w-full  flex items-center justify-center'>
 
