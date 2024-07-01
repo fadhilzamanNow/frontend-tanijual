@@ -64,6 +64,8 @@ const Wishlist = ({setOpenWishlist}) => {
                 </div>
 
                 { /* detail barang keranjang */}
+                <div className="overflow-y-scroll h-[100vh]">
+
                 {
                     wishlist && wishlist.map((i,index) => {
                         return (
@@ -71,6 +73,7 @@ const Wishlist = ({setOpenWishlist}) => {
                         )
                     })
                 }
+                </div>
             </div>
             )
            }
