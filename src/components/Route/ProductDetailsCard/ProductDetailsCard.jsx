@@ -159,10 +159,14 @@ const ProductDetailsCard = ({data,setOpen,event}) => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center">
                                         <div className="">
-                                            <img src={data?.shop?.avatar?.url} alt="" className='h-[30px] w-[30px] rounded'/>
+                                            <Link to={`/shop/preview/${data.shopId}`}>
+                                                <img src={data?.shop?.avatar?.url} alt="" className='h-[30px] w-[30px] rounded'/>
+                                            </Link>
                                         </div>
                                         <div className="text-center !text-[12px]">
+                                            <Link to={`/shop/preview/${data.shopId}`}>
                                             {data?.shop?.name}
+                                            </Link>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-x-2 font-[600] hover:text-gray-500"  onClick={handleMessageSubmit}>

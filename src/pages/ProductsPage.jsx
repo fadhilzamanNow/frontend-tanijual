@@ -13,7 +13,7 @@ const ProductsPage = () => {
 
     const {allProducts,isLoading} = useSelector((state) => state.products)
     
-
+    
     useEffect(()=> {
         if(categoryData === null){
             const d = allProducts

@@ -96,7 +96,7 @@ const ProductDetailsPage = () => {
             data && <SuggestedProduct data={data} />
         }
         
-        <div className="sticky h-[50px] w-full bottom-0  bg-white z-[99999999999999] rounded flex justify-around items-center xl:hidden">
+        <div className="sticky h-[50px] w-full bottom-0  bg-white z-[9999] rounded flex justify-around items-center xl:hidden">
         
           <div className="text-[12px] text-gray-500 p-2 rounded border border-gray-500 h-[80%] flex items-center !px-3" onClick={() => handleMessageSubmit()}>
             <BsFillChatLeftTextFill/>

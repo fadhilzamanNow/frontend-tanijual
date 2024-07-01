@@ -28,7 +28,7 @@ const Cart = ({setOpenCart}) => {
 
     const totalPrice = cart.reduce((acc,item) => acc + item.qty * item.discountPrice, 0)
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#fafafa00] h-screen z-[99999999999]">
+    <div className="fixed bottom-0 left-0 w-full bg-[#fafafa00] h-screen z-[99999999999]">
         <div className="fixed top-0 right-0 min-h-full w-[80%] xl:w-[25%] bg-white flex flex-col justify-between shadow-sm overflow-y-scroll">
             {
                 cart && cart.length === 0 ?  (
@@ -67,7 +67,7 @@ const Cart = ({setOpenCart}) => {
                         </div>
     
                         { /* detail barang keranjang */}
-                        <div className="overflow-y-scroll h-[80vh]">                        
+                        <div className="overflow-y-scroll h-[70vh] sm:h-[80vh]">                        
                         {
                             cart && cart.map((i,index) => {
                                 return (

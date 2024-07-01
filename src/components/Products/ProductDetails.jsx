@@ -146,7 +146,8 @@ const ProductDetails = ({data}) => {
                                                 return (
                                                     <img src={gambar?.url} className="w-full h-full"/>
                                                 )
-                                            })}
+                                            })
+                                            }
                                         </Carousel>
                                     </div>
                                 <div>
@@ -329,11 +330,15 @@ const ProductDetails = ({data}) => {
                                                 <div>
                                                     <div className="flex mt-2 items-center ">
                                                     <div>
+                                                        <Link to={`/shop/preview/${data.shopId}`}>
                                                         <img src={data?.shop?.avatar?.url} alt="" className="h-[75px] w-[75px] rounded-full" />
+                                                        </Link>
                                                     </div>
                                                     <div>
                                                         <div className="font-[600] flex">
+                                                            <Link to={`/shop/preview/${data.shopId}`}>
                                                             {data?.shop?.name.toUpperCase()}
+                                                            </Link>
                                                         </div>
                                                       
                                                         <div className="text-gray-400 text-[12px]">
@@ -477,11 +482,15 @@ const ProductDetails = ({data}) => {
                             </div>
                             <div className="mt-2 bg-white flex items-center rounded gap-x-[10px] xl:hidden">
                                     <div className="">
+                                    <Link to={`/shop/preview/${data.shopId}`}>
                                       <img src={data?.shop?.avatar?.url} alt="" className="h-[40px] w-[40px]"/>   
+                                    </Link>
                                     </div>
                                     <div className="block">
                                         <div className="font-[500]">
-                                            {data?.shop?.name.toUpperCase()}
+                                            <Link to={`/shop/preview/${data.shopId}`}>
+                                                {data?.shop?.name.toUpperCase()}
+                                            </Link>
                                         </div>
                                         <div className="text-[12px]">
                                             {data?.shop?.address?.slice(0,20)}

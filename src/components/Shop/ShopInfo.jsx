@@ -81,7 +81,7 @@ const ShopInfo = ({isOwner, isOpen, setIsOpen}) => {
             />
             </div>
             <div className="w-full item-center justify-center hidden sm:flex" onClick={() => setIsOpen(true)}>
-            <img src={`${data?.avatar?.url}`} alt="" 
+                <img src={`${data?.avatar?.url}`} alt="" 
                     className=" w-[80px] h-[80px] sm:w-[150px] sm:h-[150px] object-cover rounded-full" 
                 />
             </div>
