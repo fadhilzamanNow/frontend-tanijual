@@ -1,6 +1,6 @@
 import { defineConfig } from '@rsbuild/core';
 import {pluginReact} from "@rsbuild/plugin-react";
-
+import { tanstackRouter } from '@tanstack/router-plugin/rspack'
 
 
 export default defineConfig({
@@ -12,5 +12,10 @@ export default defineConfig({
     entry : {
         index : "./src/index.tsx"
     }
-  }
+  },
+ tools: {
+    rspack: {
+      plugins: [tanstackRouter({ target: 'react', autoCodeSplitting: true })],
+    },
+  },
 });
