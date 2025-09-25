@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CheckoutStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELED
+  FULFILLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart      Cart?
+  checkouts Checkout[]
+
+  @@index([email])
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([userId])
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int      @default(1)
+  unitPrice Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([cartId, productId])
+  @@index([productId])
+  @@index([cartId])
+}
+
+model Seller {
+  id        String   @id @default(uuid())
+  username  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@index([email])
+}
+
+model Product {
+  id        String   @id @default(uuid())
+  name      String
+  quantity  Int
+  price     Decimal  @db.Decimal(10, 2)
+  sellerId  String
+  seller    Seller   @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+
+  checkoutItem CheckoutItem[]
+  cartItem     CartItem[]
+}
+
+model Checkout {
+  id        String         @id @default(uuid())
+  userId    String?
+  user      User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  status    CheckoutStatus @default(PENDING)
+  total     Decimal        @db.Decimal(10, 2)
+  createdAt DateTime       @default(now())
+
+  items CheckoutItem[]
+
+  @@index([userId])
+}
+
+model CheckoutItem {
+  id          String  @id @default(uuid())
+  checkoutId  String
+  productId   String
+  quantity    Int     @default(1)
+  unitPrice   Decimal @db.Decimal(10, 2)
+  productName String
+
+  checkout Checkout @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([checkoutId])
+  @@index([productId])
+}

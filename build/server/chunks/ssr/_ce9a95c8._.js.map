@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///home/progz/Documents/projects/frontend-tanijual/src/app/layout.tsx"],"sourcesContent":["import type { Metadata } from \"next\"\n\nexport const metadata: Metadata = {\n  title: 'TaniJual',\n  description: 'Aplikasi Jual Beli Pertanian Holtikultura',\n}\n\nexport default function RootLayout({\n  children,\n}: {\n  children: React.ReactNode\n}) {\n  return (\n    <html lang=\"en\">\n    <body>\n        <div id=\"root\">{children}</div>\n    </body>\n</html>\n\n  )\n}"],"names":[],"mappings":";;;;;;;;AAEO,MAAM,WAAqB;IAChC,OAAO;IACP,aAAa;AACf;AAEe,SAAS,WAAW,EACjC,QAAQ,EAGT;IACC,qBACE,8OAAC;QAAK,MAAK;kBACX,cAAA,8OAAC;sBACG,cAAA,8OAAC;gBAAI,IAAG;0BAAQ;;;;;;;;;;;;;;;;AAKxB","debugId":null}},
-    {"offset": {"line": 43, "column": 0}, "map": {"version":3,"sources":["file:///home/progz/Documents/projects/frontend-tanijual/node_modules/next/src/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.ts"],"sourcesContent":["module.exports = (\n  require('../../module.compiled') as typeof import('../../module.compiled')\n).vendored['react-rsc']!.ReactJsxDevRuntime\n"],"names":["module","exports","require","vendored","ReactJsxDevRuntime"],"mappings":"AAAAA,OAAOC,OAAO,GACZC,QAAQ,4HACRC,QAAQ,CAAC,YAAY,CAAEC,kBAAkB","ignoreList":[0],"debugId":null}}]
-}
