@@ -125,25 +125,23 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
+  profilePhotoUrl: 'profilePhotoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CartScalarFieldEnum = {
+exports.Prisma.SavedScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.CartItemScalarFieldEnum = {
+exports.Prisma.SavedItemScalarFieldEnum = {
   id: 'id',
-  cartId: 'cartId',
+  savedId: 'savedId',
   productId: 'productId',
-  quantity: 'quantity',
-  unitPrice: 'unitPrice',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SellerScalarFieldEnum = {
@@ -151,6 +149,7 @@ exports.Prisma.SellerScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
+  profilePhotoUrl: 'profilePhotoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -158,9 +157,18 @@ exports.Prisma.SellerScalarFieldEnum = {
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   quantity: 'quantity',
   price: 'price',
   sellerId: 'sellerId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProductImageScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  imageUrl: 'imageUrl',
+  order: 'order',
   createdAt: 'createdAt'
 };
 
@@ -205,10 +213,11 @@ exports.CheckoutStatus = exports.$Enums.CheckoutStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Cart: 'Cart',
-  CartItem: 'CartItem',
+  Saved: 'Saved',
+  SavedItem: 'SavedItem',
   Seller: 'Seller',
   Product: 'Product',
+  ProductImage: 'ProductImage',
   Checkout: 'Checkout',
   CheckoutItem: 'CheckoutItem'
 };

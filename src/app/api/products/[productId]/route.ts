@@ -1,75 +1,89 @@
-import { NextRequest } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { json } from '@/lib/api-helpers'
-import { productUpdateSchema } from '@/lib/validators'
+import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { json, handleApiError } from "@/lib/api-helpers";
+import { productUpdateSchema } from "@/lib/validators";
 
-
-export const runtime = 'nodejs'
-
-
-function isPrismaKnownError(error: unknown, code: string) {
-  return typeof error === 'object' && error !== null && 'code' in error && (error as any).code === code
-}
-
+export const runtime = "nodejs";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: { productId: string } },
 ) {
-  const product = await prisma.product.findUnique({ where: { id: params.productId } })
-  if (!product) return json({ error: 'Product not found' }, { status: 404 })
-  return json(product)
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: params.productId },
+      include: {
+        images: {
+          orderBy: { order: "asc" },
+        },
+        seller: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            profilePhotoUrl: true,
+          },
+        },
+      },
+    });
+    if (!product) return json({ error: "Product not found" }, { status: 404 });
+    return json(product);
+  } catch (error) {
+    return handleApiError(error);
+  }
 }
-
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: { productId: string } },
 ) {
-  const body = await req.json()
-  const data = productUpdateSchema.parse(body)
-
-  if (Object.keys(data).length === 0) {
-    return json({ error: 'No changes provided' }, { status: 400 })
-  }
-
   try {
-    const { price, ...rest } = data
+    const body = await req.json();
+    const data = productUpdateSchema.parse(body);
+
+    if (Object.keys(data).length === 0) {
+      return json({ error: "No changes provided" }, { status: 400 });
+    }
+
+    // Build update data with only defined values
+    const updateData: Record<string, any> = {};
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.quantity !== undefined) updateData.quantity = data.quantity;
+    if (data.price !== undefined) updateData.price = data.price;
+    if (data.description !== undefined)
+      updateData.description = data.description;
+
     const updated = await prisma.product.update({
       where: { id: params.productId },
-      data: {
-        ...rest,
-        ...(price !== undefined ? { price } : {}),
+      data: updateData,
+      include: {
+        images: {
+          orderBy: { order: "asc" },
+        },
+        seller: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            profilePhotoUrl: true,
+          },
+        },
       },
-    })
-    return json(updated)
+    });
+    return json(updated);
   } catch (error) {
-    if (isPrismaKnownError(error, 'P2025')) {
-      return json({ error: 'Product not found' }, { status: 404 })
-    }
-    throw error
+    return handleApiError(error);
   }
 }
 
-
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { productId: string } }
+  { params }: { params: { productId: string } },
 ) {
   try {
-    await prisma.product.delete({ where: { id: params.productId } })
-    return json({ ok: true })
+    await prisma.product.delete({ where: { id: params.productId } });
+    return json({ ok: true });
   } catch (error) {
-    if (isPrismaKnownError(error, 'P2025')) {
-      return json({ error: 'Product not found' }, { status: 404 })
-    }
-
-    if (isPrismaKnownError(error, 'P2003')) {
-      return json({
-        error: 'Cannot delete product with active references',
-      }, { status: 409 })
-    }
-
-    throw error
+    return handleApiError(error);
   }
 }

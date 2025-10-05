@@ -10,8 +10,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum CheckoutStatus {
@@ -23,54 +24,53 @@ enum CheckoutStatus {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  username        String
+  email           String   @unique
+  password        String
+  profilePhotoUrl String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  cart      Cart?
+  saved     Saved?
   checkouts Checkout[]
 
   @@index([email])
 }
 
-model Cart {
-  id        String     @id @default(uuid())
-  userId    String     @unique
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     CartItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+model Saved {
+  id        String      @id @default(uuid())
+  userId    String      @unique
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     SavedItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   @@index([userId])
 }
 
-model CartItem {
+model SavedItem {
   id        String   @id @default(uuid())
-  cartId    String
+  savedId   String
   productId String
-  quantity  Int      @default(1)
-  unitPrice Decimal  @db.Decimal(10, 2)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  saved   Saved   @relation(fields: [savedId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
 
-  @@unique([cartId, productId])
+  @@unique([savedId, productId])
   @@index([productId])
-  @@index([cartId])
+  @@index([savedId])
 }
 
 model Seller {
-  id        String   @id @default(uuid())
-  username  String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(uuid())
+  username        String
+  email           String   @unique
+  password        String
+  profilePhotoUrl String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   products Product[]
 
@@ -78,16 +78,31 @@ model Seller {
 }
 
 model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String?  @db.Text
+  quantity    Int
+  price       Decimal  @db.Decimal(10, 2)
+  sellerId    String
+  seller      Seller   @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  createdAt   DateTime @default(now())
+
+  images       ProductImage[]
+  checkoutItem CheckoutItem[]
+  savedItem    SavedItem[]
+}
+
+model ProductImage {
   id        String   @id @default(uuid())
-  name      String
-  quantity  Int
-  price     Decimal  @db.Decimal(10, 2)
-  sellerId  String
-  seller    Seller   @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  productId String
+  imageUrl  String
+  order     Int      @default(0)
   createdAt DateTime @default(now())
 
-  checkoutItem CheckoutItem[]
-  cartItem     CartItem[]
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([productId, order])
 }
 
 model Checkout {
