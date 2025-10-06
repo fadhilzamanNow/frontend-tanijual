@@ -12,3 +12,4 @@
 
 # Keep example file
 !.env.example
+.next
