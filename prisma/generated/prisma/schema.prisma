@@ -77,19 +77,31 @@ model Seller {
   @@index([email])
 }
 
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  products Product[]
+}
+
 model Product {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
-  description String?  @db.Text
+  description String?   @db.Text
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   quantity    Int
-  price       Decimal  @db.Decimal(10, 2)
+  price       Decimal   @db.Decimal(10, 2)
   sellerId    String
-  seller      Seller   @relation(fields: [sellerId], references: [id], onDelete: Restrict)
-  createdAt   DateTime @default(now())
+  seller      Seller    @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  createdAt   DateTime  @default(now())
 
   images       ProductImage[]
   checkoutItem CheckoutItem[]
   savedItem    SavedItem[]
+
+  @@index([categoryId])
 }
 
 model ProductImage {

@@ -4,7 +4,9 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductImageCarousel from "@/components/Carousel/ProductImageCarousel";
 import ProductSuggestionCard from "@/components/ProductSuggestionCard";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
 import { FaBookmark, FaRegBookmark, FaWhatsapp } from "react-icons/fa6";
+import { useLoading } from "@/contexts/LoadingContext";
 import {
   Accordion,
   AccordionContent,
@@ -26,6 +28,17 @@ type Product = {
   quantity: number;
   price: number | string;
   sellerId: string;
+  categoryId?: string | null;
+  category?: {
+    id: string;
+    name: string;
+  } | null;
+  seller?: {
+    id: string;
+    username: string;
+    email: string;
+    profilePhotoUrl?: string | null;
+  };
   images?: Array<{
     id: string;
     imageUrl: string;
@@ -55,6 +68,8 @@ export default function ProductDetailsPage({
   const [number, setNumber] = useState<number>(1);
   const [section, setSection] = useState<number>(1);
   const [suggestedProducts, setSuggestedProducts] = useState<Product[]>([]);
+  const [savedItemId, setSavedItemId] = useState<string | null>(null);
+  const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -75,6 +90,7 @@ export default function ProductDetailsPage({
     async function loadProduct() {
       try {
         setLoading(true);
+        startLoading();
         setError(null);
         const response = await fetch(`/api/products/${productId}`, {
           signal: controller.signal,
@@ -92,7 +108,10 @@ export default function ProductDetailsPage({
         );
       } finally {
         if (!controller.signal.aborted) {
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+            stopLoading();
+          }, 300);
         }
       }
     }
@@ -113,7 +132,7 @@ export default function ProductDetailsPage({
 
     async function checkSavedStatus() {
       try {
-        const response = await fetch("/api/saved/items", {
+        const response = await fetch("/api/saved", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -121,10 +140,16 @@ export default function ProductDetailsPage({
 
         if (response.ok) {
           const savedItems = await response.json();
-          const isProductSaved = savedItems.some(
+          const savedItem = savedItems.find(
             (item: any) => item.productId === product?.id,
           );
-          setIsSaved(isProductSaved);
+          if (savedItem) {
+            setIsSaved(true);
+            setSavedItemId(savedItem.id);
+          } else {
+            setIsSaved(false);
+            setSavedItemId(null);
+          }
         }
       } catch (err) {
         // Silently fail - not critical
@@ -171,30 +196,56 @@ export default function ProductDetailsPage({
       }
 
       setSubmitting(true);
+      startLoading();
       setFeedback(null);
 
-      const response = await fetch("/api/saved/item", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ productId: product.id }),
-      });
+      if (isSaved && savedItemId) {
+        // Unsave the product
+        const response = await fetch(`/api/saved/item/${savedItemId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        throw new Error(body?.error ?? "Failed to save product");
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body?.error ?? "Failed to unsave product");
+        }
+
+        setIsSaved(false);
+        setSavedItemId(null);
+        setFeedback("Product removed from saved!");
+      } else {
+        // Save the product
+        const response = await fetch("/api/saved/item", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ productId: product.id }),
+        });
+
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body?.error ?? "Failed to save product");
+        }
+
+        const data = await response.json();
+        setIsSaved(true);
+        setSavedItemId(data.id);
+        setFeedback("Product saved for later!");
       }
-
-      setIsSaved(true);
-      setFeedback("Product saved for later!");
     } catch (err) {
       setFeedback(
         err instanceof Error ? err.message : "Unexpected error occurred",
       );
     } finally {
-      setSubmitting(false);
+      setTimeout(() => {
+        setSubmitting(false);
+        stopLoading();
+      }, 300);
     }
   }
 
@@ -226,6 +277,7 @@ export default function ProductDetailsPage({
 
   return (
     <>
+      <CustomBreadcrumb />
       <section className="flex flex-col pb-24 md:pb-8 gap-2 min-h-[70vh]">
         <div className="flex justify-between gap-2">
           {/* Product Images Carousel */}
@@ -328,15 +380,15 @@ export default function ProductDetailsPage({
               <button
                 type="button"
                 onClick={handleSaveProduct}
-                disabled={submitting || isSaved}
-                className=" text-green-500  px-4 py-2 text-sm font-semibold   transition  flex items-center justify-center gap-2 hover:bg-black/5 border border-green-500 rounded-md"
+                disabled={submitting}
+                className=" text-green-500  px-4 py-2 text-sm font-semibold   transition  flex items-center justify-center gap-2 hover:bg-black/5 border border-green-500 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaved ? (
                   <FaBookmark className="text-white" />
                 ) : (
                   <FaRegBookmark className="text-green-500" />
                 )}
-                {submitting ? "Saving…" : isSaved ? "Saved" : "Simpan"}
+                {submitting ? "Memproses…" : isSaved ? "Tersimpan" : "Simpan"}
               </button>
             </div>
 
@@ -431,7 +483,7 @@ export default function ProductDetailsPage({
           <button
             type="button"
             onClick={handleSaveProduct}
-            disabled={submitting || isSaved}
+            disabled={submitting}
             className="flex items-center justify-center gap-2 bg-white px-4 py-4 text-sm font-semibold transition border-r border-slate-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSaved ? (

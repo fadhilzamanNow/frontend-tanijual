@@ -355,6 +355,27 @@ const sellerData = [
 async function main() {
   console.log("🌱 Starting seed process...");
 
+  // Create categories first
+  console.log("📂 Creating categories...");
+  const categories = [
+    { name: "Sayuran" },
+    { name: "Buah" },
+    { name: "Rempah" },
+    { name: "Umbi" },
+    { name: "Biji-bijian" },
+    { name: "Lain" },
+  ];
+
+  for (const category of categories) {
+    await prisma.category.upsert({
+      where: { name: category.name },
+      update: {},
+      create: category,
+    });
+    console.log(`  ✓ Created category: ${category.name}`);
+  }
+  console.log(`✅ Created ${categories.length} categories`);
+
   const sellerPassword = "seller123!";
   const hashedSellerPassword = await bcrypt.hash(sellerPassword, 10);
 

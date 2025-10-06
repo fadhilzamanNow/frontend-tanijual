@@ -24,6 +24,7 @@ export async function GET(
             profilePhotoUrl: true,
           },
         },
+        category: true,
       },
     });
     if (!product) return json({ error: "Product not found" }, { status: 404 });
@@ -68,6 +69,7 @@ export async function PATCH(
             profilePhotoUrl: true,
           },
         },
+        category: true,
       },
     });
     return json(updated);

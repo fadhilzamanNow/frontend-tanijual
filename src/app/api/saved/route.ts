@@ -16,13 +16,29 @@ export async function GET(req: NextRequest) {
       where: { id: saved.id },
       include: {
         items: {
-          include: { product: true },
+          include: {
+            product: {
+              include: {
+                images: {
+                  orderBy: { order: "asc" },
+                },
+                seller: {
+                  select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                    profilePhotoUrl: true,
+                  },
+                },
+              },
+            },
+          },
           orderBy: { createdAt: "desc" },
         },
       },
     });
 
-    return json(full);
+    return json(full?.items || []);
   } catch (error) {
     return handleApiError(error);
   }

@@ -6,6 +6,7 @@
     "@vitejs/plugin-react": "^5.0.2",
     "dotenv-cli": "^10.0.0",
     "prisma": "^6.16.2",
+    "supabase": "^2.48.3",
     "tailwindcss": "^4.1.13",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
@@ -13,7 +14,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development next dev",
+    "dev": " NODE_ENV=development next dev",
     "dev:db": "NODE_ENV=development prisma studio",
     "build": "NODE_ENV=production next build",
     "build:dev": "NODE_ENV=development next build",

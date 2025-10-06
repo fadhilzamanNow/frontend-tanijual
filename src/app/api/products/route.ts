@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const sellerId = searchParams.get("sellerId");
+    const categoryId = searchParams.get("categoryId");
     const limit = searchParams.get("limit")
       ? parseInt(searchParams.get("limit")!, 10)
       : undefined;
@@ -16,8 +17,12 @@ export async function GET(req: NextRequest) {
       ? parseInt(searchParams.get("offset")!, 10)
       : undefined;
 
+    const where: any = {};
+    if (sellerId) where.sellerId = sellerId;
+    if (categoryId) where.categoryId = categoryId;
+
     const products = await prisma.product.findMany({
-      where: sellerId ? { sellerId } : {},
+      where,
       include: {
         images: {
           orderBy: { order: "asc" },
@@ -30,6 +35,7 @@ export async function GET(req: NextRequest) {
             profilePhotoUrl: true,
           },
         },
+        category: true,
       },
       orderBy: { createdAt: "desc" },
       ...(limit !== undefined ? { take: limit } : {}),

@@ -18,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import SavedItemsDrawer from "./SavedItemsDrawer";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -50,6 +51,7 @@ function readRole(): AuthRole {
 export default function NavBar() {
   const [role, setRole] = useState<AuthRole>("guest");
   const isSmallScreen = useMediaQuery("(min-width: 640px)");
+  const [savedDrawerOpen, setSavedDrawerOpen] = useState(false);
 
   useEffect(() => {
     setRole(readRole());
@@ -170,19 +172,26 @@ export default function NavBar() {
 
           {role !== "guest" && (
             <div className="flex text-xl justify-center items-center gap-4">
-              <div>
+              <button
+                onClick={() => setSavedDrawerOpen(true)}
+                className="hover:text-green-500 transition"
+              >
                 <FaRegBookmark />
-              </div>
+              </button>
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <FaRegUser />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="z-999">
                     <DropdownMenuLabel>Quick Action</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Akun saya</DropdownMenuItem>
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/settings">Akun saya</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Logout
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -190,6 +199,11 @@ export default function NavBar() {
           )}
         </div>
       </div>
+
+      <SavedItemsDrawer
+        isOpen={savedDrawerOpen}
+        onClose={() => setSavedDrawerOpen(false)}
+      />
     </nav>
   );
 }

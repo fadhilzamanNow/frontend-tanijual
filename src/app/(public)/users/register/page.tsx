@@ -1,58 +1,104 @@
-'use client'
+"use client";
 
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function UserRegisterPage() {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    // Check if user is already authenticated
+    if (typeof window === "undefined") return;
+
+    const authToken = window.localStorage.getItem("authToken");
+    const authRole = window.localStorage.getItem("authRole");
+
+    if (authToken && authRole === "user") {
+      router.replace("/");
+      return;
+    }
+
+    if (authToken && authRole === "seller") {
+      router.replace("/seller/dashboard");
+      return;
+    }
+
+    setChecking(false);
+  }, [router]);
+
+  if (checking) {
+    return (
+      <section className="mx-auto w-full max-w-md space-y-6">
+        <p className="text-center text-sm text-slate-600">
+          Checking authentication...
+        </p>
+      </section>
+    );
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setMessage(null)
-    setLoading(true)
+    event.preventDefault();
+    setMessage(null);
+    setLoading(true);
 
     try {
-      const response = await fetch('/api/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
-      })
+      });
 
       if (!response.ok) {
-        const body = await response.json().catch(() => ({}))
-        throw new Error(body?.error ?? 'Unable to register')
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body?.error ?? "Unable to register");
       }
 
-      const body = await response.json()
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem('authToken', body.authToken)
-        window.localStorage.setItem('authRole', 'user')
-        window.localStorage.setItem('userId', body.user?.id ?? '')
-        window.localStorage.setItem('userName', body.user?.username ?? '')
-        window.dispatchEvent(new Event('auth-change'))
+      const body = await response.json();
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("authToken", body.authToken);
+        window.localStorage.setItem("authRole", "user");
+        window.localStorage.setItem("userId", body.user?.id ?? "");
+        window.localStorage.setItem("userName", body.user?.username ?? "");
+        window.dispatchEvent(new Event("auth-change"));
       }
 
-      setMessage('Registration complete! Token stored locally.')
+      setMessage("Registration complete! Redirecting...");
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Unexpected error')
+      setMessage(error instanceof Error ? error.message : "Unexpected error");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   return (
     <section className="mx-auto w-full max-w-md space-y-6">
       <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold text-slate-900">Create a User Account</h1>
-        <p className="text-sm text-slate-600">Register to start filling carts and supporting local farmers.</p>
+        <h1 className="text-2xl font-semibold text-slate-900">
+          Create a User Account
+        </h1>
+        <p className="text-sm text-slate-600">
+          Register to start filling carts and supporting local farmers.
+        </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
         <div className="space-y-2">
-          <label htmlFor="username" className="block text-sm font-medium text-slate-700">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-slate-700"
+          >
             Username
           </label>
           <input
@@ -64,7 +110,10 @@ export default function UserRegisterPage() {
           />
         </div>
         <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-slate-700"
+          >
             Email
           </label>
           <input
@@ -77,7 +126,10 @@ export default function UserRegisterPage() {
           />
         </div>
         <div className="space-y-2">
-          <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-slate-700"
+          >
             Password
           </label>
           <input
@@ -94,21 +146,21 @@ export default function UserRegisterPage() {
           disabled={loading}
           className="w-full rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-emerald-300"
         >
-          {loading ? 'Registering…' : 'Register'}
+          {loading ? "Registering…" : "Register"}
         </button>
       </form>
 
       {message ? (
         <div
           className={`rounded-lg border p-4 text-sm ${
-            message.includes('complete')
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-              : 'border-rose-200 bg-rose-50 text-rose-700'
+            message.includes("complete")
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-rose-200 bg-rose-50 text-rose-700"
           }`}
         >
           {message}
         </div>
       ) : null}
     </section>
-  )
+  );
 }

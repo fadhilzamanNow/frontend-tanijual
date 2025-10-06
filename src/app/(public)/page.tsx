@@ -4,6 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import HomeCarousel from "@/components/Carousel/HomeCarousel";
 import ProductCard from "@/components/ProductCard";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
+import { FaLeaf, FaShoppingBasket, FaUsers, FaTruck } from "react-icons/fa";
+import { useLoading } from "@/contexts/LoadingContext";
+
+type Category = {
+  id: string;
+  name: string;
+};
 
 type Product = {
   id: string;
@@ -11,6 +19,8 @@ type Product = {
   price: number | string;
   quantity: number;
   createdAt: string;
+  categoryId?: string | null;
+  category?: Category | null;
   images?: Array<{
     id: string;
     imageUrl: string;
@@ -33,7 +43,20 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
+  const [stats, setStats] = useState({ products: 0, sellers: 0 });
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { startLoading, stopLoading } = useLoading();
   const LIMIT = 6;
+
+  const categoryEmojis: Record<string, string> = {
+    Sayuran: "🥬",
+    Buah: "🍎",
+    Rempah: "🌶️",
+    Umbi: "🥔",
+    "Biji-bijian": "🌾",
+    Lain: "📦",
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -47,6 +70,22 @@ export default function HomePage() {
     setRole(storedRole === "user" ? "user" : "guest");
   }, [router]);
 
+  // Load categories
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const response = await fetch("/api/categories");
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+        }
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      }
+    }
+    loadCategories();
+  }, []);
+
   useEffect(() => {
     if (role === "seller") return;
 
@@ -55,10 +94,17 @@ export default function HomePage() {
     async function loadInitialProducts() {
       try {
         setLoading(true);
+        startLoading();
         setError(null);
-        const response = await fetch(`/api/products?limit=${LIMIT}&offset=0`, {
-          signal: controller.signal,
-        });
+        const categoryParam = selectedCategory
+          ? `&categoryId=${selectedCategory}`
+          : "";
+        const response = await fetch(
+          `/api/products?limit=${LIMIT}&offset=0${categoryParam}`,
+          {
+            signal: controller.signal,
+          },
+        );
         if (!response.ok) {
           const body = await response.json().catch(() => ({}));
           throw new Error(body?.error ?? "Failed to load products");
@@ -72,13 +118,35 @@ export default function HomePage() {
         setError(err instanceof Error ? err.message : "Unexpected error");
       } finally {
         if (!controller.signal.aborted) {
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+            stopLoading();
+          }, 300);
         }
       }
     }
 
     loadInitialProducts();
     return () => controller.abort();
+  }, [role, selectedCategory]);
+
+  useEffect(() => {
+    // Fetch stats
+    async function loadStats() {
+      try {
+        const response = await fetch("/api/products?limit=1000");
+        if (response.ok) {
+          const data = await response.json();
+          const uniqueSellers = new Set(data.map((p: Product) => p.seller.id));
+          setStats({ products: data.length, sellers: uniqueSellers.size });
+        }
+      } catch (err) {
+        console.error("Failed to load stats:", err);
+      }
+    }
+    if (role !== "seller") {
+      loadStats();
+    }
   }, [role]);
 
   async function loadMoreProducts() {
@@ -86,9 +154,13 @@ export default function HomePage() {
 
     try {
       setLoadingMore(true);
+      startLoading();
       setError(null);
+      const categoryParam = selectedCategory
+        ? `&categoryId=${selectedCategory}`
+        : "";
       const response = await fetch(
-        `/api/products?limit=${LIMIT}&offset=${offset}`,
+        `/api/products?limit=${LIMIT}&offset=${offset}${categoryParam}`,
       );
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
@@ -101,7 +173,10 @@ export default function HomePage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unexpected error");
     } finally {
-      setLoadingMore(false);
+      setTimeout(() => {
+        setLoadingMore(false);
+        stopLoading();
+      }, 300);
     }
   }
 
@@ -177,45 +252,126 @@ export default function HomePage() {
   }
 
   return (
-    <section className="">
-      <header className="">
-        <div className="">
-          <HomeCarousel />
+    <section className="space-y-8">
+      <CustomBreadcrumb />
+      {/* Hero Banner */}
+      <div className="relative rounded-3xl bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 overflow-hidden shadow-xl">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]"></div>
         </div>
-        <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">
-          Your bridge between farmers and buyers
-        </h1>
-        <p className="max-w-2xl text-base text-slate-600">
-          Browse fresh horticulture products, keep track of your cart, or manage
-          your seller dashboard. Use the navigation above to jump to the area
-          that makes sense for you.
-        </p>
-      </header>
-
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <h2 className="text-lg font-semibold text-slate-900">
-          Getting Started
-        </h2>
-        <ul className="mt-4 space-y-3 text-sm text-slate-600">
-          <li>
-            New here? Head to the login or register screens to create an account
-            as a buyer or a seller.
-          </li>
-          <li>
-            Buyers can access private routes such as{" "}
-            <span className="font-semibold text-green-500">/my-carts</span> and{" "}
-            <span className="font-semibold text-green-500">/settings</span> once
-            authenticated.
-          </li>
-          <li>
-            Sellers manage their shop from the dedicated{" "}
-            <span className="font-semibold text-green-500">
-              /seller/dashboard
-            </span>{" "}
-            area.
-          </li>
-        </ul>
+        <div className="relative px-6 py-12 sm:px-12 sm:py-16">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-2 mb-4">
+              <FaLeaf className="text-white text-2xl" />
+              <span className="text-white/90 font-medium">
+                Platform Jual Beli Pertanian
+              </span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
+              Hasil Panen Segar
+              <br />
+              Langsung dari Petani
+            </h1>
+            <p className="text-lg text-white/90 mb-6 max-w-2xl">
+              Hubungkan petani dan pembeli dalam satu platform. Dapatkan produk
+              hortikultura segar dengan harga terbaik.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button className="bg-white text-green-600 px-6 py-3 rounded-full font-semibold hover:bg-green-50 transition shadow-lg">
+                Mulai Belanja
+              </button>
+              <button className="bg-green-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-800 transition border-2 border-white/20">
+                Jadi Penjual
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Stats Section */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-green-500 p-3 rounded-xl">
+              <FaShoppingBasket className="text-white text-xl" />
+            </div>
+          </div>
+          <p className="text-2xl font-bold text-slate-900">{stats.products}+</p>
+          <p className="text-sm text-slate-600">Produk Tersedia</p>
+        </div>
+        <div className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-100">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-blue-500 p-3 rounded-xl">
+              <FaUsers className="text-white text-xl" />
+            </div>
+          </div>
+          <p className="text-2xl font-bold text-slate-900">{stats.sellers}+</p>
+          <p className="text-sm text-slate-600">Penjual Aktif</p>
+        </div>
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-amber-500 p-3 rounded-xl">
+              <FaTruck className="text-white text-xl" />
+            </div>
+          </div>
+          <p className="text-2xl font-bold text-slate-900">Fast</p>
+          <p className="text-sm text-slate-600">Pengiriman Cepat</p>
+        </div>
+        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-emerald-500 p-3 rounded-xl">
+              <FaLeaf className="text-white text-xl" />
+            </div>
+          </div>
+          <p className="text-2xl font-bold text-slate-900">100%</p>
+          <p className="text-sm text-slate-600">Produk Segar</p>
+        </div>
+      </div>
+
+      {/* Categories */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <h2 className="text-xl font-bold text-slate-900 mb-4">
+          Kategori Populer
+        </h2>
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`flex items-center gap-2 px-5 py-3 rounded-full border transition ${
+              selectedCategory === null
+                ? "bg-green-500 text-white border-green-500"
+                : "bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200"
+            }`}
+          >
+            <span className="text-2xl">🌟</span>
+            <span className="font-semibold">Semua</span>
+          </button>
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCategory(category.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-full border transition ${
+                selectedCategory === category.id
+                  ? "bg-green-500 text-white border-green-500"
+                  : "bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200"
+              }`}
+            >
+              <span className="text-2xl">
+                {categoryEmojis[category.name] || "📦"}
+              </span>
+              <span
+                className={`font-semibold ${selectedCategory === category.id ? "text-white" : "text-slate-700 group-hover:text-green-700"}`}
+              >
+                {category.name}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Carousel Section */}
+      {/*<div className="rounded-2xl overflow-hidden shadow-lg">
+        <HomeCarousel />
+      </div>*/}
 
       {productGrid}
     </section>
