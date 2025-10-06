@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@tanstack/router-plugin": "^1.131.44",
-    "@types/node": "24.5.2",
+    "@types/node": "^24.5.2",
     "@vitejs/plugin-react": "^5.0.2",
     "dotenv-cli": "^10.0.0",
     "prisma": "^6.16.2",
