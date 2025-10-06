@@ -20,7 +20,7 @@
     "dev:db": "NODE_ENV=development prisma studio",
     "build": "NODE_ENV=production next build",
     "build:dev": "NODE_ENV=development next build",
-    "start": "npx serve@latest ./build",
+    "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "db:seed": "dotenv -e .env.development -- prisma db seed",
