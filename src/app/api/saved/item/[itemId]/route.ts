@@ -11,12 +11,12 @@ export const runtime = "nodejs";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { itemId: string } },
+  { params }: { params: Promise<{ itemId: string }> },
 ) {
   try {
     const userId = await requireUserId(req);
     const saved = await ensureUserSaved(userId);
-    const { itemId } = params;
+    const { itemId } = await params;
 
     const item = await prisma.savedItem.findFirst({
       where: { id: itemId, savedId: saved.id },

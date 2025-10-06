@@ -7,7 +7,7 @@ type ProductSuggestionCardProps = {
   id: string;
   name: string;
   price: number | string;
-  imageUrl?: string;
+  imageUrl?: string | undefined;
 };
 
 const IDR = new Intl.NumberFormat("id-ID", {

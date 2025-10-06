@@ -164,13 +164,17 @@ export default function ProductDetailsPage({
   useEffect(() => {
     if (!product) return;
 
+    const currentProductId = product.id;
+
     async function loadSuggestions() {
       try {
         const response = await fetch("/api/products?limit=4");
         if (response.ok) {
           const products = await response.json();
           // Filter out current product
-          const filtered = products.filter((p: Product) => p.id !== product.id);
+          const filtered = products.filter(
+            (p: Product) => p.id !== currentProductId,
+          );
           setSuggestedProducts(filtered.slice(0, 4));
         }
       } catch (err) {
@@ -313,11 +317,13 @@ export default function ProductDetailsPage({
               </span>
             )}
 
-            {section === 2 && (
+            {section === 2 && product.seller && (
               <>
                 <div className="flex justify-start items-center gap-2 pb-2 ">
                   <Avatar>
-                    <AvatarImage src={product.seller.profilePhotoUrl} />
+                    <AvatarImage
+                      src={product.seller.profilePhotoUrl || undefined}
+                    />
                     <AvatarFallback>
                       {product.seller.username.slice(0, 2)}
                     </AvatarFallback>
@@ -435,13 +441,15 @@ export default function ProductDetailsPage({
             <>
               <div className="flex justify-start items-center gap-2 pb-2 ">
                 <Avatar>
-                  <AvatarImage src={product.seller.profilePhotoUrl} />
+                  <AvatarImage
+                    src={product.seller?.profilePhotoUrl || undefined}
+                  />
                   <AvatarFallback>
-                    {product.seller.username.slice(0, 2)}
+                    {product.seller?.username.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <span className="text-black text-sm font-medium ">
-                  {product.seller.username}
+                  {product.seller?.username}
                 </span>
               </div>
               <span className="text-justify leading-6 text-sm">

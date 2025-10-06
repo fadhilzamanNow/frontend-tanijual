@@ -7,11 +7,12 @@ export const runtime = "nodejs";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) {
   try {
+    const { productId } = await params;
     const product = await prisma.product.findUnique({
-      where: { id: params.productId },
+      where: { id: productId },
       include: {
         images: {
           orderBy: { order: "asc" },
@@ -36,9 +37,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) {
   try {
+    const { productId } = await params;
     const body = await req.json();
     const data = productUpdateSchema.parse(body);
 
@@ -55,7 +57,7 @@ export async function PATCH(
       updateData.description = data.description;
 
     const updated = await prisma.product.update({
-      where: { id: params.productId },
+      where: { id: productId },
       data: updateData,
       include: {
         images: {
@@ -80,10 +82,11 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { productId: string } },
+  { params }: { params: Promise<{ productId: string }> },
 ) {
   try {
-    await prisma.product.delete({ where: { id: params.productId } });
+    const { productId } = await params;
+    await prisma.product.delete({ where: { id: productId } });
     return json({ ok: true });
   } catch (error) {
     return handleApiError(error);

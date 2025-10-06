@@ -1,21 +1,22 @@
-import { defineConfig } from '@rsbuild/core';
-import {pluginReact} from "@rsbuild/plugin-react";
-import { tanstackRouter } from '@tanstack/router-plugin/rspack'
+import { defineConfig } from "@rsbuild/core";
+import { pluginReact } from "@rsbuild/plugin-react";
 
+//@ts-ignore
+import { tanstackRouter } from "@tanstack/router-plugin/rspack";
 
 export default defineConfig({
   plugins: [pluginReact()],
-  html : {
-    template : "./index.html"
+  html: {
+    template: "./index.html",
   },
-  source : {
-    entry : {
-        index : "./src/index.tsx"
-    }
+  source: {
+    entry: {
+      index: "./src/index.tsx",
+    },
   },
- tools: {
+  tools: {
     rspack: {
-      plugins: [tanstackRouter({ target: 'react', autoCodeSplitting: true })],
+      plugins: [tanstackRouter({ target: "react", autoCodeSplitting: true })],
     },
   },
 });
