@@ -42,8 +42,6 @@ export async function uploadToS3(
       Key: key,
       Body: file,
       ContentType: contentType,
-      // Make the file publicly readable (optional - remove if you want private files)
-      ACL: "public-read",
     };
 
     const command = new PutObjectCommand(params);
