@@ -1,15 +1,30 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { sellerLoginSchema, type SellerLoginInput } from "@/lib/validators";
 
 export default function SellerLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+    watch,
+  } = useForm<SellerLoginInput>({
+    resolver: zodResolver(sellerLoginSchema),
+    mode: "onChange",
+  });
+
+  const email = watch("email");
+  const password = watch("password");
+  const isFormEmpty = !email || !password;
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -41,16 +56,14 @@ export default function SellerLoginPage() {
     );
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function onSubmit(data: SellerLoginInput) {
     setMessage(null);
-    setLoading(true);
 
     try {
       const response = await fetch("/api/sellers/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -73,24 +86,23 @@ export default function SellerLoginPage() {
       }, 500);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unexpected error");
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
-    <section className="mx-auto w-full max-w-md space-y-6">
-      <header className="space-y-2 text-center">
-        <h1 className="text-2xl font-semibold text-slate-900">Seller Login</h1>
-        <p className="text-sm text-slate-600">
-          Access your farm dashboard and manage your products.
-        </p>
-      </header>
-
+    <section className="bg-white mx-auto w-full space-y-6 flex flex-col justify-center items-center min-h-[calc(100vh-73px)] py-8 xs:bg-slate-50">
       <form
-        onSubmit={handleSubmit}
-        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-4 rounded-md border-0 xs:border border-slate-200 bg-white p-6 shadow-none xs:max-w-md xs:shadow-sm xs:w-111 animate-in slide-in-from-bottom-2 fade-in duration-500"
       >
+        <header className="space-y-2 text-center">
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Masuk sebagai Penjual
+          </h1>
+          <p className="text-sm text-slate-600">
+            Akses dashboard penjualanmu produk pertanianmu disini
+          </p>
+        </header>
         <div className="space-y-2">
           <label
             htmlFor="email"
@@ -101,11 +113,12 @@ export default function SellerLoginPage() {
           <input
             id="email"
             type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200"
+            {...register("email")}
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
+          {errors.email && (
+            <p className="text-sm text-rose-600">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -118,25 +131,35 @@ export default function SellerLoginPage() {
           <input
             id="password"
             type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200"
+            {...register("password")}
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
+          {errors.password && (
+            <p className="text-sm text-rose-600">{errors.password.message}</p>
+          )}
         </div>
 
         <button
           type="submit"
-          disabled={loading}
-          className="w-full rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:bg-orange-300"
+          disabled={isSubmitting || isFormEmpty}
+          className="w-full rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
         >
-          {loading ? "Signing in…" : "Sign in as seller"}
+          {isSubmitting ? "Signing in…" : "Sign in as seller"}
         </button>
+        <div className="flex gap-2 justify-center text-sm text-slate-600">
+          <span>Belum punya akun seller?</span>
+          <Link
+            href="/sellers/register"
+            className="text-green-500 hover:text-emerald-600 font-medium"
+          >
+            Daftar Sekarang
+          </Link>
+        </div>
       </form>
 
       {message ? (
         <div
-          className={`rounded-lg border p-4 text-sm ${
+          className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
             message.includes("successful")
               ? "border-orange-200 bg-orange-50 text-orange-700"
               : "border-rose-200 bg-rose-50 text-rose-700"

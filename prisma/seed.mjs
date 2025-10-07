@@ -372,11 +372,7 @@ async function main() {
       update: {},
       create: category,
     });
-    console.log(`  ✓ Created category: ${category.name}`);
-  }
-  console.log(`✅ Created ${categories.length} categories`);
-
-  const sellerPassword = "seller123!";
+    console.log(`  ✓ Created category: ${Password = "seller123!";
   const hashedSellerPassword = await bcrypt.hash(sellerPassword, 10);
 
   // Create 7 sellers

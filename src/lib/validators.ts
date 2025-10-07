@@ -26,27 +26,39 @@ export const savedAddItemSchema = z.object({
 export type SavedAddItemInput = z.infer<typeof savedAddItemSchema>;
 
 export const registerSchema = z.object({
-  username: z.string().min(2),
-  email: z.email(),
-  password: z.string().min(8),
+  username: z
+    .string()
+    .min(2, "Username must be at least 2 characters long")
+    .max(50, "Username must be less than 50 characters"),
+  email: z.email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(100, "Password must be less than 100 characters"),
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 
 export const sellerRegisterSchema = z.object({
-  username: z.string().min(2),
-  email: z.email(),
-  password: z.string().min(8),
+  username: z
+    .string()
+    .min(2, "Username must be at least 2 characters long")
+    .max(50, "Username must be less than 50 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(100, "Password must be less than 100 characters"),
 });
 export type SellerRegisterInput = z.infer<typeof sellerRegisterSchema>;
 
 export const sellerLoginSchema = z.object({
-  email: z.email(),
-  password: z.string().min(1),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
 });
 export type SellerLoginInput = z.infer<typeof sellerLoginSchema>;

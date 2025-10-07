@@ -31,7 +31,6 @@ export async function POST(req: NextRequest) {
         username: data.username,
         email: data.email,
         password,
-        cart: { create: {} },
       },
     });
 

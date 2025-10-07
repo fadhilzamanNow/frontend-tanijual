@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "./ui/input";
 import {
@@ -49,9 +50,14 @@ function readRole(): AuthRole {
 }
 
 export default function NavBar() {
+  const pathname = usePathname();
   const [role, setRole] = useState<AuthRole>("guest");
   const isSmallScreen = useMediaQuery("(min-width: 640px)");
   const [savedDrawerOpen, setSavedDrawerOpen] = useState(false);
+
+  // Check if we're on an auth page (login or register)
+  const isAuthPage =
+    pathname?.includes("/login") || pathname?.includes("/register");
 
   useEffect(() => {
     setRole(readRole());
@@ -107,19 +113,25 @@ export default function NavBar() {
 
   return (
     <nav className="sticky z-99 top-0 border-b border-slate-200 bg-white backdrop-blur">
-      <div className="mx-auto flex w-full container items-center justify-between gap-4 px-4  py-4 sm:px-0">
+      <div
+        className={`mx-auto flex w-full container items-center gap-4 px-4 py-4 sm:px-0 ${isAuthPage ? "justify-center xs:justify-start" : "justify-between"}`}
+      >
         <Link
           href="/"
           className="text-lg font-semibold tracking-tight text-green-500"
         >
           TaniJual
         </Link>
-        <div className="relative flex-1">
-          <Input placeholder={isSmallScreen ? "Cari Barang...." : ""} />
-          <FaMagnifyingGlass className="absolute top-1/2 -translate-y-1/2 right-2 text-stone-400" />
-        </div>
-        <div className="flex  items-center justify-end gap-2 sm:gap-4">
-          {/*<div className="hidden items-center gap-4 text-sm font-medium text-slate-600 md:flex">
+
+        {/* Only show search and other UI elements if NOT on auth pages */}
+        {!isAuthPage && (
+          <>
+            <div className="relative flex-1">
+              <Input placeholder={isSmallScreen ? "Cari Barang...." : ""} />
+              <FaMagnifyingGlass className="absolute top-1/2 -translate-y-1/2 right-2 text-stone-400" />
+            </div>
+            <div className="flex  items-center justify-end gap-2 sm:gap-4">
+              {/*<div className="hidden items-center gap-4 text-sm font-medium text-slate-600 md:flex">
             {menu.map((item) => (
               <Link
                 key={item.href}
@@ -131,7 +143,7 @@ export default function NavBar() {
             ))}
           </div>*/}
 
-          {/*<div className="flex flex-col items-end gap-2 md:hidden">
+              {/*<div className="flex flex-col items-end gap-2 md:hidden">
             <select
               className="w-40 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm"
               value=""
@@ -156,48 +168,50 @@ export default function NavBar() {
               {role !== "guest" ? <option value="logout">Logout</option> : null}
             </select>
           </div>*/}
-          {role == "guest" && (
-            <div className="flex justify-center items-center gap-2">
-              <Link href="/users/register">
-                <Button className="text-green-500 bg-white border border-green-500 hover:bg-black/5">
-                  Daftar
-                </Button>
-              </Link>
-
-              <Button className="bg-green-500 hover:bg-green-500/80">
-                Masuk
-              </Button>
+              {role == "guest" && (
+                <div className="flex justify-center items-center gap-2">
+                  <Link href="/users/register">
+                    <Button className="text-green-500 bg-white border border-green-500 hover:bg-black/5">
+                      Daftar
+                    </Button>
+                  </Link>
+                  <Link href="/users/login">
+                    <Button className="bg-green-500 hover:bg-green-500/80">
+                      Masuk
+                    </Button>
+                  </Link>
+                </div>
+              )}
+              {role !== "guest" && (
+                <div className="flex text-xl justify-center items-center gap-4">
+                  <button
+                    onClick={() => setSavedDrawerOpen(true)}
+                    className="hover:text-green-500 transition"
+                  >
+                    <FaRegBookmark />
+                  </button>
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <FaRegUser />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="z-999">
+                        <DropdownMenuLabel>Quick Action</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href="/settings">Akun saya</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleLogout}>
+                          Logout
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-
-          {role !== "guest" && (
-            <div className="flex text-xl justify-center items-center gap-4">
-              <button
-                onClick={() => setSavedDrawerOpen(true)}
-                className="hover:text-green-500 transition"
-              >
-                <FaRegBookmark />
-              </button>
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <FaRegUser />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="z-999">
-                    <DropdownMenuLabel>Quick Action</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/settings">Akun saya</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
       <SavedItemsDrawer

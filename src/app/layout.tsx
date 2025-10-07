@@ -16,13 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen bg-slate-50 font-sans text-slate-900">
+      <body className="flex flex-col min-h-screen bg-slate-50 font-sans text-slate-900">
         <LoadingProvider>
           <Overlay />
           <NavBar />
-          <main className="mt-4 sm:container mx-auto px-4 sm:px-0">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
         </LoadingProvider>
       </body>
     </html>
