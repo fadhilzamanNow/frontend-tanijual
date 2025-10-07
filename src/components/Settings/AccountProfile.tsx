@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaUser, FaEnvelope, FaCamera, FaLock } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLoading } from "@/contexts/LoadingContext";
+import { toast } from "react-toastify";
 
 type UserProfile = {
   id: string;
@@ -23,7 +24,6 @@ export default function AccountProfile() {
     confirmPassword: "",
   });
   const [saving, setSaving] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const { startLoading, stopLoading } = useLoading();
 
@@ -68,18 +68,17 @@ export default function AccountProfile() {
   async function handlePasswordChange() {
     try {
       if (passwordData.newPassword !== passwordData.confirmPassword) {
-        setFeedback("Password baru dan konfirmasi password tidak cocok");
+        toast.error("Password baru dan konfirmasi password tidak cocok");
         return;
       }
 
       if (passwordData.newPassword.length < 6) {
-        setFeedback("Password baru harus minimal 6 karakter");
+        toast.error("Password baru harus minimal 6 karakter");
         return;
       }
 
       setSaving(true);
       startLoading();
-      setFeedback(null);
 
       const token = window.localStorage.getItem("authToken");
       if (!token) return;
@@ -107,9 +106,9 @@ export default function AccountProfile() {
         newPassword: "",
         confirmPassword: "",
       });
-      setFeedback("Password berhasil diubah!");
+      toast.success("Password berhasil diubah!");
     } catch (err) {
-      setFeedback(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setTimeout(() => {
         setSaving(false);
@@ -124,20 +123,19 @@ export default function AccountProfile() {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      setFeedback("File harus berupa gambar");
+      toast.error("File harus berupa gambar");
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setFeedback("Ukuran file maksimal 5MB");
+      toast.error("Ukuran file maksimal 5MB");
       return;
     }
 
     try {
       setUploadingPhoto(true);
       startLoading();
-      setFeedback(null);
 
       const token = window.localStorage.getItem("authToken");
       if (!token) return;
@@ -160,9 +158,9 @@ export default function AccountProfile() {
 
       const updated = await response.json();
       setUser(updated);
-      setFeedback("Foto profil berhasil diperbarui!");
+      toast.success("Foto profil berhasil diperbarui!");
     } catch (err) {
-      setFeedback(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setTimeout(() => {
         setUploadingPhoto(false);
@@ -348,7 +346,6 @@ export default function AccountProfile() {
                     newPassword: "",
                     confirmPassword: "",
                   });
-                  setFeedback(null);
                 }}
                 disabled={saving}
                 className="px-6 py-2 border border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition"
@@ -359,19 +356,6 @@ export default function AccountProfile() {
           </div>
         )}
       </div>
-
-      {/* Feedback */}
-      {feedback && (
-        <div
-          className={`rounded-lg border p-4 text-sm ${
-            feedback.includes("berhasil")
-              ? "border-green-200 bg-green-50 text-green-700"
-              : "border-rose-200 bg-rose-50 text-rose-700"
-          }`}
-        >
-          {feedback}
-        </div>
-      )}
     </div>
   );
 }

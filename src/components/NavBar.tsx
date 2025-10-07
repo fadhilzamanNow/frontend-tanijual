@@ -1,15 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "./ui/input";
-import {
-  FaMagnifyingGlass,
-  FaRegBookmark,
-  FaRegUser,
-  FaUser,
-} from "react-icons/fa6";
+import { FaMagnifyingGlass, FaRegUser } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -19,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import SavedItemsDrawer from "./SavedItemsDrawer";
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -51,9 +45,10 @@ function readRole(): AuthRole {
 
 export default function NavBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [role, setRole] = useState<AuthRole>("guest");
+  const [searchQuery, setSearchQuery] = useState("");
   const isSmallScreen = useMediaQuery("(min-width: 640px)");
-  const [savedDrawerOpen, setSavedDrawerOpen] = useState(false);
 
   // Check if we're on an auth page (login or register)
   const isAuthPage =
@@ -78,7 +73,6 @@ export default function NavBar() {
     if (role === "user") {
       return [
         { href: "/", label: "Home" },
-        { href: "/my-carts", label: "Saved" },
         { href: "/settings", label: "Settings" },
       ];
     }
@@ -111,6 +105,19 @@ export default function NavBar() {
     setRole("guest");
   }
 
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
+
+  function handleSearchClick() {
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
+
   return (
     <nav className="sticky z-99 top-0 border-b border-slate-200 bg-white backdrop-blur">
       <div
@@ -126,10 +133,20 @@ export default function NavBar() {
         {/* Only show search and other UI elements if NOT on auth pages */}
         {!isAuthPage && (
           <>
-            <div className="relative flex-1">
-              <Input placeholder={isSmallScreen ? "Cari Barang...." : ""} />
-              <FaMagnifyingGlass className="absolute top-1/2 -translate-y-1/2 right-2 text-stone-400" />
-            </div>
+            <form onSubmit={handleSearch} className="relative flex-1">
+              <Input
+                placeholder={isSmallScreen ? "Cari Barang...." : ""}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={handleSearchClick}
+                className="absolute top-1/2 -translate-y-1/2 right-2 text-stone-400 hover:text-green-500 transition-colors cursor-pointer"
+              >
+                <FaMagnifyingGlass />
+              </button>
+            </form>
             <div className="flex  items-center justify-end gap-2 sm:gap-4">
               {/*<div className="hidden items-center gap-4 text-sm font-medium text-slate-600 md:flex">
             {menu.map((item) => (
@@ -184,12 +201,6 @@ export default function NavBar() {
               )}
               {role !== "guest" && (
                 <div className="flex text-xl justify-center items-center gap-4">
-                  <button
-                    onClick={() => setSavedDrawerOpen(true)}
-                    className="hover:text-green-500 transition"
-                  >
-                    <FaRegBookmark />
-                  </button>
                   <div>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
@@ -213,11 +224,6 @@ export default function NavBar() {
           </>
         )}
       </div>
-
-      <SavedItemsDrawer
-        isOpen={savedDrawerOpen}
-        onClose={() => setSavedDrawerOpen(false)}
-      />
     </nav>
   );
 }

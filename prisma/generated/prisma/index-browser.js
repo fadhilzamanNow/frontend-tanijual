@@ -150,6 +150,7 @@ exports.Prisma.SellerScalarFieldEnum = {
   email: 'email',
   password: 'password',
   profilePhotoUrl: 'profilePhotoUrl',
+  motto: 'motto',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

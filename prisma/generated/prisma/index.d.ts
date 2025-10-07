@@ -5074,6 +5074,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     profilePhotoUrl: string | null
+    motto: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5084,6 +5085,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     profilePhotoUrl: string | null
+    motto: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5094,6 +5096,7 @@ export namespace Prisma {
     email: number
     password: number
     profilePhotoUrl: number
+    motto: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5106,6 +5109,7 @@ export namespace Prisma {
     email?: true
     password?: true
     profilePhotoUrl?: true
+    motto?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5116,6 +5120,7 @@ export namespace Prisma {
     email?: true
     password?: true
     profilePhotoUrl?: true
+    motto?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5126,6 +5131,7 @@ export namespace Prisma {
     email?: true
     password?: true
     profilePhotoUrl?: true
+    motto?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5209,6 +5215,7 @@ export namespace Prisma {
     email: string
     password: string
     profilePhotoUrl: string | null
+    motto: string | null
     createdAt: Date
     updatedAt: Date
     _count: SellerCountAggregateOutputType | null
@@ -5236,6 +5243,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     profilePhotoUrl?: boolean
+    motto?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     products?: boolean | Seller$productsArgs<ExtArgs>
@@ -5248,6 +5256,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     profilePhotoUrl?: boolean
+    motto?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["seller"]>
@@ -5258,6 +5267,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     profilePhotoUrl?: boolean
+    motto?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["seller"]>
@@ -5268,11 +5278,12 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     profilePhotoUrl?: boolean
+    motto?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SellerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "profilePhotoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["seller"]>
+  export type SellerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "profilePhotoUrl" | "motto" | "createdAt" | "updatedAt", ExtArgs["result"]["seller"]>
   export type SellerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Seller$productsArgs<ExtArgs>
     _count?: boolean | SellerCountOutputTypeDefaultArgs<ExtArgs>
@@ -5291,6 +5302,7 @@ export namespace Prisma {
       email: string
       password: string
       profilePhotoUrl: string | null
+      motto: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["seller"]>
@@ -5722,6 +5734,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Seller", 'String'>
     readonly password: FieldRef<"Seller", 'String'>
     readonly profilePhotoUrl: FieldRef<"Seller", 'String'>
+    readonly motto: FieldRef<"Seller", 'String'>
     readonly createdAt: FieldRef<"Seller", 'DateTime'>
     readonly updatedAt: FieldRef<"Seller", 'DateTime'>
   }
@@ -11849,6 +11862,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     profilePhotoUrl: 'profilePhotoUrl',
+    motto: 'motto',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12213,6 +12227,7 @@ export namespace Prisma {
     email?: StringFilter<"Seller"> | string
     password?: StringFilter<"Seller"> | string
     profilePhotoUrl?: StringNullableFilter<"Seller"> | string | null
+    motto?: StringNullableFilter<"Seller"> | string | null
     createdAt?: DateTimeFilter<"Seller"> | Date | string
     updatedAt?: DateTimeFilter<"Seller"> | Date | string
     products?: ProductListRelationFilter
@@ -12224,6 +12239,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     profilePhotoUrl?: SortOrderInput | SortOrder
+    motto?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     products?: ProductOrderByRelationAggregateInput
@@ -12238,6 +12254,7 @@ export namespace Prisma {
     username?: StringFilter<"Seller"> | string
     password?: StringFilter<"Seller"> | string
     profilePhotoUrl?: StringNullableFilter<"Seller"> | string | null
+    motto?: StringNullableFilter<"Seller"> | string | null
     createdAt?: DateTimeFilter<"Seller"> | Date | string
     updatedAt?: DateTimeFilter<"Seller"> | Date | string
     products?: ProductListRelationFilter
@@ -12249,6 +12266,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     profilePhotoUrl?: SortOrderInput | SortOrder
+    motto?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SellerCountOrderByAggregateInput
@@ -12265,6 +12283,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Seller"> | string
     password?: StringWithAggregatesFilter<"Seller"> | string
     profilePhotoUrl?: StringNullableWithAggregatesFilter<"Seller"> | string | null
+    motto?: StringNullableWithAggregatesFilter<"Seller"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Seller"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Seller"> | Date | string
   }
@@ -12763,6 +12782,7 @@ export namespace Prisma {
     email: string
     password: string
     profilePhotoUrl?: string | null
+    motto?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     products?: ProductCreateNestedManyWithoutSellerInput
@@ -12774,6 +12794,7 @@ export namespace Prisma {
     email: string
     password: string
     profilePhotoUrl?: string | null
+    motto?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput
@@ -12785,6 +12806,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    motto?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUpdateManyWithoutSellerNestedInput
@@ -12796,6 +12818,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    motto?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput
@@ -12807,6 +12830,7 @@ export namespace Prisma {
     email: string
     password: string
     profilePhotoUrl?: string | null
+    motto?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12817,6 +12841,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    motto?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12827,6 +12852,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    motto?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13368,6 +13394,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     profilePhotoUrl?: SortOrder
+    motto?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13378,6 +13405,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     profilePhotoUrl?: SortOrder
+    motto?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13388,6 +13416,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     profilePhotoUrl?: SortOrder
+    motto?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14833,6 +14862,7 @@ export namespace Prisma {
     email: string
     password: string
     profilePhotoUrl?: string | null
+    motto?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14843,6 +14873,7 @@ export namespace Prisma {
     email: string
     password: string
     profilePhotoUrl?: string | null
+    motto?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14964,6 +14995,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    motto?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14974,6 +15006,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     profilePhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    motto?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

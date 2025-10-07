@@ -5,19 +5,25 @@ const priceSchema = z
   .transform((v) => Number(v));
 
 export const productCreateSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, "Product name is required"),
   description: z.string().optional(),
-  quantity: z.number().int().min(0),
+  categoryId: z.string().uuid().optional(),
+  quantity: z.number().int().min(0, "Quantity must be 0 or greater"),
   price: priceSchema,
   sellerId: z.uuid(),
+  imageUrl: z.string().optional(),
+  imageKey: z.string().optional(),
 });
 export type ProductCreateInput = z.infer<typeof productCreateSchema>;
 
 export const productUpdateSchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().optional(),
+  categoryId: z.string().uuid().optional().nullable(),
   quantity: z.number().int().min(0).optional(),
   price: priceSchema.optional(),
+  imageUrl: z.string().optional(),
+  imageKey: z.string().optional(),
 });
 export type ProductUpdateInput = z.infer<typeof productUpdateSchema>;
 

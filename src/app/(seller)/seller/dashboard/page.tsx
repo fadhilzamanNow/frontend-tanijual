@@ -6,14 +6,16 @@ import { FaUser, FaBox } from "react-icons/fa";
 import AccountSettings from "@/components/SellerDashboard/AccountSettings";
 import ProductList from "@/components/SellerDashboard/ProductList";
 import CreateProduct from "@/components/SellerDashboard/CreateProduct";
+import EditProduct from "@/components/SellerDashboard/EditProduct";
 import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
 import { useLoading } from "@/contexts/LoadingContext";
 
-type TabType = "account" | "products" | "create-product";
+type TabType = "account" | "products" | "create-product" | "edit-product";
 
 export default function SellerDashboardPage() {
   const { authorized, checked } = useAuthGuard({ requiredRole: "seller" });
   const [activeTab, setActiveTab] = useState<TabType>("account");
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
@@ -36,12 +38,24 @@ export default function SellerDashboardPage() {
     handleTabChange("create-product");
   };
 
+  const handleEditProduct = (productId: string) => {
+    setEditingProductId(productId);
+    handleTabChange("edit-product");
+  };
+
   const handleBackToProducts = () => {
+    setEditingProductId(null);
     handleTabChange("products");
   };
 
   const handleProductCreated = () => {
     // Reload products list
+    handleTabChange("products");
+  };
+
+  const handleProductUpdated = () => {
+    // Reload products list
+    setEditingProductId(null);
     handleTabChange("products");
   };
 
@@ -83,7 +97,9 @@ export default function SellerDashboardPage() {
             <button
               onClick={() => handleTabChange("products")}
               className={`w-full flex items-center gap-3 px-4 py-3 text-left transition ${
-                activeTab === "products" || activeTab === "create-product"
+                activeTab === "products" ||
+                activeTab === "create-product" ||
+                activeTab === "edit-product"
                   ? "bg-green-50 text-green-700 border-l-4 border-green-500"
                   : "text-slate-700 hover:bg-slate-50"
               }`}
@@ -99,12 +115,22 @@ export default function SellerDashboardPage() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             {activeTab === "account" && <AccountSettings />}
             {activeTab === "products" && (
-              <ProductList onAddProduct={handleAddProduct} />
+              <ProductList
+                onAddProduct={handleAddProduct}
+                onEditProduct={handleEditProduct}
+              />
             )}
             {activeTab === "create-product" && (
               <CreateProduct
                 onBack={handleBackToProducts}
                 onSuccess={handleProductCreated}
+              />
+            )}
+            {activeTab === "edit-product" && editingProductId && (
+              <EditProduct
+                productId={editingProductId}
+                onBack={handleBackToProducts}
+                onSuccess={handleProductUpdated}
               />
             )}
           </div>

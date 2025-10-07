@@ -7,42 +7,55 @@ import { productCreateSchema, type ProductCreateInput } from "@/lib/validators";
 import ImageUpload from "@/components/ImageUpload";
 import { FaArrowLeft } from "react-icons/fa";
 import { z } from "zod";
+import { toast } from "react-toastify";
+import { useLoading } from "@/contexts/LoadingContext";
 
 type Category = {
   id: string;
   name: string;
 };
 
-// Create form schema without sellerId
-const createProductFormSchema = productCreateSchema.omit({ sellerId: true });
-type CreateProductFormInput = z.infer<typeof createProductFormSchema>;
+type Product = {
+  id: string;
+  name: string;
+  description?: string | null;
+  quantity: number;
+  price: number | string;
+  categoryId?: string | null;
+  imageUrl?: string | null;
+  imageKey?: string | null;
+};
 
-interface CreateProductProps {
+// Create form schema without sellerId
+const editProductFormSchema = productCreateSchema.omit({ sellerId: true });
+type EditProductFormInput = z.infer<typeof editProductFormSchema>;
+
+interface EditProductProps {
+  productId: string;
   onBack: () => void;
   onSuccess?: () => void;
 }
 
-export default function CreateProduct({
+export default function EditProduct({
+  productId,
   onBack,
   onSuccess,
-}: CreateProductProps) {
+}: EditProductProps) {
   const [imageUrl, setImageUrl] = useState("");
   const [imageKey, setImageKey] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-  const [message, setMessage] = useState<{
-    type: "success" | "error";
-    text: string;
-  } | null>(null);
+  const [loadingProduct, setLoadingProduct] = useState(true);
+  const { startLoading, stopLoading } = useLoading();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
-    reset,
-  } = useForm<CreateProductFormInput>({
-    resolver: zodResolver(createProductFormSchema) as any,
+    setValue,
+  } = useForm<EditProductFormInput>({
+    resolver: zodResolver(editProductFormSchema) as any,
     mode: "onChange",
   });
 
@@ -53,7 +66,8 @@ export default function CreateProduct({
 
   useEffect(() => {
     loadCategories();
-  }, []);
+    loadProduct();
+  }, [productId]);
 
   async function loadCategories() {
     try {
@@ -66,35 +80,79 @@ export default function CreateProduct({
       setCategories(data);
     } catch (error) {
       console.error("Error loading categories:", error);
+      toast.error("Gagal memuat kategori");
     } finally {
       setLoadingCategories(false);
     }
   }
 
-  const onSubmit = async (data: CreateProductFormInput) => {
-    setMessage(null);
-
+  async function loadProduct() {
     try {
-      const token = window.localStorage.getItem("authToken");
-      const sellerId = window.localStorage.getItem("sellerId");
+      setLoadingProduct(true);
+      startLoading();
 
+      const token = window.localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authentication token not found");
       }
 
-      if (!sellerId) {
-        throw new Error("Seller ID not found");
+      const response = await fetch(`/api/seller/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body?.error ?? "Failed to load product");
+      }
+
+      const product: Product = await response.json();
+
+      // Set form values
+      setValue("name", product.name);
+      setValue("description", product.description || "");
+      setValue("quantity", product.quantity);
+      setValue("price", Number(product.price));
+      setValue("categoryId", product.categoryId || "");
+
+      // Set image
+      if (product.imageUrl) {
+        setImageUrl(product.imageUrl);
+      }
+      if (product.imageKey) {
+        setImageKey(product.imageKey);
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to load product"
+      );
+      onBack();
+    } finally {
+      setTimeout(() => {
+        setLoadingProduct(false);
+        stopLoading();
+      }, 300);
+    }
+  }
+
+  const onSubmit = async (data: EditProductFormInput) => {
+    try {
+      startLoading();
+
+      const token = window.localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authentication token not found");
       }
 
       const productData = {
         ...data,
-        sellerId,
         imageUrl: imageUrl || undefined,
         imageKey: imageKey || undefined,
       };
 
-      const response = await fetch("/api/seller/products", {
-        method: "POST",
+      const response = await fetch(`/api/seller/products/${productId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -104,18 +162,10 @@ export default function CreateProduct({
 
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
-        throw new Error(body?.error ?? "Failed to create product");
+        throw new Error(body?.error ?? "Failed to update product");
       }
 
-      setMessage({
-        type: "success",
-        text: "Produk berhasil ditambahkan!",
-      });
-
-      // Reset form
-      reset();
-      setImageUrl("");
-      setImageKey("");
+      toast.success("Produk berhasil diperbarui!");
 
       // Call success callback after a short delay
       setTimeout(() => {
@@ -123,15 +173,28 @@ export default function CreateProduct({
           onSuccess();
         }
         onBack();
-      }, 1500);
+      }, 1000);
     } catch (error) {
-      setMessage({
-        type: "error",
-        text:
-          error instanceof Error ? error.message : "Failed to create product",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update product"
+      );
+    } finally {
+      setTimeout(() => {
+        stopLoading();
+      }, 300);
     }
   };
+
+  if (loadingProduct) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-4 text-sm text-slate-600">Memuat produk...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -144,11 +207,9 @@ export default function CreateProduct({
           <FaArrowLeft />
           Kembali ke Daftar Produk
         </button>
-        <h2 className="text-2xl font-semibold text-slate-900">
-          Tambah Produk Baru
-        </h2>
+        <h2 className="text-2xl font-semibold text-slate-900">Edit Produk</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Lengkapi informasi produk yang ingin Anda jual
+          Perbarui informasi produk Anda
         </p>
       </div>
 
@@ -166,6 +227,7 @@ export default function CreateProduct({
               setImageKey(key);
             }}
             maxSizeMB={5}
+            initialImageUrl={imageUrl}
           />
           <p className="text-xs text-slate-500">
             Upload foto produk dengan kualitas terbaik. Format: JPG, PNG, WebP
@@ -290,19 +352,6 @@ export default function CreateProduct({
           </div>
         </div>
 
-        {/* Message */}
-        {message && (
-          <div
-            className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
-              message.type === "success"
-                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-rose-200 bg-rose-50 text-rose-700"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
-
         {/* Actions */}
         <div className="flex gap-3 justify-end border-t border-slate-200 pt-6">
           <button
@@ -318,7 +367,7 @@ export default function CreateProduct({
             disabled={isSubmitting || isFormEmpty}
             className="rounded-md bg-green-500 px-6 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
           >
-            {isSubmitting ? "Menyimpan..." : "Tambah Produk"}
+            {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
           </button>
         </div>
       </form>

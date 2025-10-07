@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import ProductImageCarousel from "@/components/Carousel/ProductImageCarousel";
 import ProductSuggestionCard from "@/components/ProductSuggestionCard";
 import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
@@ -38,6 +39,7 @@ type Product = {
     username: string;
     email: string;
     profilePhotoUrl?: string | null;
+    motto?: string | null;
   };
   images?: Array<{
     id: string;
@@ -319,7 +321,10 @@ export default function ProductDetailsPage({
 
             {section === 2 && product.seller && (
               <>
-                <div className="flex justify-start items-center gap-2 pb-2 ">
+                <Link
+                  href={`/sellers/${product.seller.id}`}
+                  className="flex justify-start items-center gap-2 pb-2 hover:bg-green-50 p-2 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-green-200"
+                >
                   <Avatar>
                     <AvatarImage
                       src={product.seller.profilePhotoUrl || undefined}
@@ -328,16 +333,26 @@ export default function ProductDetailsPage({
                       {product.seller.username.slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-black text-sm font-medium ">
-                    {product.seller.username}
+                  <div className="flex flex-col">
+                    <span className="text-black text-sm font-medium">
+                      {product.seller.username}
+                    </span>
+                    <span className="text-xs text-green-600">
+                      Klik untuk lihat toko →
+                    </span>
+                  </div>
+                </Link>
+                {product.seller.motto ? (
+                  <p className="text-justify leading-6 text-sm italic text-slate-700">
+                    "{product.seller.motto}"
+                  </p>
+                ) : (
+                  <span className="text-justify leading-6 text-sm">
+                    Selamat datang di toko kami! Kami menyediakan produk
+                    pertanian segar langsung dari petani. Kami berkomitmen untuk
+                    memberikan kualitas terbaik dengan harga yang kompetitif.
                   </span>
-                </div>
-                <span className="text-justify leading-6 text-sm">
-                  loreamdaosdas dasda hsduiahdiuah sidhai hdasihdauihdauih
-                  duiahsd uiahsudih asuid haiuhd aidhahduiash duahdi ahsduiahsu
-                  iahsdiha idhasduia shduashdasuidhas hasidha
-                  siduhasuidhasudhasuidhahi
-                </span>
+                )}
               </>
             )}
           </div>
@@ -437,26 +452,40 @@ export default function ProductDetailsPage({
             </span>
           )}
 
-          {section === 2 && (
+          {section === 2 && product.seller && (
             <>
-              <div className="flex justify-start items-center gap-2 pb-2 ">
+              <Link
+                href={`/sellers/${product.seller.id}`}
+                className="flex justify-start items-center gap-2 pb-2 hover:bg-green-50 p-2 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-green-200"
+              >
                 <Avatar>
                   <AvatarImage
-                    src={product.seller?.profilePhotoUrl || undefined}
+                    src={product.seller.profilePhotoUrl || undefined}
                   />
                   <AvatarFallback>
-                    {product.seller?.username.slice(0, 2)}
+                    {product.seller.username.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-black text-sm font-medium ">
-                  {product.seller?.username}
+                <div className="flex flex-col">
+                  <span className="text-black text-sm font-medium">
+                    {product.seller.username}
+                  </span>
+                  <span className="text-xs text-green-600">
+                    Klik untuk lihat toko →
+                  </span>
+                </div>
+              </Link>
+              {product.seller.motto ? (
+                <p className="text-justify leading-6 text-sm italic text-slate-700">
+                  "{product.seller.motto}"
+                </p>
+              ) : (
+                <span className="text-justify leading-6 text-sm">
+                  Selamat datang di toko kami! Kami menyediakan produk pertanian
+                  segar langsung dari petani. Kami berkomitmen untuk memberikan
+                  kualitas terbaik dengan harga yang kompetitif.
                 </span>
-              </div>
-              <span className="text-justify leading-6 text-sm">
-                loreamdaosdas dasda hsduiahdiuah sidhai hdasihdauihdauih duiahsd
-                uiahsudih asuid haiuhd aidhahduiash duahdi ahsduiahsu iahsdiha
-                idhasduia shduashdasuidhas hasidha siduhasuidhasudhasuidhahi
-              </span>
+              )}
             </>
           )}
         </div>

@@ -17,3 +17,5 @@
 # Uploads directory (keep structure, ignore files)
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+/docs

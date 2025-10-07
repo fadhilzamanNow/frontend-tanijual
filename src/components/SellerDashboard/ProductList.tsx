@@ -20,9 +20,13 @@ type Product = {
 
 interface ProductListProps {
   onAddProduct: () => void;
+  onEditProduct: (productId: string) => void;
 }
 
-export default function ProductList({ onAddProduct }: ProductListProps) {
+export default function ProductList({
+  onAddProduct,
+  onEditProduct,
+}: ProductListProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -219,10 +223,7 @@ export default function ProductList({ onAddProduct }: ProductListProps) {
 
                     <div className="mt-4 flex gap-2 border-t border-slate-100 pt-4">
                       <button
-                        onClick={() => {
-                          // TODO: Implement edit functionality
-                          alert("Edit feature coming soon!");
-                        }}
+                        onClick={() => onEditProduct(product.id)}
                         className="flex-1 flex items-center justify-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                         disabled={isDeleting}
                       >
