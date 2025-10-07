@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
 import { useLoading } from "@/contexts/LoadingContext";
 import { FaSearch, FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
+import Overlay from "@/components/Overlay/Overlay";
 
 type Category = {
   id: string;
@@ -34,7 +35,7 @@ type Product = {
   };
 };
 
-export default function SearchPage() {
+function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q");
@@ -245,5 +246,13 @@ export default function SearchPage() {
         </div>
       )}
     </section>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<Overlay />}>
+      <SearchContent />
+    </Suspense>
   );
 }

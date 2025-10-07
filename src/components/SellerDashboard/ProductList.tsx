@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
+import { useLoading } from "@/contexts/LoadingContext";
 
 const IDR = new Intl.NumberFormat("id-ID", {
   style: "currency",
@@ -42,6 +43,7 @@ export default function ProductList({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     loadProducts();
@@ -50,6 +52,7 @@ export default function ProductList({
   const loadProducts = async () => {
     try {
       setLoading(true);
+      startLoading();
       setError(null);
 
       const token = window.localStorage.getItem("authToken");
@@ -71,13 +74,17 @@ export default function ProductList({
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load products");
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+        stopLoading();
+      }, 300);
     }
   };
 
   const handleDelete = async (productId: string) => {
     try {
       setDeleteLoading(productId);
+      startLoading();
 
       const token = window.localStorage.getItem("authToken");
       if (!token) {
@@ -99,7 +106,10 @@ export default function ProductList({
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete product");
     } finally {
-      setDeleteLoading(null);
+      setTimeout(() => {
+        setDeleteLoading(null);
+        stopLoading();
+      }, 300);
     }
   };
 
