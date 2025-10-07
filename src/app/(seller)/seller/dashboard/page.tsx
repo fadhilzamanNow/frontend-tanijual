@@ -1,163 +1,115 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo, useState } from 'react'
-import { useAuthGuard } from '@/hooks/useAuthGuard'
+import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { useState, useEffect } from "react";
+import { FaUser, FaBox } from "react-icons/fa";
+import AccountSettings from "@/components/SellerDashboard/AccountSettings";
+import ProductList from "@/components/SellerDashboard/ProductList";
+import CreateProduct from "@/components/SellerDashboard/CreateProduct";
+import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
+import { useLoading } from "@/contexts/LoadingContext";
 
-const IDR = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  maximumFractionDigits: 0,
-})
-
-type Product = {
-  id: string
-  name: string
-  quantity: number
-  price: number | string
-  createdAt: string
-}
+type TabType = "account" | "products" | "create-product";
 
 export default function SellerDashboardPage() {
-  const { authorized, checked } = useAuthGuard({ requiredRole: 'seller' })
-  const [sellerName, setSellerName] = useState('Seller')
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { authorized, checked } = useAuthGuard({ requiredRole: "seller" });
+  const [activeTab, setActiveTab] = useState<TabType>("account");
+  const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const storedName = window.localStorage.getItem('sellerName')
-    if (storedName) {
-      setSellerName(storedName)
+    if (checked) {
+      stopLoading();
+    } else {
+      startLoading();
     }
-  }, [checked])
+  }, [checked, startLoading, stopLoading]);
 
-  useEffect(() => {
-    if (!checked || !authorized) return
-    if (typeof window === 'undefined') return
+  const handleTabChange = (tab: TabType) => {
+    startLoading();
+    setActiveTab(tab);
+    setTimeout(() => {
+      stopLoading();
+    }, 300);
+  };
 
-    const token = window.localStorage.getItem('authToken')
-    if (!token) {
-      setError('Missing authentication token. Please sign in again.')
-      return
-    }
+  const handleAddProduct = () => {
+    handleTabChange("create-product");
+  };
 
-    const controller = new AbortController()
+  const handleBackToProducts = () => {
+    handleTabChange("products");
+  };
 
-    async function loadProducts() {
-      try {
-        setLoading(true)
-        setError(null)
-        const response = await fetch('/api/seller/products', {
-          headers: { Authorization: `Bearer ${token}` },
-          signal: controller.signal,
-        })
-
-        if (!response.ok) {
-          const body = await response.json().catch(() => ({}))
-          throw new Error(body?.error ?? 'Unable to fetch products')
-        }
-
-        const data = (await response.json()) as Product[]
-        setProducts(data)
-      } catch (err) {
-        if (controller.signal.aborted) return
-        setError(err instanceof Error ? err.message : 'Unexpected error occurred')
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    loadProducts()
-    return () => controller.abort()
-  }, [authorized, checked])
-
-  const content = useMemo(() => {
-    if (loading) {
-      return <p className="text-sm text-slate-600">Loading your catalogue…</p>
-    }
-
-    if (error) {
-      return (
-        <div className="rounded-xl border border-rose-200 bg-rose-50 p-6 text-sm text-rose-700">
-          <strong className="font-semibold">Error:</strong> {error}
-        </div>
-      )
-    }
-
-    if (products.length === 0) {
-      return (
-        <div className="rounded-xl border border-orange-200 bg-orange-50 p-6 text-sm text-orange-700">
-          <h3 className="text-base font-semibold text-orange-900">No products yet</h3>
-          <p className="mt-2 text-orange-700">Start by adding your first harvest so buyers can discover your produce.</p>
-        </div>
-      )
-    }
-
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-900">Your Products</h3>
-          <span className="text-sm text-slate-500">{products.length} listed</span>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {products.map((product) => {
-            const createdAt = new Date(product.createdAt)
-            return (
-              <article
-                key={product.id}
-                className="flex h-full flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-slate-300 hover:shadow-md"
-              >
-                <header className="flex-1">
-                  <h4 className="text-base font-semibold text-slate-900">{product.name}</h4>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Added {createdAt.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                  </p>
-                </header>
-                <dl className="mt-4 space-y-1 text-sm text-slate-600">
-                  <div className="flex justify-between">
-                    <dt>Stock</dt>
-                    <dd className="font-semibold text-slate-900">{product.quantity} unit</dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt>Price</dt>
-                    <dd className="font-semibold text-slate-900">{IDR.format(Number(product.price))}</dd>
-                  </div>
-                </dl>
-              </article>
-            )
-          })}
-        </div>
-      </div>
-    )
-  }, [error, loading, products])
+  const handleProductCreated = () => {
+    // Reload products list
+    handleTabChange("products");
+  };
 
   if (!checked) {
-    return <p className="text-sm text-slate-600">Checking permissions…</p>
+    return <p className="text-sm text-slate-600">Checking permissions…</p>;
   }
 
   if (!authorized) {
-    return <p className="text-sm text-slate-600">Redirecting…</p>
+    return <p className="text-sm text-slate-600">Redirecting…</p>;
   }
 
   return (
-    <section className="space-y-8">
-      <header className="space-y-3">
-        <span className="inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-orange-600">
-          Seller Workspace
-        </span>
-        <div>
-          <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Hello, {sellerName}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-600">
-            Monitor your latest produce and keep your catalogue up to date. Buyers will discover your freshest harvest
-            right here.
-          </p>
-        </div>
+    <section className="space-y-6 container mx-auto mt-4">
+      <CustomBreadcrumb />
+      <header className="space-y-2">
+        <h1 className="text-3xl font-semibold text-slate-900">
+          Dashboard Seller
+        </h1>
+        <p className="max-w-2xl text-sm text-slate-600">
+          Kelola akun dan produk Anda
+        </p>
       </header>
 
-      {content}
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Sidebar */}
+        <aside className="w-full md:w-64 flex-shrink-0">
+          <nav className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <button
+              onClick={() => handleTabChange("account")}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition ${
+                activeTab === "account"
+                  ? "bg-green-50 text-green-700 border-l-4 border-green-500"
+                  : "text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              <FaUser className="text-lg" />
+              <span className="font-medium">Pengaturan Akun</span>
+            </button>
+            <button
+              onClick={() => handleTabChange("products")}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition ${
+                activeTab === "products" || activeTab === "create-product"
+                  ? "bg-green-50 text-green-700 border-l-4 border-green-500"
+                  : "text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              <FaBox className="text-lg" />
+              <span className="font-medium">Daftar Produk</span>
+            </button>
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+            {activeTab === "account" && <AccountSettings />}
+            {activeTab === "products" && (
+              <ProductList onAddProduct={handleAddProduct} />
+            )}
+            {activeTab === "create-product" && (
+              <CreateProduct
+                onBack={handleBackToProducts}
+                onSuccess={handleProductCreated}
+              />
+            )}
+          </div>
+        </main>
+      </div>
     </section>
-  )
+  );
 }

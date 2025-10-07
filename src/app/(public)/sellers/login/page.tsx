@@ -114,7 +114,7 @@ export default function SellerLoginPage() {
             id="email"
             type="email"
             {...register("email")}
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
           {errors.email && (
             <p className="text-sm text-rose-600">{errors.email.message}</p>
@@ -132,7 +132,7 @@ export default function SellerLoginPage() {
             id="password"
             type="password"
             {...register("password")}
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
           {errors.password && (
             <p className="text-sm text-rose-600">{errors.password.message}</p>
@@ -161,7 +161,7 @@ export default function SellerLoginPage() {
         <div
           className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
             message.includes("successful")
-              ? "border-orange-200 bg-orange-50 text-orange-700"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
               : "border-rose-200 bg-rose-50 text-rose-700"
           }`}
         >

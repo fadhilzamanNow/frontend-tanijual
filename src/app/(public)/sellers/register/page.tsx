@@ -117,7 +117,7 @@ export default function SellerRegisterPage() {
           <input
             id="username"
             {...register("username")}
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
           {errors.username && (
             <p className="text-sm text-rose-600">{errors.username.message}</p>
@@ -135,7 +135,7 @@ export default function SellerRegisterPage() {
             id="email"
             type="email"
             {...register("email")}
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
           {errors.email && (
             <p className="text-sm text-rose-600">{errors.email.message}</p>
@@ -153,7 +153,7 @@ export default function SellerRegisterPage() {
             id="password"
             type="password"
             {...register("password")}
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
           {errors.password && (
             <p className="text-sm text-rose-600">{errors.password.message}</p>
@@ -163,7 +163,7 @@ export default function SellerRegisterPage() {
         <button
           type="submit"
           disabled={isSubmitting || isFormEmpty}
-          className="w-full rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
+          className="w-full rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
         >
           {isSubmitting ? "Registering…" : "Register as seller"}
         </button>
@@ -182,7 +182,7 @@ export default function SellerRegisterPage() {
         <div
           className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
             message.includes("created")
-              ? "border-orange-200 bg-orange-50 text-orange-700"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
               : "border-rose-200 bg-rose-50 text-rose-700"
           }`}
         >

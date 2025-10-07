@@ -38,7 +38,7 @@ export default function UserSettingsPage() {
   }
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 container mx-auto mt-4">
       <CustomBreadcrumb />
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold text-slate-900">

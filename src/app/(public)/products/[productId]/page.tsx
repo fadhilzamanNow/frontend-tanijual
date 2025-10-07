@@ -280,7 +280,7 @@ export default function ProductDetailsPage({
   }
 
   return (
-    <>
+    <div className="container mx-auto mt-4">
       <CustomBreadcrumb />
       <section className="flex flex-col pb-24 md:pb-8 gap-2 min-h-[70vh]">
         <div className="flex justify-between gap-2">
@@ -519,6 +519,6 @@ export default function ProductDetailsPage({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

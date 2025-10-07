@@ -6,6 +6,7 @@ const priceSchema = z
 
 export const productCreateSchema = z.object({
   name: z.string().min(1),
+  description: z.string().optional(),
   quantity: z.number().int().min(0),
   price: priceSchema,
   sellerId: z.uuid(),

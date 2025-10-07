@@ -209,7 +209,7 @@ export default function HomePage() {
     }
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 ">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-slate-900">
             Fresh From Our Sellers
@@ -252,7 +252,7 @@ export default function HomePage() {
   }
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 container mx-auto mt-4">
       <CustomBreadcrumb />
       {/* Hero Banner */}
       <div className="relative rounded-3xl bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 overflow-hidden shadow-xl">
