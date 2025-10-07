@@ -2,6 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "../ui/button";
 
 const IDR = new Intl.NumberFormat("id-ID", {
   style: "currency",
@@ -65,10 +76,6 @@ export default function ProductList({
   };
 
   const handleDelete = async (productId: string) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
-      return;
-    }
-
     try {
       setDeleteLoading(productId);
 
@@ -230,14 +237,52 @@ export default function ProductList({
                         <FaEdit />
                         Edit
                       </button>
-                      <button
-                        onClick={() => handleDelete(product.id)}
-                        className="flex-1 flex items-center justify-center gap-2 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700 transition hover:bg-rose-100"
-                        disabled={isDeleting}
-                      >
-                        <FaTrash />
-                        {isDeleting ? "Menghapus..." : "Hapus"}
-                      </button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button
+                            className="flex-1 flex items-center justify-center gap-2 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-medium text-rose-700 transition hover:bg-rose-100"
+                            disabled={isDeleting}
+                          >
+                            <FaTrash />
+                            {isDeleting ? "Menghapus..." : "Hapus"}
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle className="text-slate-900">
+                              Hapus Produk
+                            </DialogTitle>
+                            <DialogDescription className="text-slate-600">
+                              Apakah Anda yakin ingin menghapus produk{" "}
+                              <span className="font-semibold text-slate-900">
+                                {product.name}
+                              </span>
+                              ? Tindakan ini tidak dapat dibatalkan.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter className="gap-2">
+                            <DialogClose asChild>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                disabled={isDeleting}
+                              >
+                                Tidak
+                              </Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button
+                                type="button"
+                                onClick={() => handleDelete(product.id)}
+                                disabled={isDeleting}
+                                className="bg-rose-500 hover:bg-rose-600 text-white"
+                              >
+                                {isDeleting ? "Menghapus..." : "Ya, Hapus"}
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                   </div>
                 </article>
