@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import Image from "next/image";
 
@@ -9,6 +9,7 @@ interface ImageUploadProps {
   onUploadSuccess?: (url: string, key: string) => void;
   maxSizeMB?: number;
   className?: string;
+  initialImageUrl?: string;
 }
 
 export default function ImageUpload({
@@ -16,6 +17,7 @@ export default function ImageUpload({
   onUploadSuccess,
   maxSizeMB = 5,
   className = "",
+  initialImageUrl,
 }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const { upload, uploading, progress, error, result, reset } = useImageUpload({
@@ -27,6 +29,13 @@ export default function ImageUpload({
       }
     },
   });
+
+  // Set initial preview if initialImageUrl is provided
+  useEffect(() => {
+    if (initialImageUrl) {
+      setPreview(initialImageUrl);
+    }
+  }, [initialImageUrl]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
