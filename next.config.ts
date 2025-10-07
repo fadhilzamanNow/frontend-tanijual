@@ -33,6 +33,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "tanijual.s3.ap-southeast-1.amazonaws.com",
+      },
     ],
   },
 };
