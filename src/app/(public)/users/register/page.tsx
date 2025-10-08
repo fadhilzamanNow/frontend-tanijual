@@ -6,10 +6,11 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterInput } from "@/lib/validators";
+import { toast } from "sonner";
+import { BadgeCheck, CirclePlus } from "lucide-react";
 
 export default function UserRegisterPage() {
   const router = useRouter();
-  const [message, setMessage] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
 
   const {
@@ -58,8 +59,6 @@ export default function UserRegisterPage() {
   }
 
   async function onSubmit(data: RegisterInput) {
-    setMessage(null);
-
     try {
       const response = await fetch("/api/users/register", {
         method: "POST",
@@ -81,12 +80,26 @@ export default function UserRegisterPage() {
         window.dispatchEvent(new Event("auth-change"));
       }
 
-      setMessage("Registration complete! Redirecting...");
+      toast.info("Registration complete! Redirecting...", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
       setTimeout(() => {
         router.push("/");
       }, 500);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unexpected error");
+      toast.error(error instanceof Error ? error.message : "Unexpected error", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     }
   }
 
@@ -174,18 +187,6 @@ export default function UserRegisterPage() {
           </Link>
         </div>
       </form>
-
-      {message ? (
-        <div
-          className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
-            message.includes("complete")
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-rose-200 bg-rose-50 text-rose-700"
-          }`}
-        >
-          {message}
-        </div>
-      ) : null}
     </section>
   );
 }

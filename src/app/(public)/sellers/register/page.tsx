@@ -9,10 +9,11 @@ import {
   sellerRegisterSchema,
   type SellerRegisterInput,
 } from "@/lib/validators";
+import { toast } from "sonner";
+import { BadgeCheck, CirclePlus } from "lucide-react";
 
 export default function SellerRegisterPage() {
   const router = useRouter();
-  const [message, setMessage] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
 
   const {
@@ -61,8 +62,6 @@ export default function SellerRegisterPage() {
   }
 
   async function onSubmit(data: SellerRegisterInput) {
-    setMessage(null);
-
     try {
       const response = await fetch("/api/sellers/register", {
         method: "POST",
@@ -84,12 +83,26 @@ export default function SellerRegisterPage() {
         window.dispatchEvent(new Event("auth-change"));
       }
 
-      setMessage("Seller account created! Redirecting to dashboard...");
+      toast.info("Seller account created! Redirecting to dashboard...", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
       setTimeout(() => {
         router.push("/seller/dashboard");
       }, 500);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unexpected error");
+      toast.error(error instanceof Error ? error.message : "Unexpected error", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     }
   }
 
@@ -177,18 +190,6 @@ export default function SellerRegisterPage() {
           </Link>
         </div>
       </form>
-
-      {message ? (
-        <div
-          className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
-            message.includes("created")
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-rose-200 bg-rose-50 text-rose-700"
-          }`}
-        >
-          {message}
-        </div>
-      ) : null}
     </section>
   );
 }

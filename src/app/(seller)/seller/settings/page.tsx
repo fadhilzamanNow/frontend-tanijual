@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser, FaStore, FaQuoteLeft, FaCamera } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import { BadgeCheck, CirclePlus } from "lucide-react";
 import Link from "next/link";
 
 type SellerSettings = {
@@ -101,13 +102,27 @@ export default function SellerSettingsPage() {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      toast.error("File harus berupa gambar");
+      toast.info("File harus berupa gambar", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Ukuran file maksimal 5MB");
+      toast.info("Ukuran file maksimal 5MB", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
       return;
     }
 
@@ -136,9 +151,23 @@ export default function SellerSettingsPage() {
 
       const updated = await response.json();
       setSettings(updated);
-      toast.success("Foto profil berhasil diperbarui!");
+      toast.info("Foto profil berhasil diperbarui!", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     } finally {
       setTimeout(() => {
         setUploadingPhoto(false);
@@ -176,6 +205,14 @@ export default function SellerSettingsPage() {
       const data = await response.json();
       setSettings(data);
       setSuccess("Pengaturan berhasil diperbarui!");
+      toast.info("Pengaturan berhasil diperbarui!", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
 
       // Update localStorage if username changed
       if (data.username) {
@@ -185,7 +222,16 @@ export default function SellerSettingsPage() {
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unexpected error");
+      const errorMsg = err instanceof Error ? err.message : "Unexpected error";
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     } finally {
       setTimeout(() => {
         setSubmitting(false);

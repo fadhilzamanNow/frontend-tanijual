@@ -136,6 +136,13 @@ export default function NavBar() {
     window.localStorage.removeItem("sellerName");
     window.dispatchEvent(new Event("auth-change"));
     setRole("guest");
+
+    // Reload if already on home, otherwise navigate
+    if (pathname === "/") {
+      window.location.reload();
+    } else {
+      router.push("/");
+    }
   }
 
   function handleSearch(e: React.FormEvent) {

@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { FaUser, FaEnvelope, FaCamera, FaLock } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLoading } from "@/contexts/LoadingContext";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import { BadgeCheck, CirclePlus } from "lucide-react";
 
 type UserProfile = {
   id: string;
@@ -68,12 +69,26 @@ export default function AccountProfile() {
   async function handlePasswordChange() {
     try {
       if (passwordData.newPassword !== passwordData.confirmPassword) {
-        toast.error("Password baru dan konfirmasi password tidak cocok");
+        toast.info("Password baru dan konfirmasi password tidak cocok", {
+          action: {
+            label: "Tutup",
+            onClick: () => {},
+          },
+          actionButtonStyle: { backgroundColor: "red" },
+          icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+        });
         return;
       }
 
       if (passwordData.newPassword.length < 6) {
-        toast.error("Password baru harus minimal 6 karakter");
+        toast.info("Password baru harus minimal 6 karakter", {
+          action: {
+            label: "Tutup",
+            onClick: () => {},
+          },
+          actionButtonStyle: { backgroundColor: "red" },
+          icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+        });
         return;
       }
 
@@ -106,9 +121,23 @@ export default function AccountProfile() {
         newPassword: "",
         confirmPassword: "",
       });
-      toast.success("Password berhasil diubah!");
+      toast.info("Password berhasil diubah!", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     } finally {
       setTimeout(() => {
         setSaving(false);
@@ -123,13 +152,27 @@ export default function AccountProfile() {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      toast.error("File harus berupa gambar");
+      toast.info("File harus berupa gambar", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Ukuran file maksimal 5MB");
+      toast.info("Ukuran file maksimal 5MB", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
       return;
     }
 
@@ -158,9 +201,23 @@ export default function AccountProfile() {
 
       const updated = await response.json();
       setUser(updated);
-      toast.success("Foto profil berhasil diperbarui!");
+      toast.info("Foto profil berhasil diperbarui!", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "An error occurred");
+      toast.error(err instanceof Error ? err.message : "An error occurred", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     } finally {
       setTimeout(() => {
         setUploadingPhoto(false);
@@ -257,10 +314,7 @@ export default function AccountProfile() {
 
       {/* Change Password Section */}
       <div className="border-t pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-slate-900">
-            Ubah Password
-          </h3>
+        <div className="flex items-center justify-end mb-4">
           {!changingPassword && (
             <button
               onClick={() => setChangingPassword(true)}

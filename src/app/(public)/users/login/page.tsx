@@ -6,10 +6,11 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "@/lib/validators";
+import { toast } from "sonner";
+import { BadgeCheck, CirclePlus } from "lucide-react";
 
 export default function UserLoginPage() {
   const router = useRouter();
-  const [message, setMessage] = useState<string | null>(null);
   const [checking, setChecking] = useState(true);
 
   const {
@@ -57,8 +58,6 @@ export default function UserLoginPage() {
   }
 
   async function onSubmit(data: LoginInput) {
-    setMessage(null);
-
     try {
       const response = await fetch("/api/users/login", {
         method: "POST",
@@ -80,12 +79,26 @@ export default function UserLoginPage() {
         window.dispatchEvent(new Event("auth-change"));
       }
 
-      setMessage("Login successful! Redirecting...");
+      toast.info("Login successful! Redirecting...", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
       setTimeout(() => {
         router.push("/");
       }, 500);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unexpected error");
+      toast.error(error instanceof Error ? error.message : "Unexpected error", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     }
   }
 
@@ -156,18 +169,6 @@ export default function UserLoginPage() {
           </Link>
         </div>
       </form>
-
-      {message ? (
-        <div
-          className={`rounded-lg border p-4 text-sm animate-in slide-in-from-bottom-2 fade-in duration-300 ${
-            message.includes("successful")
-              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-              : "border-rose-200 bg-rose-50 text-rose-700"
-          }`}
-        >
-          {message}
-        </div>
-      ) : null}
     </section>
   );
 }

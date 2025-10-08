@@ -252,7 +252,7 @@ export default function HomePage() {
   }
 
   return (
-    <section className="space-y-8 container mx-auto mt-4 px-4 xs:px-0">
+    <section className="space-y-8 container mx-auto mt-4 px-4 xs:px-0 mb-2">
       <CustomBreadcrumb />
       {/* Hero Banner */}
       <div className="relative rounded-3xl bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 overflow-hidden shadow-xl">
@@ -276,14 +276,22 @@ export default function HomePage() {
               Hubungkan petani dan pembeli dalam satu platform. Dapatkan produk
               hortikultura segar dengan harga terbaik.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <button className="bg-white text-green-600 px-6 py-3 rounded-full font-semibold hover:bg-green-50 transition shadow-lg">
-                Mulai Belanja
-              </button>
-              <button className="bg-green-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-800 transition border-2 border-white/20">
-                Jadi Penjual
-              </button>
-            </div>
+            {role === "guest" && (
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => router.push("/users/login")}
+                  className="bg-white text-green-600 px-6 py-3 rounded-full font-semibold hover:bg-green-50 transition shadow-lg"
+                >
+                  Mulai Belanja
+                </button>
+                <button
+                  onClick={() => router.push("/sellers/login")}
+                  className="bg-green-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-800 transition border-2 border-white/20"
+                >
+                  Jadi Penjual
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
