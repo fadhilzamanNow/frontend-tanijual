@@ -15,6 +15,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "sonner";
+import { BadgeCheck, CirclePlus, Trash, X } from "lucide-react";
 
 const IDR = new Intl.NumberFormat("id-ID", {
   style: "currency",
@@ -195,15 +197,19 @@ export default function ProductDetailsPage({
       const role = window.localStorage.getItem("authRole");
 
       if (!token || role !== "user") {
-        setFeedback(
-          "You must be logged in as a buyer to save items for later.",
-        );
+        toast.info("Kamu harus login sebagai pembeli terlebih dahulu", {
+          action: {
+            label: "Tutup",
+            onClick: () => {},
+          },
+          actionButtonStyle: { backgroundColor: "red" },
+          icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+        });
         return;
       }
 
       setSubmitting(true);
       startLoading();
-      setFeedback(null);
 
       if (isSaved && savedItemId) {
         // Unsave the product
@@ -221,7 +227,14 @@ export default function ProductDetailsPage({
 
         setIsSaved(false);
         setSavedItemId(null);
-        setFeedback("Product removed from saved!");
+        toast.info("Product tidak disimpan!", {
+          action: {
+            label: <span className="bg-red-500">Tutup</span>,
+            onClick: () => {},
+          },
+          icon: <Trash size={15} className="text-red-500" />,
+          actionButtonStyle: { backgroundColor: "red" },
+        });
       } else {
         // Save the product
         const response = await fetch("/api/saved/item", {
@@ -241,12 +254,26 @@ export default function ProductDetailsPage({
         const data = await response.json();
         setIsSaved(true);
         setSavedItemId(data.id);
-        setFeedback("Product saved for later!");
+        toast.info("Produk telah disimpan!", {
+          action: {
+            label: "Tutup",
+            onClick: () => {},
+          },
+          actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+          icon: <BadgeCheck className="text-green-500" size={15} />,
+        });
       }
     } catch (err) {
-      setFeedback(
-        err instanceof Error ? err.message : "Unexpected error occurred",
-      );
+      const errorMsg =
+        err instanceof Error ? err.message : "Unexpected error occurred";
+      toast.error(errorMsg, {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     } finally {
       setTimeout(() => {
         setSubmitting(false);
@@ -282,12 +309,12 @@ export default function ProductDetailsPage({
   }
 
   return (
-    <div className="container mx-auto mt-4">
+    <div className="container mx-auto mt-4 px-4 xs:px-0 my-4">
       <CustomBreadcrumb />
       <section className="flex flex-col pb-24 md:pb-8 gap-2 min-h-[70vh]">
-        <div className="flex justify-between gap-2">
+        <div className="flex justify-between gap-2 items-start">
           {/* Product Images Carousel */}
-          <div className="w-full  xs:w-5/8 lg:w-3/8 sticky top-20 self-start">
+          <div className="w-full  sm:w-5/8 lg:w-3/8 sticky top-20 self-start">
             <ProductImageCarousel
               images={product.images || []}
               productName={product.name}
@@ -357,7 +384,7 @@ export default function ProductDetailsPage({
             )}
           </div>
           {/* Desktop sidebar */}
-          <aside className="flex flex-col  w-70 rounded-2xl border border-slate-200 bg-white shadow-sm justify-between py-4  sticky top-20 h-100">
+          <aside className="hidden sm:flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm justify-between py-4  sticky top-20 gap-3">
             <div className="flex flex-col px-4 gap-4">
               <h1 className="font-semibold text-lg  text-wrap">Atur jumlah</h1>
               <div className="flex gap-2 items-center">
@@ -412,22 +439,10 @@ export default function ProductDetailsPage({
                 {submitting ? "Memproses…" : isSaved ? "Tersimpan" : "Simpan"}
               </button>
             </div>
-
-            {feedback ? (
-              <div
-                className={`rounded-lg border p-3 text-sm ${
-                  feedback.includes("saved")
-                    ? "border-green-200 bg-green-50 text-green-700"
-                    : "border-rose-200 bg-rose-50 text-rose-700"
-                }`}
-              >
-                {feedback}
-              </div>
-            ) : null}
           </aside>
         </div>
-        <div className="flex-1 flex flex-col mx-4 gap-4 lg:hidden">
-          {/* DESCRIPTION */}
+        <div className="flex-1 flex flex-col mx-4 gap-4 lg:hidden mt-2">
+          {/* DESCRIPTION MOBILE */}
           <h1 className="text-2xl font-bold">{product.name}</h1>
           <h2 className="text-xl font-semibold">
             {IDR.format(Number(product.price))}
@@ -492,9 +507,9 @@ export default function ProductDetailsPage({
       </section>
 
       {/* Fixed Mobile Bottom Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 xs:hidden bg-white border-t border-slate-200 shadow-lg">
-        <div className="flex">
-          <div className="flex justify-center items-center w-25   px-2 py-0.5">
+      <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-white border-t border-slate-200 shadow-lg">
+        <div className="flex p-2 items-center gap-2">
+          {/*<div className="flex justify-center items-center w-25   px-2 py-0.5">
             <span
               onClick={() => number > 1 && setNumber(number - 1)}
               className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
@@ -510,23 +525,30 @@ export default function ProductDetailsPage({
             >
               +
             </span>
-          </div>
+          </div>*/}
           <button
             type="button"
-            className="flex-1 flex items-center justify-center bg-green-500 px-4 py-4 text-sm font-semibold text-white transition hover:bg-green-600 active:bg-green-700"
+            className="rounded-md w-1/2 flex items-center justify-center gap-2 bg-green-500 px-4 py-4 text-sm font-semibold text-white transition hover:bg-green-600 active:bg-green-700"
           >
-            Order Lewat WA
+            <span>Order Lewat WA</span>
+            <FaWhatsapp className="text-xl" />
           </button>
           <button
             type="button"
             onClick={handleSaveProduct}
             disabled={submitting}
-            className="flex items-center justify-center gap-2 bg-white px-4 py-4 text-sm font-semibold transition border-r border-slate-200 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-1/2 gap-2 bg-white px-4 py-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 rounded-md border border-green-500 text-green-500"
           >
             {isSaved ? (
-              <FaBookmark className="text-green-500 text-xl" />
+              <div className="flex justify-center gap-2">
+                <span>Produk Tersimpan</span>
+                <FaBookmark className="text-green-500 text-xl" />
+              </div>
             ) : (
-              <FaRegBookmark className="text-slate-400 text-xl" />
+              <div className="flex justify-center gap-2">
+                <span>Simpan Produk</span>
+                <FaRegBookmark className="text-xl" />
+              </div>
             )}
           </button>
         </div>
