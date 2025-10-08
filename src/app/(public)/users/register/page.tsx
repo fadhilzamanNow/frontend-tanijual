@@ -26,7 +26,8 @@ export default function UserRegisterPage() {
   const username = watch("username");
   const email = watch("email");
   const password = watch("password");
-  const isFormEmpty = !username || !email || !password;
+  const phoneNumber = watch("phoneNumber");
+  const isFormEmpty = !username || !email || !password || !phoneNumber;
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -167,6 +168,27 @@ export default function UserRegisterPage() {
           />
           {errors.password && (
             <p className="text-sm text-rose-600">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="phoneNumber"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Nomor Telepon
+          </label>
+          <input
+            id="phoneNumber"
+            type="tel"
+            placeholder="08123456789"
+            {...register("phoneNumber")}
+            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+          {errors.phoneNumber && (
+            <p className="text-sm text-rose-600">
+              {errors.phoneNumber.message}
+            </p>
           )}
         </div>
 

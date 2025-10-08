@@ -125,6 +125,7 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
+  phoneNumber: 'phoneNumber',
   profilePhotoUrl: 'profilePhotoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -149,6 +150,7 @@ exports.Prisma.SellerScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
+  phoneNumber: 'phoneNumber',
   profilePhotoUrl: 'profilePhotoUrl',
   motto: 'motto',
   createdAt: 'createdAt',

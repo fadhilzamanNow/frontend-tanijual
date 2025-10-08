@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const phoneNumberSchema = z
+  .string()
+  .min(10, "Phone number must be at least 10 digits")
+  .refine((val) => val.startsWith("08"), "Phone number must start with 08");
+
 const priceSchema = z
   .union([z.number(), z.string()])
   .transform((v) => Number(v));
@@ -42,6 +47,7 @@ export const registerSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters long")
     .max(100, "Password must be less than 100 characters"),
+  phoneNumber: phoneNumberSchema,
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
@@ -61,6 +67,7 @@ export const sellerRegisterSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters long")
     .max(100, "Password must be less than 100 characters"),
+  phoneNumber: phoneNumberSchema,
 });
 export type SellerRegisterInput = z.infer<typeof sellerRegisterSchema>;
 

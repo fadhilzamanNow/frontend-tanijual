@@ -372,11 +372,25 @@ async function main() {
       update: {},
       create: category,
     });
-    console.log(`  ✓ Created category: ${Password = "seller123!";
+    console.log(`  ✓ Created category: ${category.name}`);
+  }
+  console.log(`✅ Created ${categories.length} categories`);
+
+  // Create sellers with password
+  const sellerPassword = "seller123!";
   const hashedSellerPassword = await bcrypt.hash(sellerPassword, 10);
 
   // Create 7 sellers
   console.log("👨‍🌾 Creating 7 sellers...");
+  const sellerPhones = [
+    "081234567890",
+    "082345678901",
+    "085678901234",
+    "087890123456",
+    "081122334455",
+    "085566778899",
+    "089988776655",
+  ];
   const sellers = await Promise.all(
     sellerData.map((seller, index) =>
       prisma.seller.create({
@@ -384,6 +398,7 @@ async function main() {
           username: seller.username,
           email: seller.email,
           password: hashedSellerPassword,
+          phoneNumber: sellerPhones[index],
           profilePhotoUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seller.username}`,
         },
       }),
@@ -395,6 +410,22 @@ async function main() {
   console.log("🌾 Creating 50 products...");
   const allProducts = [];
   let productCount = 0;
+
+  // Map product categories to database category names
+  const categoryMap = {
+    Vegetables: "Sayuran",
+    Fruits: "Buah",
+    "Leafy Greens": "Sayuran",
+    "Root Vegetables": "Umbi",
+    "Herbs & Spices": "Rempah",
+  };
+
+  // Get category IDs
+  const dbCategories = await prisma.category.findMany();
+  const categoryIdMap = {};
+  dbCategories.forEach((cat) => {
+    categoryIdMap[cat.name] = cat.id;
+  });
 
   // Flatten all product items
   const flatProducts = productCategories.flatMap((cat) =>
@@ -426,6 +457,10 @@ async function main() {
         ? ` ${variations[Math.floor(i / flatProducts.length) % variations.length]}`
         : "";
 
+    // Get category ID for this product
+    const dbCategoryName = categoryMap[productTemplate.category] || "Lain";
+    const categoryId = categoryIdMap[dbCategoryName];
+
     const product = await prisma.product.create({
       data: {
         name: `${productTemplate.name}${variation}`.trim(),
@@ -433,6 +468,7 @@ async function main() {
         price: price,
         description: `High quality ${productTemplate.name.toLowerCase()} from ${seller.username.replace(/_/g, " ")}. ${faker.commerce.productDescription()}`,
         sellerId: seller.id,
+        categoryId: categoryId,
         images: {
           create: productTemplate.images.map((url, index) => ({
             imageUrl: url,
@@ -459,6 +495,7 @@ async function main() {
       username: "seeded_buyer",
       email: "seeded_buyer@example.com",
       password: await bcrypt.hash(userPassword, 10),
+      phoneNumber: "081234509876",
       profilePhotoUrl:
         "https://api.dicebear.com/7.x/avataaars/svg?seed=seeded_buyer",
       saved: { create: {} },

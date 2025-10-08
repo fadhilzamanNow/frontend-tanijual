@@ -24,6 +24,7 @@ export async function GET(
             email: true,
             profilePhotoUrl: true,
             motto: true,
+            phoneNumber: true,
           },
         },
         category: true,

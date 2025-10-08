@@ -16,7 +16,16 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { BadgeCheck, CirclePlus, Minus, Plus, Trash, X } from "lucide-react";
+import {
+  BadgeCheck,
+  CirclePlus,
+  Minus,
+  Plus,
+  Trash,
+  X,
+  Copy,
+  Check,
+} from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -26,6 +35,14 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const IDR = new Intl.NumberFormat("id-ID", {
   style: "currency",
@@ -49,6 +66,7 @@ type Product = {
     id: string;
     username: string;
     email: string;
+    phoneNumber?: string | null;
     profilePhotoUrl?: string | null;
     motto?: string | null;
   };
@@ -82,6 +100,8 @@ export default function ProductDetailsPage({
   const [section, setSection] = useState<number>(1);
   const [suggestedProducts, setSuggestedProducts] = useState<Product[]>([]);
   const [savedItemId, setSavedItemId] = useState<string | null>(null);
+  const [isWaModalOpen, setIsWaModalOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
@@ -291,6 +311,57 @@ export default function ProductDetailsPage({
     }
   }
 
+  function getWaMessageText() {
+    if (!product) return "";
+    return `Selamat pagi pak/bu, saya tertarik dengan produk ${product.name} dan ingin membeli sekitar ${number} ${number > 1 ? "unit" : "unit"} dengan total harga ${IDR.format(Number(product.price) * number)}.\n\nApakah produk ini masih tersedia? Terima kasih.`;
+  }
+
+  async function handleCopyWaText() {
+    const text = getWaMessageText();
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsCopied(true);
+      toast.success("Teks berhasil disalin!", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "oklch(72.3% 0.219 149.579)" },
+        icon: <BadgeCheck className="text-green-500" size={15} />,
+      });
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      toast.error("Gagal menyalin teks", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
+    }
+  }
+
+  function handleOpenWhatsApp() {
+    if (!product?.seller?.phoneNumber) {
+      toast.error("Nomor WhatsApp penjual tidak tersedia", {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
+      return;
+    }
+
+    const text = getWaMessageText();
+    const phoneNumber = product.seller.phoneNumber.replace(/^0/, "62");
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, "_blank");
+    setIsWaModalOpen(false);
+  }
+
   if (!checked) {
     return <p className="text-sm text-slate-600">Loading product…</p>;
   }
@@ -318,19 +389,150 @@ export default function ProductDetailsPage({
   }
 
   return (
-    <div className="container mx-auto mt-4 px-4 xs:px-0 my-4">
-      <CustomBreadcrumb />
-      <section className="flex flex-col pb-24 md:pb-8 gap-2 min-h-[70vh]">
-        <div className="flex justify-between gap-2 items-start">
-          {/* Product Images Carousel */}
-          <div className="w-full  sm:w-5/8 lg:w-3/8 sticky top-20 self-start">
-            <ProductImageCarousel
-              images={product.images || []}
-              productName={product.name}
-            />
+    <Dialog open={isWaModalOpen} onOpenChange={setIsWaModalOpen}>
+      <div className="container mx-auto mt-4 px-4 xs:px-0 my-4">
+        <CustomBreadcrumb />
+        <section className="flex flex-col pb-24 md:pb-8 gap-2 min-h-[70vh]">
+          <div className="flex justify-between gap-2 items-start">
+            {/* Product Images Carousel */}
+            <div className="w-full  sm:w-5/8 lg:w-3/8 sticky top-20 self-start">
+              <ProductImageCarousel
+                images={product.images || []}
+                productName={product.name}
+              />
+            </div>
+            <div className="flex-1 lg:flex flex-col mx-4 gap-4 hidden">
+              {/* DESCRIPTION */}
+              <h1 className="text-2xl font-bold">{product.name}</h1>
+              <h2 className="text-xl font-semibold">
+                {IDR.format(Number(product.price))}
+              </h2>
+              <div className="flex gap-4 border-y py-2">
+                <span
+                  onClick={() => section !== 1 && setSection(1)}
+                  className={`${section === 1 ? "text-green-500 font-bold" : "text-black font-medium"} cursor-pointer`}
+                >
+                  Deskripsi
+                </span>
+                <span
+                  onClick={() => section !== 2 && setSection(2)}
+                  className={`${section === 2 ? "text-green-500 font-bold" : "text-black font-medium"} cursor-pointer`}
+                >
+                  Detail Toko
+                </span>
+              </div>
+              {section === 1 && (
+                <span className="text-justify text-sm mt-2 leading-6">
+                  {product.description}
+                </span>
+              )}
+
+              {section === 2 && product.seller && (
+                <>
+                  <Link
+                    href={`/sellers/${product.seller.id}`}
+                    className="flex justify-start items-center gap-2 pb-2 hover:bg-green-50 p-2 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-green-200"
+                  >
+                    <Avatar>
+                      <AvatarImage
+                        src={product.seller.profilePhotoUrl || undefined}
+                      />
+                      <AvatarFallback>
+                        {product.seller.username.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="text-black text-sm font-medium">
+                        {product.seller.username}
+                      </span>
+                      <span className="text-xs text-green-600">
+                        Klik untuk lihat toko →
+                      </span>
+                    </div>
+                  </Link>
+                  {product.seller.motto ? (
+                    <p className="text-justify leading-6 text-sm italic text-slate-700">
+                      "{product.seller.motto}"
+                    </p>
+                  ) : (
+                    <span className="text-justify leading-6 text-sm">
+                      Selamat datang di toko kami! Kami menyediakan produk
+                      pertanian segar langsung dari petani. Kami berkomitmen
+                      untuk memberikan kualitas terbaik dengan harga yang
+                      kompetitif.
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+            {/* Desktop sidebar */}
+            <aside className="hidden sm:flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm justify-between py-4  sticky top-20 gap-3">
+              <div className="flex flex-col px-4 gap-4">
+                <h1 className="font-semibold text-lg  text-wrap">
+                  Atur jumlah
+                </h1>
+                <div className="flex gap-2 items-center">
+                  <div className="flex w-25 border border-green-500 rounded-md px-2 py-0.5">
+                    <span
+                      onClick={() => number > 1 && setNumber(number - 1)}
+                      className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
+                    >
+                      -
+                    </span>
+                    <span className="flex-1 flex justify-center items-center">
+                      {number}
+                    </span>
+                    <span
+                      onClick={() => setNumber(number + 1)}
+                      className={`${number >= product.quantity ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
+                    >
+                      +
+                    </span>
+                  </div>
+                  <div className="flex gap-2 items-center text-sm">
+                    <span>Stok:</span>
+                    <span>{product.quantity}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-slate-400 text-sm ">
+                  <span className="text-sm">Subtotal: </span>
+                  <span className="text-base font-semibold text-slate-900 ">
+                    {IDR.format(Number(product.price) * number)}
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col px-4 gap-2">
+                <DialogTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex-2 flex justify-center items-center gap-2   bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-green-600 rounded-md"
+                  >
+                    <FaWhatsapp />
+                    <span>Order Lewat WA</span>
+                  </button>
+                </DialogTrigger>
+                <button
+                  type="button"
+                  onClick={handleSaveProduct}
+                  disabled={submitting}
+                  className=" text-green-500  px-4 py-2 text-sm font-semibold   transition  flex items-center justify-center gap-2 hover:bg-black/5 border border-green-500 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSaved ? (
+                    <FaBookmark className="text-green-500" />
+                  ) : (
+                    <FaRegBookmark className="text-green-500" />
+                  )}
+                  {submitting
+                    ? "Memproses…"
+                    : isSaved
+                      ? "Produk Tersimpan"
+                      : "Simpan Produk"}
+                </button>
+              </div>
+            </aside>
           </div>
-          <div className="flex-1 lg:flex flex-col mx-4 gap-4 hidden">
-            {/* DESCRIPTION */}
+          <div className="flex-1 flex flex-col mx-4 gap-4 lg:hidden mt-2">
+            {/* DESCRIPTION MOBILE */}
             <h1 className="text-2xl font-bold">{product.name}</h1>
             <h2 className="text-xl font-semibold">
               {IDR.format(Number(product.price))}
@@ -392,137 +594,12 @@ export default function ProductDetailsPage({
               </>
             )}
           </div>
-          {/* Desktop sidebar */}
-          <aside className="hidden sm:flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm justify-between py-4  sticky top-20 gap-3">
-            <div className="flex flex-col px-4 gap-4">
-              <h1 className="font-semibold text-lg  text-wrap">Atur jumlah</h1>
-              <div className="flex gap-2 items-center">
-                <div className="flex w-25 border border-green-500 rounded-md px-2 py-0.5">
-                  <span
-                    onClick={() => number > 1 && setNumber(number - 1)}
-                    className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
-                  >
-                    -
-                  </span>
-                  <span className="flex-1 flex justify-center items-center">
-                    {number}
-                  </span>
-                  <span
-                    onClick={() => setNumber(number + 1)}
-                    className={`${number >= product.quantity ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
-                  >
-                    +
-                  </span>
-                </div>
-                <div className="flex gap-2 items-center text-sm">
-                  <span>Stok:</span>
-                  <span>{product.quantity}</span>
-                </div>
-              </div>
-              <div className="flex justify-between items-center text-slate-400 text-sm ">
-                <span className="text-sm">Subtotal: </span>
-                <span className="text-base font-semibold text-slate-900 ">
-                  {IDR.format(Number(product.price) * number)}
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col px-4 gap-2">
-              <button
-                type="button"
-                className="flex-2 flex justify-center items-center gap-2   bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-green-600 rounded-md"
-              >
-                <FaWhatsapp />
-                <span>Order Lewat WA</span>
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveProduct}
-                disabled={submitting}
-                className=" text-green-500  px-4 py-2 text-sm font-semibold   transition  flex items-center justify-center gap-2 hover:bg-black/5 border border-green-500 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSaved ? (
-                  <FaBookmark className="text-green-500" />
-                ) : (
-                  <FaRegBookmark className="text-green-500" />
-                )}
-                {submitting
-                  ? "Memproses…"
-                  : isSaved
-                    ? "Produk Tersimpan"
-                    : "Simpan Produk"}
-              </button>
-            </div>
-          </aside>
-        </div>
-        <div className="flex-1 flex flex-col mx-4 gap-4 lg:hidden mt-2">
-          {/* DESCRIPTION MOBILE */}
-          <h1 className="text-2xl font-bold">{product.name}</h1>
-          <h2 className="text-xl font-semibold">
-            {IDR.format(Number(product.price))}
-          </h2>
-          <div className="flex gap-4 border-y py-2">
-            <span
-              onClick={() => section !== 1 && setSection(1)}
-              className={`${section === 1 ? "text-green-500 font-bold" : "text-black font-medium"} cursor-pointer`}
-            >
-              Deskripsi
-            </span>
-            <span
-              onClick={() => section !== 2 && setSection(2)}
-              className={`${section === 2 ? "text-green-500 font-bold" : "text-black font-medium"} cursor-pointer`}
-            >
-              Detail Toko
-            </span>
-          </div>
-          {section === 1 && (
-            <span className="text-justify text-sm mt-2 leading-6">
-              {product.description}
-            </span>
-          )}
+        </section>
 
-          {section === 2 && product.seller && (
-            <>
-              <Link
-                href={`/sellers/${product.seller.id}`}
-                className="flex justify-start items-center gap-2 pb-2 hover:bg-green-50 p-2 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-green-200"
-              >
-                <Avatar>
-                  <AvatarImage
-                    src={product.seller.profilePhotoUrl || undefined}
-                  />
-                  <AvatarFallback>
-                    {product.seller.username.slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <span className="text-black text-sm font-medium">
-                    {product.seller.username}
-                  </span>
-                  <span className="text-xs text-green-600">
-                    Klik untuk lihat toko →
-                  </span>
-                </div>
-              </Link>
-              {product.seller.motto ? (
-                <p className="text-justify leading-6 text-sm italic text-slate-700">
-                  "{product.seller.motto}"
-                </p>
-              ) : (
-                <span className="text-justify leading-6 text-sm">
-                  Selamat datang di toko kami! Kami menyediakan produk pertanian
-                  segar langsung dari petani. Kami berkomitmen untuk memberikan
-                  kualitas terbaik dengan harga yang kompetitif.
-                </span>
-              )}
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* Fixed Mobile Bottom Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-white border-t border-slate-200 shadow-lg">
-        <div className="flex p-2 items-center gap-2">
-          {/*<div className="flex justify-center items-center w-25   px-2 py-0.5">
+        {/* Fixed Mobile Bottom Buttons */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-white border-t border-slate-200 shadow-lg">
+          <div className="flex p-2 items-center gap-2">
+            {/*<div className="flex justify-center items-center w-25   px-2 py-0.5">
             <span
               onClick={() => number > 1 && setNumber(number - 1)}
               className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
@@ -539,87 +616,144 @@ export default function ProductDetailsPage({
               +
             </span>
           </div>*/}
-          <Drawer>
-            <DrawerTrigger className="w-1/2" asChild>
-              <button
-                type="button"
-                className="rounded-md  flex items-center justify-center gap-2 bg-green-500 px-4 py-4 text-sm font-semibold text-white transition hover:bg-green-600 active:bg-green-700"
-              >
-                <span>Order Lewat WA</span>
-                <FaWhatsapp className="text-xl" />
-              </button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle>Order Lewat WA</DrawerTitle>
-                <DrawerDescription>
-                  Masukkan Jumlah yang ingin diorder
-                </DrawerDescription>
-                <div className="flex gap-6 w-full mt-2 py-2 px-1 border rounded-md  justify-center items-center">
-                  <Minus
-                    onClick={() => number > 1 && setNumber(number - 1)}
-                    className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
-                  />
-                  <span className="font-bold text-2xl">{number}</span>
-                  <Plus
-                    onClick={() =>
-                      number < product.quantity && setNumber(number + 1)
-                    }
-                    className={`${number >= product.quantity ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
-                  />
-                </div>
-                <div className="mt-2 p-2 flex gap-2 justify-center items-center ">
-                  <div className="bg-green-500 p-2 rounded-md text-white flex-1 flex gap-2 justify-center items-center ">
-                    <span>Order Lewat WA</span>
-                    <FaWhatsapp />
+            <Drawer>
+              <DrawerTrigger className="w-1/2" asChild>
+                <button
+                  type="button"
+                  className="rounded-md  flex items-center justify-center gap-2 bg-green-500 px-4 py-4 text-sm font-semibold text-white transition hover:bg-green-600 active:bg-green-700"
+                >
+                  <span>Order Lewat WA</span>
+                  <FaWhatsapp className="text-xl" />
+                </button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Order Lewat WA</DrawerTitle>
+                  <DrawerDescription>
+                    Masukkan Jumlah yang ingin diorder
+                  </DrawerDescription>
+                  <div className="flex gap-6 w-full mt-2 py-2 px-1 border rounded-md  justify-center items-center">
+                    <Minus
+                      onClick={() => number > 1 && setNumber(number - 1)}
+                      className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
+                    />
+                    <span className="font-bold text-2xl">{number}</span>
+                    <Plus
+                      onClick={() =>
+                        number < product.quantity && setNumber(number + 1)
+                      }
+                      className={`${number >= product.quantity ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
+                    />
                   </div>
-                  <DrawerClose>
-                    <span className="p-2  border border-green-500 text-green-500 rounded-md hover:text-emerald-600 hover:border-emerald-600">
-                      Batal
-                    </span>
-                  </DrawerClose>
-                </div>
-              </DrawerHeader>
-            </DrawerContent>
-          </Drawer>
+                  <div className="mt-2 p-2 flex gap-2 justify-center items-center ">
+                    <button
+                      onClick={() => setIsWaModalOpen(true)}
+                      className="bg-green-500 p-2 rounded-md text-white flex-1 flex gap-2 justify-center items-center cursor-pointer hover:bg-green-600 transition"
+                    >
+                      <span>Order Lewat WA</span>
+                      <FaWhatsapp />
+                    </button>
+                    <DrawerClose>
+                      <span className="p-2  border border-green-500 text-green-500 rounded-md hover:text-emerald-600 hover:border-emerald-600">
+                        Batal
+                      </span>
+                    </DrawerClose>
+                  </div>
+                </DrawerHeader>
+              </DrawerContent>
+            </Drawer>
 
-          <button
-            type="button"
-            onClick={handleSaveProduct}
-            disabled={submitting}
-            className="w-1/2 gap-2 bg-white px-4 py-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 rounded-md border border-green-500 text-green-500"
-          >
-            {isSaved ? (
-              <div className="flex justify-center gap-2">
-                <span>Tersimpan</span>
-                <FaBookmark className="text-green-500 text-xl" />
-              </div>
-            ) : (
-              <div className="flex justify-center gap-2">
-                <span>Simpan Produk</span>
-                <FaRegBookmark className="text-xl" />
-              </div>
-            )}
-          </button>
-        </div>
-      </div>
-      {/* Product Suggestions */}
-      {suggestedProducts.length > 0 && (
-        <div className="mt-12 border-t pt-8 px-4">
-          <h2 className="text-xl font-bold mb-6">Produk Lainnya</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {suggestedProducts.map((item) => (
-              <ProductSuggestionCard
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                price={item.price}
-                imageUrl={item.images?.[0]?.imageUrl}
-              />
-            ))}
+            <button
+              type="button"
+              onClick={handleSaveProduct}
+              disabled={submitting}
+              className="w-1/2 gap-2 bg-white px-4 py-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 rounded-md border border-green-500 text-green-500"
+            >
+              {isSaved ? (
+                <div className="flex justify-center gap-2">
+                  <span>Tersimpan</span>
+                  <FaBookmark className="text-green-500 text-xl" />
+                </div>
+              ) : (
+                <div className="flex justify-center gap-2">
+                  <span>Simpan Produk</span>
+                  <FaRegBookmark className="text-xl" />
+                </div>
+              )}
+            </button>
           </div>
         </div>
-      )}
-    </div>
+        {/* Product Suggestions */}
+        {suggestedProducts.length > 0 && (
+          <div className="mt-12 border-t pt-8 px-4">
+            <h2 className="text-xl font-bold mb-6">Produk Lainnya</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {suggestedProducts.map((item) => (
+                <ProductSuggestionCard
+                  key={item.id}
+                  id={item.id}
+                  name={item.name}
+                  price={item.price}
+                  imageUrl={item.images?.[0]?.imageUrl}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* WhatsApp Order Dialog - Shared for both desktop and mobile */}
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Order via WhatsApp</DialogTitle>
+          <DialogDescription>
+            Salin pesan di bawah ini untuk menghubungi penjual
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="rounded-lg bg-slate-50 p-4 border border-slate-200">
+            <p className="text-sm text-slate-700 whitespace-pre-wrap">
+              Selamat pagi pak/bu, saya tertarik dengan produk{" "}
+              <strong>{product?.name}</strong> dan ingin membeli sekitar{" "}
+              <strong>
+                {number} {number > 1 ? "unit" : "unit"}
+              </strong>{" "}
+              dengan total harga{" "}
+              <strong>
+                {IDR.format(Number(product?.price || 0) * number)}
+              </strong>
+              .{"\n\n"}
+              Apakah produk ini masih tersedia? Terima kasih.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={handleCopyWaText}
+              className="flex-1 flex items-center justify-center gap-2 rounded-md bg-slate-100 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-200 transition"
+            >
+              {isCopied ? (
+                <>
+                  <Check size={16} className="text-green-600" />
+                  <span>Tersalin!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={16} />
+                  <span>Salin Teks</span>
+                </>
+              )}
+            </button>
+            <button
+              onClick={handleOpenWhatsApp}
+              disabled={!product?.seller?.phoneNumber}
+              className="flex-1 flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <FaWhatsapp size={16} />
+              <span>Buka WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
