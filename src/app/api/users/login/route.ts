@@ -14,14 +14,17 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { email: data.email } });
     if (!user)
       return json(
-        { error: "Invalid credentials", message: "User not found" },
+        {
+          error: "Kredensial tidak valid",
+          message: "Pengguna tidak ditemukan",
+        },
         { status: 401 },
       );
 
     const ok = await verifyPassword(data.password, user.password);
     if (!ok)
       return json(
-        { error: "Invalid credentials", message: "Incorrect password" },
+        { error: "Kredensial tidak valid", message: "Password salah" },
         { status: 401 },
       );
 

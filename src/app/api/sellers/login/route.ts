@@ -16,14 +16,17 @@ export async function POST(req: NextRequest) {
     });
     if (!seller)
       return json(
-        { error: "Invalid credentials", message: "Seller not found" },
+        {
+          error: "Kredensial tidak valid",
+          message: "Penjual tidak ditemukan",
+        },
         { status: 401 },
       );
 
     const ok = await verifyPassword(data.password, seller.password);
     if (!ok)
       return json(
-        { error: "Invalid credentials", message: "Incorrect password" },
+        { error: "Kredensial tidak valid", message: "Password salah" },
         { status: 401 },
       );
 

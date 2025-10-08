@@ -197,7 +197,7 @@ export default function UserRegisterPage() {
           disabled={isSubmitting || isFormEmpty}
           className="w-full rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
         >
-          {isSubmitting ? "Registering…" : "Register"}
+          {isSubmitting ? "Mendaftar…" : "Daftar"}
         </button>
         <div className="flex gap-2 justify-center text-sm text-slate-600">
           <span>Sudah punya akun?</span>

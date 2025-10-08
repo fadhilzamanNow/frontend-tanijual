@@ -27,8 +27,11 @@ const pathNameMap: Record<string, string> = {
 export default function CustomBreadcrumb() {
   const pathname = usePathname();
 
-  // Split pathname into segments
-  const segments = pathname.split("/").filter(Boolean);
+  // Split pathname into segments and filter out route groups (e.g., "(public)", "(auth)")
+  const segments = pathname
+    .split("/")
+    .filter(Boolean)
+    .filter((segment) => !segment.startsWith("(") || !segment.endsWith(")"));
 
   // If we're on homepage, don't show breadcrumb
   if (segments.length === 0) {
@@ -70,13 +73,9 @@ export default function CustomBreadcrumb() {
             <div key={item.path} className="flex items-center font-semibold">
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                {item.isLast ? (
-                  <BreadcrumbPage className="text-green-600">
-                    {item.name}
-                  </BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink href={item.path}>{item.name}</BreadcrumbLink>
-                )}
+                <BreadcrumbPage className={item.isLast ? "text-green-600" : ""}>
+                  {item.name}
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </div>
           ))}

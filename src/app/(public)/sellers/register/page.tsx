@@ -200,7 +200,7 @@ export default function SellerRegisterPage() {
           disabled={isSubmitting || isFormEmpty}
           className="w-full rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
         >
-          {isSubmitting ? "Registering…" : "Register as seller"}
+          {isSubmitting ? "Mendaftar…" : "Daftar sebagai Penjual"}
         </button>
         <div className="flex gap-2 justify-center text-sm text-slate-600">
           <span>Sudah punya akun seller?</span>

@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
     if (exists)
       return json(
         {
-          error: "User already exists",
-          message: "Email or username is already taken",
+          error: "Pengguna sudah terdaftar",
+          message: "Email atau username sudah digunakan",
         },
         { status: 409 },
       );

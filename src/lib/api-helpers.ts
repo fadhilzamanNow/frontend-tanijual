@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "./prisma";
-import { AuthTokenPayload, verifyToken } from "./auth";
+import { type AuthTokenPayload, verifyToken } from "./auth";
 
 export class UnauthenticatedError extends Error {
-  constructor(message = "Unauthenticated") {
+  constructor(message = "Tidak terautentikasi") {
     super(message);
     this.name = "UnauthenticatedError";
   }
@@ -65,11 +65,11 @@ export function json<T>(data: T, init?: ResponseInit) {
 
 export function handleAuthError(error: unknown) {
   if (error instanceof UnauthenticatedError) {
-    return json({ error: "Unauthenticated" }, { status: 401 });
+    return json({ error: "Tidak terautentikasi" }, { status: 401 });
   }
 
   if (error instanceof Error && error.message === "MISSING_USER_ID") {
-    return json({ error: "Unauthenticated" }, { status: 401 });
+    return json({ error: "Tidak terautentikasi" }, { status: 401 });
   }
 
   throw error;
@@ -85,7 +85,7 @@ export function handleApiError(error: unknown) {
   // Handle authentication errors
   if (error instanceof UnauthenticatedError) {
     return json(
-      { error: "Unauthenticated", message: error.message },
+      { error: "Tidak terautentikasi", message: error.message },
       { status: 401 },
     );
   }
@@ -138,7 +138,7 @@ export function handleApiError(error: unknown) {
   if (error instanceof Error && error.name === "ZodError") {
     return json(
       {
-        error: "Validation error",
+        error: "Kesalahan validasi",
         message: error.message,
       },
       { status: 400 },
@@ -149,7 +149,7 @@ export function handleApiError(error: unknown) {
   if (error instanceof Error) {
     return json(
       {
-        error: "Internal server error",
+        error: "Kesalahan server internal",
         message: error.message,
       },
       { status: 500 },
@@ -159,8 +159,8 @@ export function handleApiError(error: unknown) {
   // Fallback for unknown errors
   return json(
     {
-      error: "Internal server error",
-      message: "An unexpected error occurred",
+      error: "Kesalahan server internal",
+      message: "Terjadi kesalahan yang tidak terduga",
     },
     { status: 500 },
   );

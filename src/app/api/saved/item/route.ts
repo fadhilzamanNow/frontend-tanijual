@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     });
     if (!product)
       return json(
-        { error: "Product not found", message: "Product does not exist" },
+        { error: "Produk tidak ditemukan", message: "Produk tidak ada" },
         { status: 404 },
       );
 

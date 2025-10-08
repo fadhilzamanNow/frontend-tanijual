@@ -369,7 +369,7 @@ export default function HomePage() {
       <h1 className="text-center font-bold text-2xl mt-4">FAQ</h1>
       <Accordion type="single" collapsible>
         {AccordionItems.map((item, i) => (
-          <AccordionItem value={`${i + 1}`}>
+          <AccordionItem value={`${i + 1}`} key={i + 1}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
             <AccordionContent>{item.content}</AccordionContent>
           </AccordionItem>

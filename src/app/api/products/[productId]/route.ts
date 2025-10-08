@@ -30,7 +30,8 @@ export async function GET(
         category: true,
       },
     });
-    if (!product) return json({ error: "Product not found" }, { status: 404 });
+    if (!product)
+      return json({ error: "Produk tidak ditemukan" }, { status: 404 });
     return json(product);
   } catch (error) {
     return handleApiError(error);
@@ -47,7 +48,10 @@ export async function PATCH(
     const data = productUpdateSchema.parse(body);
 
     if (Object.keys(data).length === 0) {
-      return json({ error: "No changes provided" }, { status: 400 });
+      return json(
+        { error: "Tidak ada perubahan yang diberikan" },
+        { status: 400 },
+      );
     }
 
     // Build update data with only defined values

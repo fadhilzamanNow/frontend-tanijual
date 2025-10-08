@@ -130,10 +130,10 @@ export default function NavBar() {
 
     return [
       { href: "/", label: "Home" },
-      { href: "/users/login", label: "User Login" },
-      { href: "/users/register", label: "User Register" },
-      { href: "/sellers/login", label: "Seller Login" },
-      { href: "/sellers/register", label: "Seller Register" },
+      { href: "/users/login", label: "Masuk Pembeli" },
+      { href: "/users/register", label: "Daftar Pembeli" },
+      { href: "/sellers/login", label: "Masuk Penjual" },
+      { href: "/sellers/register", label: "Daftar Penjual" },
     ];
   }, [role]);
 
@@ -214,55 +214,56 @@ export default function NavBar() {
         {/* Only show search and other UI elements if NOT on auth pages */}
         {!isAuthPage && (
           <>
-            <form onSubmit={handleSearch} className="relative flex-1">
-              <InputGroup>
-                <InputGroupInput
-                  placeholder={isSmallScreen ? "Cari Barang...." : ""}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <InputGroupAddon align="inline-end" className="text-xs">
-                  <Search onClick={handleSearchClick} size={15} />
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      {!selectedCategory ? (
-                        // FILTER OFF
-                        <Funnel size={15} />
-                      ) : (
-                        // FILTER ON
-                        <div className="relative">
-                          <Funnel size={15} className="text-green-500" />
-                          <Check
-                            size={6}
-                            className="absolute bottom-0 -right-0.5 bg-green-500 text-white rounded-full"
-                          />
-                        </div>
-                      )}
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="z-999 w-56">
-                      <DropdownMenuLabel>Kategori Produk</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuRadioGroup
-                        value={selectedCategory}
-                        onValueChange={handleCategoryChange}
-                      >
-                        <DropdownMenuRadioItem value="">
-                          Semua Kategori
-                        </DropdownMenuRadioItem>
-                        {categories.map((category) => (
-                          <DropdownMenuRadioItem
-                            key={category.id}
-                            value={category.id}
-                          >
-                            {category.name}
+            {role !== "seller" && (
+              <form onSubmit={handleSearch} className="relative flex-1">
+                <InputGroup>
+                  <InputGroupInput
+                    placeholder={isSmallScreen ? "Cari Barang...." : ""}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <InputGroupAddon align="inline-end" className="text-xs">
+                    <Search onClick={handleSearchClick} size={15} />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        {!selectedCategory ? (
+                          // FILTER OFF
+                          <Funnel size={15} />
+                        ) : (
+                          // FILTER ON
+                          <div className="relative">
+                            <Funnel size={15} className="text-green-500" />
+                            <Check
+                              size={6}
+                              className="absolute bottom-0 -right-0.5 bg-green-500 text-white rounded-full"
+                            />
+                          </div>
+                        )}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="z-999 w-56">
+                        <DropdownMenuLabel>Kategori Produk</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup
+                          value={selectedCategory}
+                          onValueChange={handleCategoryChange}
+                        >
+                          <DropdownMenuRadioItem value="">
+                            Semua Kategori
                           </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </InputGroupAddon>
-              </InputGroup>
-              {/*<Input
+                          {categories.map((category) => (
+                            <DropdownMenuRadioItem
+                              key={category.id}
+                              value={category.id}
+                            >
+                              {category.name}
+                            </DropdownMenuRadioItem>
+                          ))}
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </InputGroupAddon>
+                </InputGroup>
+                {/*<Input
                 placeholder={isSmallScreen ? "Cari Barang...." : ""}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -274,7 +275,8 @@ export default function NavBar() {
               >
                 <FaMagnifyingGlass />
               </button>*/}
-            </form>
+              </form>
+            )}
             <div className="flex  items-center justify-end gap-2 sm:gap-4">
               {/*<div className="hidden items-center gap-4 text-sm font-medium text-slate-600 md:flex">
             {menu.map((item) => (
@@ -327,7 +329,7 @@ export default function NavBar() {
                   </Link>
                 </div>
               )}
-              {role !== "guest" && (
+              {role === "user" && (
                 <div className="flex text-xl justify-center items-center gap-4">
                   <Sheet>
                     <SheetTrigger>
@@ -360,6 +362,22 @@ export default function NavBar() {
                         <DropdownMenuItem asChild>
                           <Link href="/settings">Akun saya</Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleLogout}>
+                          Logout
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              )}
+              {role === "seller" && (
+                <div className="flex text-xl justify-center items-center gap-4">
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <UserRound size={16} className="hover:text-green-500" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="z-999">
                         <DropdownMenuItem onClick={handleLogout}>
                           Logout
                         </DropdownMenuItem>
