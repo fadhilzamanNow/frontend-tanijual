@@ -252,7 +252,7 @@ export default function HomePage() {
   }
 
   return (
-    <section className="space-y-8 container mx-auto mt-4">
+    <section className="space-y-8 container mx-auto mt-4 px-4 xs:px-0">
       <CustomBreadcrumb />
       {/* Hero Banner */}
       <div className="relative rounded-3xl bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 overflow-hidden shadow-xl">

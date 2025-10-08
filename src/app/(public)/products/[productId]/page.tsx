@@ -432,11 +432,15 @@ export default function ProductDetailsPage({
                 className=" text-green-500  px-4 py-2 text-sm font-semibold   transition  flex items-center justify-center gap-2 hover:bg-black/5 border border-green-500 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaved ? (
-                  <FaBookmark className="text-white" />
+                  <FaBookmark className="text-green-500" />
                 ) : (
                   <FaRegBookmark className="text-green-500" />
                 )}
-                {submitting ? "Memproses…" : isSaved ? "Tersimpan" : "Simpan"}
+                {submitting
+                  ? "Memproses…"
+                  : isSaved
+                    ? "Produk Tersimpan"
+                    : "Simpan Produk"}
               </button>
             </div>
           </aside>
