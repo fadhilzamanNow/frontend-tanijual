@@ -25,7 +25,18 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { TbFilter } from "react-icons/tb";
-import { Search, Funnel, User, UserRound, Check } from "lucide-react";
+import { Search, Funnel, User, UserRound, Check, Bookmark } from "lucide-react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import SavedProductsList from "./Settings/SavedProductsList";
 
 type Category = {
   id: string;
@@ -318,6 +329,22 @@ export default function NavBar() {
               )}
               {role !== "guest" && (
                 <div className="flex text-xl justify-center items-center gap-4">
+                  <Sheet>
+                    <SheetTrigger>
+                      <Bookmark strokeWidth={1.25} size={15} />
+                    </SheetTrigger>
+                    <SheetContent className="overflow-y-auto">
+                      <SheetHeader>
+                        <SheetTitle>Produk Tersimpan</SheetTitle>
+                        <SheetDescription>
+                          Produk tersimpan favoritmu
+                        </SheetDescription>
+                      </SheetHeader>
+                      <div className="mt-2 px-4">
+                        <SavedProductsList />
+                      </div>
+                    </SheetContent>
+                  </Sheet>
                   <div>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
