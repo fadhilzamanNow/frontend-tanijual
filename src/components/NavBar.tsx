@@ -331,7 +331,11 @@ export default function NavBar() {
                 <div className="flex text-xl justify-center items-center gap-4">
                   <Sheet>
                     <SheetTrigger>
-                      <Bookmark strokeWidth={1.25} size={15} />
+                      <Bookmark
+                        strokeWidth={1.25}
+                        size={15}
+                        className="hover:text-green-500"
+                      />
                     </SheetTrigger>
                     <SheetContent className="overflow-y-auto">
                       <SheetHeader>
@@ -348,7 +352,7 @@ export default function NavBar() {
                   <div>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
-                        <UserRound size={16} />
+                        <UserRound size={16} className="hover:text-green-500" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="z-999">
                         <DropdownMenuLabel>Quick Action</DropdownMenuLabel>

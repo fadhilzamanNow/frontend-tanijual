@@ -7,6 +7,13 @@ import ProductCard from "@/components/ProductCard";
 import CustomBreadcrumb from "@/components/CustomBreadcrumb/CustomBreadcrumb";
 import { FaLeaf, FaShoppingBasket, FaUsers, FaTruck } from "react-icons/fa";
 import { useLoading } from "@/contexts/LoadingContext";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { AccordionItems } from "lib/accordionval";
 
 type Category = {
   id: string;
@@ -45,7 +52,7 @@ export default function HomePage() {
   const [offset, setOffset] = useState(0);
   const [stats, setStats] = useState({ products: 0, sellers: 0 });
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const { startLoading, stopLoading } = useLoading();
   const LIMIT = 6;
 
@@ -96,15 +103,9 @@ export default function HomePage() {
         setLoading(true);
         startLoading();
         setError(null);
-        const categoryParam = selectedCategory
-          ? `&categoryId=${selectedCategory}`
-          : "";
-        const response = await fetch(
-          `/api/products?limit=${LIMIT}&offset=0${categoryParam}`,
-          {
-            signal: controller.signal,
-          },
-        );
+        const response = await fetch(`/api/products?limit=${LIMIT}&offset=0`, {
+          signal: controller.signal,
+        });
         if (!response.ok) {
           const body = await response.json().catch(() => ({}));
           throw new Error(body?.error ?? "Failed to load products");
@@ -128,7 +129,7 @@ export default function HomePage() {
 
     loadInitialProducts();
     return () => controller.abort();
-  }, [role, selectedCategory]);
+  }, [role]);
 
   useEffect(() => {
     // Fetch stats
@@ -156,11 +157,8 @@ export default function HomePage() {
       setLoadingMore(true);
       startLoading();
       setError(null);
-      const categoryParam = selectedCategory
-        ? `&categoryId=${selectedCategory}`
-        : "";
       const response = await fetch(
-        `/api/products?limit=${LIMIT}&offset=${offset}${categoryParam}`,
+        `/api/products?limit=${LIMIT}&offset=${offset}`,
       );
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
@@ -212,10 +210,10 @@ export default function HomePage() {
       <div className="space-y-6 ">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-slate-900">
-            Fresh From Our Sellers
+            Segar dari Penjual Kami
           </h2>
           <span className="text-sm text-slate-500">
-            {products.length} items
+            {products.length} produk
           </span>
         </div>
         <div
@@ -342,36 +340,22 @@ export default function HomePage() {
           Kategori Populer
         </h2>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => setSelectedCategory(null)}
-            className={`flex items-center gap-2 px-5 py-3 rounded-full border transition ${
-              selectedCategory === null
-                ? "bg-green-500 text-white border-green-500"
-                : "bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200"
-            }`}
-          >
+          <div className="flex items-center gap-2 px-5 py-3 rounded-full border bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
             <span className="text-2xl">🌟</span>
-            <span className="font-semibold">Semua</span>
-          </button>
+            <span className="font-semibold text-slate-700">Semua</span>
+          </div>
           {categories.map((category) => (
-            <button
+            <div
               key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-full border transition ${
-                selectedCategory === category.id
-                  ? "bg-green-500 text-white border-green-500"
-                  : "bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-green-200"
-              }`}
+              className="flex items-center gap-2 px-5 py-3 rounded-full border bg-gradient-to-r from-green-50 to-emerald-50 border-green-200"
             >
               <span className="text-2xl">
                 {categoryEmojis[category.name] || "📦"}
               </span>
-              <span
-                className={`font-semibold ${selectedCategory === category.id ? "text-white" : "text-slate-700 group-hover:text-green-700"}`}
-              >
+              <span className="font-semibold text-slate-700">
                 {category.name}
               </span>
-            </button>
+            </div>
           ))}
         </div>
       </div>
@@ -382,6 +366,15 @@ export default function HomePage() {
       </div>*/}
 
       {productGrid}
+      <h1 className="text-center font-bold text-2xl mt-4">FAQ</h1>
+      <Accordion type="single" collapsible>
+        {AccordionItems.map((item, i) => (
+          <AccordionItem value={`${i + 1}`}>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
+            <AccordionContent>{item.content}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </section>
   );
 }

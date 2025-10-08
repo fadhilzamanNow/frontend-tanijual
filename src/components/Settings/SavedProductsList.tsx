@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { CiImageOff } from "react-icons/ci";
 import { FaTrash } from "react-icons/fa6";
+import { toast } from "sonner";
+import { Trash, CirclePlus } from "lucide-react";
 
 type SavedItem = {
   id: string;
@@ -84,9 +86,28 @@ export default function SavedProductsList() {
 
       if (response.ok) {
         setSavedItems((prev) => prev.filter((item) => item.id !== itemId));
+        toast.info("Product tidak disimpan!", {
+          action: {
+            label: "Tutup",
+            onClick: () => {},
+          },
+          icon: <Trash size={15} className="text-red-500" />,
+          actionButtonStyle: { backgroundColor: "red" },
+        });
+      } else {
+        throw new Error("Failed to remove item");
       }
     } catch (err) {
-      console.error("Failed to remove item:", err);
+      const errorMsg =
+        err instanceof Error ? err.message : "Failed to remove item";
+      toast.error(errorMsg, {
+        action: {
+          label: "Tutup",
+          onClick: () => {},
+        },
+        actionButtonStyle: { backgroundColor: "red" },
+        icon: <CirclePlus size={15} className="text-red-500 rotate-45" />,
+      });
     } finally {
       setDeleting(null);
     }
@@ -130,12 +151,12 @@ export default function SavedProductsList() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-slate-900">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
           Produk Tersimpan
         </h2>
-        <span className="text-sm text-slate-600">
+        <span className="text-xs sm:text-sm text-slate-600">
           {savedItems.length} produk
         </span>
       </div>
@@ -144,54 +165,57 @@ export default function SavedProductsList() {
         {savedItems.map((item) => (
           <div
             key={item.id}
-            className="flex gap-4 p-4 border border-slate-200 rounded-xl hover:shadow-md transition group"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4 border border-slate-200 rounded-xl hover:shadow-md transition group"
           >
-            <a href={`/products/${item.product.id}`} className="flex-shrink-0">
+            <a
+              href={`/products/${item.product.id}`}
+              className="flex-shrink-0 mx-auto sm:mx-0"
+            >
               {item.product.images && item.product.images.length > 0 ? (
                 <img
                   src={item.product.images[0].imageUrl}
                   alt={item.product.name}
-                  className="w-24 h-24 object-cover rounded-lg"
+                  className="w-full sm:w-24 h-40 sm:h-24 object-cover rounded-lg"
                 />
               ) : (
-                <div className="w-24 h-24 bg-slate-100 rounded-lg flex items-center justify-center">
-                  <CiImageOff size={32} className="text-slate-400" />
+                <div className="w-full sm:w-24 h-40 sm:h-24 bg-slate-100 rounded-lg flex items-center justify-center">
+                  <CiImageOff size={48} className="sm:size-8 text-slate-400" />
                 </div>
               )}
             </a>
 
             <div className="flex-1 min-w-0">
               <a href={`/products/${item.product.id}`}>
-                <h3 className="font-semibold text-base line-clamp-2 mb-2 group-hover:text-green-600 transition">
+                <h3 className="font-semibold text-sm sm:text-base line-clamp-2 mb-2 group-hover:text-green-600 transition">
                   {item.product.name}
                 </h3>
               </a>
-              <p className="text-green-600 font-bold text-lg mb-2">
+              <p className="text-green-600 font-bold text-base sm:text-lg mb-2">
                 {IDR.format(Number(item.product.price))}
               </p>
-              <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
                 <span>Penjual:</span>
                 <span className="font-medium">
                   {item.product.seller.username}
                 </span>
               </div>
-              <div className="text-sm text-slate-500 mt-1">
+              <div className="text-xs sm:text-sm text-slate-500 mt-1">
                 Stok: {item.product.quantity}
               </div>
             </div>
 
-            <div className="flex flex-col justify-between items-end">
+            <div className="flex sm:flex-col justify-between sm:justify-between items-center sm:items-end gap-2">
               <button
                 onClick={() => handleRemoveItem(item.id)}
                 disabled={deleting === item.id}
                 className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition disabled:opacity-50"
                 title="Hapus dari tersimpan"
               >
-                <FaTrash size={18} />
+                <FaTrash size={16} className="sm:size-[18px]" />
               </button>
               <a
                 href={`/products/${item.product.id}`}
-                className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition"
+                className="px-3 sm:px-4 py-2 bg-green-500 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-green-600 transition whitespace-nowrap"
               >
                 Lihat Detail
               </a>
