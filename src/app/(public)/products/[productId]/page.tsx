@@ -16,7 +16,16 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { BadgeCheck, CirclePlus, Trash, X } from "lucide-react";
+import { BadgeCheck, CirclePlus, Minus, Plus, Trash, X } from "lucide-react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const IDR = new Intl.NumberFormat("id-ID", {
   style: "currency",
@@ -530,13 +539,50 @@ export default function ProductDetailsPage({
               +
             </span>
           </div>*/}
-          <button
-            type="button"
-            className="rounded-md w-1/2 flex items-center justify-center gap-2 bg-green-500 px-4 py-4 text-sm font-semibold text-white transition hover:bg-green-600 active:bg-green-700"
-          >
-            <span>Order Lewat WA</span>
-            <FaWhatsapp className="text-xl" />
-          </button>
+          <Drawer>
+            <DrawerTrigger className="w-1/2" asChild>
+              <button
+                type="button"
+                className="rounded-md  flex items-center justify-center gap-2 bg-green-500 px-4 py-4 text-sm font-semibold text-white transition hover:bg-green-600 active:bg-green-700"
+              >
+                <span>Order Lewat WA</span>
+                <FaWhatsapp className="text-xl" />
+              </button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Order Lewat WA</DrawerTitle>
+                <DrawerDescription>
+                  Masukkan Jumlah yang ingin diorder
+                </DrawerDescription>
+                <div className="flex gap-6 w-full mt-2 py-2 px-1 border rounded-md  justify-center items-center">
+                  <Minus
+                    onClick={() => number > 1 && setNumber(number - 1)}
+                    className={`${number <= 1 ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
+                  />
+                  <span className="font-bold text-2xl">{number}</span>
+                  <Plus
+                    onClick={() =>
+                      number < product.quantity && setNumber(number + 1)
+                    }
+                    className={`${number >= product.quantity ? "text-slate-200 cursor-not-allowed" : "text-green-500 cursor-pointer"}`}
+                  />
+                </div>
+                <div className="mt-2 p-2 flex gap-2 justify-center items-center ">
+                  <div className="bg-green-500 p-2 rounded-md text-white flex-1 flex gap-2 justify-center items-center ">
+                    <span>Order Lewat WA</span>
+                    <FaWhatsapp />
+                  </div>
+                  <DrawerClose>
+                    <span className="p-2  border border-green-500 text-green-500 rounded-md hover:text-emerald-600 hover:border-emerald-600">
+                      Batal
+                    </span>
+                  </DrawerClose>
+                </div>
+              </DrawerHeader>
+            </DrawerContent>
+          </Drawer>
+
           <button
             type="button"
             onClick={handleSaveProduct}
@@ -545,7 +591,7 @@ export default function ProductDetailsPage({
           >
             {isSaved ? (
               <div className="flex justify-center gap-2">
-                <span>Produk Tersimpan</span>
+                <span>Tersimpan</span>
                 <FaBookmark className="text-green-500 text-xl" />
               </div>
             ) : (
