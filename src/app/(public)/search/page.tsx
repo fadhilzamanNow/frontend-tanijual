@@ -39,6 +39,7 @@ function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q");
+  const categoryId = searchParams.get("categoryId");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -49,7 +50,7 @@ function SearchContent() {
   const LIMIT = 12;
 
   useEffect(() => {
-    if (!searchQuery) return;
+    if (!searchQuery && !categoryId) return;
 
     const controller = new AbortController();
 
@@ -58,12 +59,15 @@ function SearchContent() {
         setLoading(true);
         startLoading();
         setError(null);
-        const response = await fetch(
-          `/api/products?limit=${LIMIT}&offset=0&search=${encodeURIComponent(searchQuery || "")}`,
-          {
-            signal: controller.signal,
-          },
-        );
+        const params = new URLSearchParams();
+        params.set("limit", LIMIT.toString());
+        params.set("offset", "0");
+        if (searchQuery) params.set("search", searchQuery);
+        if (categoryId) params.set("categoryId", categoryId);
+
+        const response = await fetch(`/api/products?${params.toString()}`, {
+          signal: controller.signal,
+        });
         if (!response.ok) {
           const body = await response.json().catch(() => ({}));
           throw new Error(body?.error ?? "Failed to load search results");
@@ -87,18 +91,22 @@ function SearchContent() {
 
     loadSearchResults();
     return () => controller.abort();
-  }, [searchQuery]);
+  }, [searchQuery, categoryId]);
 
   async function loadMoreProducts() {
-    if (loadingMore || !hasMore || !searchQuery) return;
+    if (loadingMore || !hasMore) return;
 
     try {
       setLoadingMore(true);
       startLoading();
       setError(null);
-      const response = await fetch(
-        `/api/products?limit=${LIMIT}&offset=${offset}&search=${encodeURIComponent(searchQuery || "")}`,
-      );
+      const params = new URLSearchParams();
+      params.set("limit", LIMIT.toString());
+      params.set("offset", offset.toString());
+      if (searchQuery) params.set("search", searchQuery);
+      if (categoryId) params.set("categoryId", categoryId);
+
+      const response = await fetch(`/api/products?${params.toString()}`);
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
         throw new Error(body?.error ?? "Failed to load more products");
@@ -117,17 +125,17 @@ function SearchContent() {
     }
   }
 
-  if (!searchQuery) {
+  if (!searchQuery && !categoryId) {
     return (
       <section className="space-y-6 container mx-auto mt-8 px-4">
         <CustomBreadcrumb />
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-8 text-center">
           <FaSearch className="mx-auto text-4xl text-amber-500 mb-4" />
           <h2 className="text-xl font-semibold text-amber-900 mb-2">
-            No Search Query
+            No Search Query or Category
           </h2>
           <p className="text-amber-700 mb-4">
-            Please enter a search term to find products.
+            Please enter a search term or select a category to find products.
           </p>
           <Link
             href="/"
@@ -164,10 +172,16 @@ function SearchContent() {
               Search Results
             </h1>
             <p className="text-slate-600">
-              Showing results for{" "}
-              <span className="font-semibold text-slate-900">
-                "{searchQuery}"
-              </span>
+              {searchQuery && (
+                <>
+                  Showing results for{" "}
+                  <span className="font-semibold text-slate-900">
+                    "{searchQuery}"
+                  </span>
+                </>
+              )}
+              {categoryId && !searchQuery && <>Filtered by category</>}
+              {categoryId && searchQuery && <> in selected category</>}
             </p>
           </div>
         </div>

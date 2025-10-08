@@ -7,14 +7,30 @@ import { Input } from "./ui/input";
 import { FaMagnifyingGlass, FaRegUser } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/ui/input-group";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioItem,
+  DropdownMenuRadioGroup,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { TbFilter } from "react-icons/tb";
+import { Search, Funnel, User, UserRound, Check } from "lucide-react";
 
+type Category = {
+  id: string;
+  name: string;
+};
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
 
@@ -48,6 +64,8 @@ export default function NavBar() {
   const router = useRouter();
   const [role, setRole] = useState<AuthRole>("guest");
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const isSmallScreen = useMediaQuery("(min-width: 640px)");
 
   // Check if we're on an auth page (login or register)
@@ -67,6 +85,21 @@ export default function NavBar() {
       window.removeEventListener("storage", handleAuthChange);
       window.removeEventListener("auth-change", handleAuthChange);
     };
+  }, []);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch("/api/categories");
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    }
+    fetchCategories();
   }, []);
 
   const menu: MenuItem[] = useMemo(() => {
@@ -107,15 +140,45 @@ export default function NavBar() {
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
+    const params = new URLSearchParams();
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      params.set("q", searchQuery.trim());
     }
+    if (selectedCategory) {
+      params.set("categoryId", selectedCategory);
+    }
+    router.push(`/search?${params.toString()}`);
   }
 
   function handleSearchClick() {
+    const params = new URLSearchParams();
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      params.set("q", searchQuery.trim());
     }
+    if (selectedCategory) {
+      params.set("categoryId", selectedCategory);
+    }
+    router.push(`/search?${params.toString()}`);
+  }
+
+  function handleCategoryChange(value: string) {
+    setSelectedCategory(value);
+
+    // Only navigate if there's a search query or a category selected
+    // When "Semua Kategori" is selected (value=""), still navigate if there's a search query
+    if (!searchQuery.trim() && !value) {
+      // If no search and no category, just update state without navigating
+      return;
+    }
+
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) {
+      params.set("q", searchQuery.trim());
+    }
+    if (value) {
+      params.set("categoryId", value);
+    }
+    router.push(`/search?${params.toString()}`);
   }
 
   return (
@@ -134,7 +197,54 @@ export default function NavBar() {
         {!isAuthPage && (
           <>
             <form onSubmit={handleSearch} className="relative flex-1">
-              <Input
+              <InputGroup>
+                <InputGroupInput
+                  placeholder={isSmallScreen ? "Cari Barang...." : ""}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <InputGroupAddon align="inline-end" className="text-xs">
+                  <Search onClick={handleSearchClick} size={15} />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      {!selectedCategory ? (
+                        // FILTER OFF
+                        <Funnel size={15} />
+                      ) : (
+                        // FILTER ON
+                        <div className="relative">
+                          <Funnel size={15} className="text-green-500" />
+                          <Check
+                            size={6}
+                            className="absolute bottom-0 -right-0.5 bg-green-500 text-white rounded-full"
+                          />
+                        </div>
+                      )}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="z-999 w-56">
+                      <DropdownMenuLabel>Kategori Produk</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuRadioGroup
+                        value={selectedCategory}
+                        onValueChange={handleCategoryChange}
+                      >
+                        <DropdownMenuRadioItem value="">
+                          Semua Kategori
+                        </DropdownMenuRadioItem>
+                        {categories.map((category) => (
+                          <DropdownMenuRadioItem
+                            key={category.id}
+                            value={category.id}
+                          >
+                            {category.name}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </InputGroupAddon>
+              </InputGroup>
+              {/*<Input
                 placeholder={isSmallScreen ? "Cari Barang...." : ""}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -145,7 +255,7 @@ export default function NavBar() {
                 className="absolute top-1/2 -translate-y-1/2 right-2 text-stone-400 hover:text-green-500 transition-colors cursor-pointer"
               >
                 <FaMagnifyingGlass />
-              </button>
+              </button>*/}
             </form>
             <div className="flex  items-center justify-end gap-2 sm:gap-4">
               {/*<div className="hidden items-center gap-4 text-sm font-medium text-slate-600 md:flex">
@@ -204,7 +314,7 @@ export default function NavBar() {
                   <div>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
-                        <FaRegUser />
+                        <UserRound size={16} />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="z-999">
                         <DropdownMenuLabel>Quick Action</DropdownMenuLabel>
